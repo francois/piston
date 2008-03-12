@@ -1,11 +1,13 @@
 #!/usr/bin/env ruby
 require "rubygems"
+require "pathname"
 
-$:.unshift File.expand_path(File.dirname(__FILE__) + "/../lib")
+path = Pathname.new(File.dirname(__FILE__)).realpath.parent
+$:.unshift path + "lib"
 require "piston/version"
 
 if ENV["NO_GEM"] then
-  $:.unshift File.expand_path(File.dirname(__FILE__) + "/../../piston-core/lib")
+  $:.unshift((path + "../piston-core/lib").realpath)
 else
   gem "piston-core", "= #{Piston::VERSION::STRING}" unless ENV["NO_GEM"]
 end

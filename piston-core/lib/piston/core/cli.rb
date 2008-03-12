@@ -14,18 +14,14 @@ Main {
   program "piston"
   author "François Beausoleil <francois@teksol.info>"
 
-  mode "import" do
-    argument "repository" do
-      required
-      description "The repository you wish to Pistonize"
-    end 
+  mixin :standard_options do
+    option("verbose", "v") { default false }
+    option("quiet", "q") { default false }
+    option("force") { default false }
+    option("dry-run") { default false }
+  end
 
-    argument "directory" do
-      optional
-      default :repository
-      description "Where to put the Pistonized repository"
-    end
-
+  mixin :revision_or_commit do
     option "revision", "r" do
       argument_required
       default "HEAD"
@@ -37,11 +33,23 @@ Main {
       default "HEAD"
       description "The commit you wish to import"
     end
+  end
 
-    option("verbose", "v") { default false }
-    option("quiet", "q") { default false }
-    option("force") { default false }
-    option("dry-run") { default false }
+  mode "import" do
+    mixin :standard_options
+    mixin :revision_or_commit
+
+    argument "repository" do
+      required
+      description "The repository you wish to Pistonize"
+    end 
+
+    argument "directory" do
+      optional
+      default :repository
+      description "Where to put the Pistonized repository"
+    end
+
     option("lock") do
       default false
       description "Automatically lock down the revision/commit to protect against blanket updates"

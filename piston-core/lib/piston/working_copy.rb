@@ -15,6 +15,8 @@ module Piston
       end
     end
 
+    attr_reader :path
+
     def initialize(path)
       @path = Pathname.new(path)
       logger.debug {"Initialized on #{@path}"}

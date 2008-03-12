@@ -11,7 +11,20 @@ module Piston
       end
 
       def run(revision, working_copy)
-        puts "Importing #{revision} into #{working_copy}"
+        tmpdir = working_copy.path.parent + ".#{working_copy.path.basename}.tmp"
+
+        begin
+          debug {"Creating temporary directory: #{tmpdir}"}
+          tmpdir.mkdir
+          revision.checkout_to(tmpdir)
+          working_copy.create
+          working_copy.copy_from(tmpdir)
+          working_copy.remember(revision.remember_values)
+          working_copy.finalize
+        ensure
+          debug {"Removing temporary directory: #{tmpdir}"}
+          tmpdir.rmtree
+        end
       end
     end
   end

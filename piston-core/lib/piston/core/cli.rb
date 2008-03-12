@@ -8,11 +8,16 @@ require "piston"
 require "piston/core"
 require "piston/core/version"
 
+require "piston/repository"
+require "piston/working_copy"
+require "piston/commands/import"
+
 require "main"
 
 Main {
   program "piston"
   author "François Beausoleil <francois@teksol.info>"
+  version Piston::Core::VERSION::STRING
 
   mixin :standard_options do
     option("verbose", "v") { default false }
@@ -25,13 +30,24 @@ Main {
     option "revision", "r" do
       argument_required
       default "HEAD"
-      description "The revision you wish to import"
+      description "The revision you wish to operate on"
     end
 
     option "commit" do
       argument_required
       default "HEAD"
-      description "The commit you wish to import"
+      description "The commit you wish to operate on"
+    end
+
+    def target_revision
+      case
+      when params["revision"].given?
+        params["revision"].value
+      when params["commit"].given?
+        params["commit"].value
+      else
+        :head
+      end
     end
   end
 
@@ -55,25 +71,27 @@ Main {
       description "Automatically lock down the revision/commit to protect against blanket updates"
     end
 
+    logger_level Logger::DEBUG
     def run
-      puts "running import"
-      puts "repos: #{params["repository"].value.inspect}"
-      puts "dir:   #{params["directory"].value.inspect}"
-      puts "revision: #{params["revision"].value.inspect}"
-      puts "commit: #{params["commit"].value.inspect}"
-      puts "verbose: #{params["verbose"].value.inspect}"
-      puts "quiet: #{params["quiet"].value.inspect}"
-      puts "force: #{params["force"].value.inspect}"
-      puts "dry-run: #{params["dry-run"].value.inspect}"
-      puts "lock: #{params["lock"].value.inspect}"
-
       if params["revision"].given? && params["commit"].given? then
         raise ArgumentError, "Only one of --revision or --commit can be given.  Received both."
       end
+
+      set_loggers!
+
+      cmd = Piston::Commands::Import.new(:lock => params["lock"].value,
+                                         :verbose => params["verbose"].value,
+                                         :quiet => params["quiet"].value,
+                                         :force => params["force"].value,
+                                         :dry_run => params["dry-run"].value)
+      repository = Piston::Repository.guess(params[:repository].value)
+      revision = repository.at(self.target_revision)
+      working_copy = Piston::WorkingCopy.guess(params[:directory].value)
+
+      cmd.run(revision, working_copy)
     end
   end
 
-  version Piston::Core::VERSION::STRING
   option("version", "v")
 
   def run
@@ -88,5 +106,11 @@ Main {
       puts "Unrecognized mode: #{ARGV.first.inspect}.  Use the help mode to find the available options."
       exit_warn!
     end
+  end
+
+  def set_loggers!
+    Piston::Repository.logger = logger
+    Piston::WorkingCopy.logger = logger
+    Piston::Commands::Base.logger = logger
   end
 }

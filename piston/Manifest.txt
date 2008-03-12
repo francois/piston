@@ -3,11 +3,11 @@ License.txt
 Manifest.txt
 README.txt
 Rakefile
+bin/piston
 config/hoe.rb
 config/requirements.rb
 lib/piston.rb
 lib/piston/version.rb
-log/debug.log
 script/destroy
 script/generate
 script/txt2html

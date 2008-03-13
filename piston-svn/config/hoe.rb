@@ -3,7 +3,7 @@ require "piston/svn/version"
 AUTHOR = "Francois Beausoleil"
 EMAIL = "francois@teksol.info"
 DESCRIPTION = "description of gem"
-GEM_NAME = "piston-core"
+GEM_NAME = "piston-svn"
 RUBYFORGE_PROJECT = "piston" # The unix name for your project
 HOMEPATH = "http://#{RUBYFORGE_PROJECT}.rubyforge.org"
 DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"

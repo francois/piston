@@ -6,7 +6,8 @@ module Piston
       include Piston::Svn::Client
 
       def checkout_to(path)
-        answer = svn(:checkout, "--quiet", "--revision", revision, path)
+        @wcpath = path.kind_of?(Pathname) ? path : Pathname.new(path)
+        answer = svn(:checkout, "--revision", revision, repository.url, path)
         if answer =~ /Checked out revision (\d+)[.]/ then
           if revision == "HEAD" then
             @revision = $1.to_i

@@ -15,7 +15,8 @@ class TestWorkingCopyFinalization < Test::Unit::TestCase
     @wcdir.mkdir
     File.open(@wcdir + "a.rb", "wb") {|f| f.write "Hello World!"}
     File.open(@wcdir + "b.rb", "wb") {|f| f.write "Hello World!"}
-    @wc.expects(:svn).with(:add, (@wcdir + "a.rb").to_s, (@wcdir + "b.rb").to_s)
+    @wc.expects(:svn).with(:add, (@wcdir + "a.rb").to_s)
+    @wc.expects(:svn).with(:add, (@wcdir + "b.rb").to_s)
     @wc.finalize
   end
 end

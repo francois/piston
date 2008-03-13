@@ -65,10 +65,8 @@ module Piston
       def finalize
         targets = []
         Dir[path + "*"].each do |item|
-          targets << item
+          svn(:add, item)
         end
-
-        svn(:add, *targets.sort)
       end
     end
   end

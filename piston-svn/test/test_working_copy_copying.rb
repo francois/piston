@@ -15,7 +15,7 @@ class TestWorkingCopyCopying < Test::Unit::TestCase
 
   def test_copies_files
     files = ["file.rb"]
-    files.expects(:copy_to).with(@wcdir + files.first)
+    files.expects(:copy_to).with("file.rb", @wcdir + files.first)
     @wc.copy_from(files)
   end
 
@@ -24,7 +24,7 @@ class TestWorkingCopyCopying < Test::Unit::TestCase
     @wcdir.expects(:+).with(files.first).returns(target = mock("target"))
     target.expects(:dirname).returns(target)
     target.expects(:mkdir)
-    files.expects(:copy_to).with(target)
+    files.expects(:copy_to).with("file/a.rb", target)
     @wc.copy_from(files)
   end
 end

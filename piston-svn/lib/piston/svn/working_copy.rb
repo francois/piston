@@ -37,7 +37,12 @@ module Piston
         svn(:propset, Piston::Svn::LOCAL_REV, local_rev, path)
       end
 
-      def copy_from(dir)
+      def copy_from(revision)
+        revision.each do |relpath|
+          target = path + relpath
+          target.dirname.mkdir rescue nil
+          revision.copy_to(target)
+        end
       end
 
       def remember(values)

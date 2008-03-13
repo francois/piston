@@ -41,7 +41,9 @@ module Piston
         revision.each do |relpath|
           target = path + relpath
           target.dirname.mkdir rescue nil
-          revision.copy_to(target)
+
+          logger.debug {"Copying #{relpath} to #{target}"}
+          revision.copy_to(relpath, target)
         end
       end
 

@@ -2,8 +2,6 @@ require File.dirname(__FILE__) + "/test_helper"
 require "pathname"
 
 class TestRevisionEach < Test::Unit::TestCase
-  include Piston::Svn::Client
-
   def setup
     @repos = mock("repository")
     @repos.stubs(:url).returns("http://a.repos.com/project/trunk")

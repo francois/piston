@@ -1,4 +1,5 @@
 require "piston/revision"
+require "fileutils"
 
 module Piston
   module Svn
@@ -32,8 +33,16 @@ module Piston
         raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @wcpath
 
         svn(:ls, "--recursive", @wcpath).each do |relpath|
+          next if relpath =~ %r{/$}
           yield relpath.chomp
         end
+      end
+
+      def copy_to(relpath, abspath)
+        raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @wcpath
+
+        Pathname.new(abspath).dirname.mkdir rescue nil
+        FileUtils.cp(@wcpath + relpath, abspath)
       end
     end
   end

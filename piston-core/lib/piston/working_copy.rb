@@ -55,6 +55,11 @@ module Piston
       logger.debug {"Remembering #{values.inspect}"}
     end
 
+    # Recalls a Hash of values from the working copy.
+    # The expected keys are passed as parameters.
+    def recall(keys)
+    end
+
     def finalize
       logger.debug {"Finalizing #{path}"}
     end

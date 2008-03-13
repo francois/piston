@@ -51,6 +51,15 @@ module Piston
         end
       end
 
+      def recall(keys)
+        hash = Hash.new
+        keys.each do |k|
+          hash[k] = svn(:propget, k, path)
+        end
+
+        hash
+      end
+
       def finalize
       end
     end

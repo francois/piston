@@ -2,12 +2,7 @@ require File.dirname(__FILE__) + "/test_helper"
 require "pathname"
 
 class TestWorkingCopyCopying < Test::Unit::TestCase
-  include Piston::Svn::Client
-
   def setup
-    @reposdir = Pathname.new("tmp/repos")
-    svnadmin :create, @reposdir
-
     @wcdir = Pathname.new("tmp/wc")
     @wc = Piston::Svn::WorkingCopy.new(@wcdir)
     @wc.stubs(:svn)
@@ -15,7 +10,6 @@ class TestWorkingCopyCopying < Test::Unit::TestCase
   end
 
   def teardown
-    @reposdir.rmtree rescue nil
     @wcdir.rmtree rescue nil
   end
 

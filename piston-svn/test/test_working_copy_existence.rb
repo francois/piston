@@ -2,18 +2,12 @@ require File.dirname(__FILE__) + "/test_helper"
 require "pathname"
 
 class TestWorkingCopyExistence < Test::Unit::TestCase
-  include Piston::Svn::Client
-
   def setup
-    @reposdir = Pathname.new("tmp/repos")
-    svnadmin :create, @reposdir
-
     @wcdir = Pathname.new("tmp/wc")
     @wc = Piston::Svn::WorkingCopy.new(@wcdir)
   end
 
   def teardown
-    @reposdir.rmtree rescue nil
     @wcdir.rmtree rescue nil
   end
 
@@ -27,7 +21,7 @@ class TestWorkingCopyExistence < Test::Unit::TestCase
   end
 
   def test_exist_true_when_svn_working_copy_at_path
-    svn :checkout, "file://" + @reposdir.realpath, @wcdir
+    @wc.expects(:svn).with(:info, @wcdir).returns("a:b")
     assert @wc.exist?
   end
 end 

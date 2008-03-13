@@ -1,7 +1,7 @@
-require 'fileutils'
+require "fileutils"
 include FileUtils
 
-require 'rubygems'
+require "rubygems"
 %w[rake hoe newgem rubigen].each do |req_gem|
   begin
     require req_gem
@@ -14,4 +14,4 @@ end
 
 $:.unshift(File.join(File.dirname(__FILE__), %w[.. lib]))
 
-require 'piston-core'
+require "piston/core"

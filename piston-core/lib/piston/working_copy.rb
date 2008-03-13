@@ -38,9 +38,16 @@ module Piston
       logger.debug {"Creating working copy at #{path}"}
     end
 
-    # Initial copy of files from +dir+.
-    def copy_from(dir)
-      logger.debug {"Copying from #{dir} to #{path}"}
+    # Copy files from +revision+.  +revision+ must
+    # #respond_to?(:each), and return each file that is to be copied.
+    # Only files must be returned.
+    #
+    # Each item yielded by Revision#each must be a relative path.
+    #
+    # WorkingCopy will call Revision#copy_to with the full path to where the
+    # file needs to be copied.
+    def copy_from(revision)
+      logger.debug {"Copying from #{revision} to #{path}"}
     end
 
     # Stores a Hash of values that can be retrieved later.

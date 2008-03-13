@@ -5,17 +5,33 @@ module Piston
     class Import < Piston::Commands::Base
       attr_reader :options
 
-      def initialize(options={})
-        @options = options
-        logger.debug {"Import with options: #{options.inspect}"}
+      def temp_dir_name(working_copy)
+        working_copy.path.parent + ".#{working_copy.path.basename}.tmp"
       end
 
-      def run(revision, working_copy)
-        tmpdir = working_copy.path.parent + ".#{working_copy.path.basename}.tmp"
-
+      def create_tmpdir(tmpdir)
+        tmpdir_create_attempted = false
         begin
           debug {"Creating temporary directory: #{tmpdir}"}
           tmpdir.mkdir
+        rescue Errno::EEXIST
+          if tmpdir_create_attempted then
+            raise
+          else
+            tmpdir.rmtree
+            tmpdir_create_attempted = true
+            retry
+          end
+        end
+      end
+
+      def run(revision, working_copy)
+        tmpdir = temp_dir_name(working_copy)
+
+        abort("Path #{working_copy} already exists and --force not given.  Aborting...") if working_copy.exist? && !force
+
+        begin
+          create_tmpdir(tmpdir)
           revision.checkout_to(tmpdir)
           working_copy.create
           working_copy.copy_from(tmpdir)

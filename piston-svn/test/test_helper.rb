@@ -5,6 +5,8 @@ require "rubygems"
 require "mocha"
 require "piston/svn/repository"
 require "piston/repository" # Part of piston-core
+require "piston/svn/working_copy"
+require "piston/working_copy" # Part of piston-core
 
 module Test
   module Unit

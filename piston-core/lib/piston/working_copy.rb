@@ -18,7 +18,7 @@ module Piston
     attr_reader :path
 
     def initialize(path)
-      @path = Pathname.new(path)
+      @path = path.kind_of?(Pathname) ? path : Pathname.new(path)
       logger.debug {"Initialized on #{@path}"}
     end
 

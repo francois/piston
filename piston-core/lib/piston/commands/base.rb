@@ -1,3 +1,5 @@
+require "logger"
+
 module Piston
   module Commands
     class Base
@@ -7,7 +9,7 @@ module Piston
         end
 
         def logger
-          @@logger
+          @@logger ||= Logger.new(File.open("/dev/null", "a"))
         end
       end
 

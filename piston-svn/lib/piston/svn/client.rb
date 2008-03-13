@@ -5,7 +5,6 @@ module Piston
       class Failed < CommandError; end
       class BadCommand < CommandError; end
 
-      protected
       def svnadmin(*args)
         run_cmd :svnadmin, *args
       end

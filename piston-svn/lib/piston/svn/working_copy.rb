@@ -1,6 +1,7 @@
 require "piston/working_copy"
+require "piston/svn"
 require "piston/svn/client"
-require "uri"
+require "yaml"
 
 module Piston
   module Svn
@@ -20,6 +21,29 @@ module Piston
 
       def svnadmin(*args)
         self.class.svnadmin(*args)
+      end
+
+      def exist?
+        logger.debug {"svn info on #{path}"}
+        result = svn(:info, path) rescue :failed
+        logger.debug {"result: #{result.inspect}"}
+        result == :failed ? false : true
+      end
+
+      def create
+        info = YAML.load(svn(:info, path.parent))
+        local_rev = info["Last Changed Rev"]
+        svn(:mkdir, path)
+        svn(:propset, Piston::Svn::LOCAL_REV, local_rev, path)
+      end
+
+      def copy_from(dir)
+      end
+
+      def remember(values)
+      end
+
+      def finalize
       end
     end
   end

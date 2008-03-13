@@ -30,6 +30,9 @@ module Piston
       "Piston::WorkingCopy(#{@path})"
     end
 
+    def exist?
+    end
+
     # Creates the initial working copy for pistonizing a new repository.
     def create
       logger.debug {"Creating working copy at #{path}"}

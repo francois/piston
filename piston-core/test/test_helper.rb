@@ -1,6 +1,7 @@
 require "rubygems"
 require "test/unit"
 require "mocha"
+require "logger"
 
 require "piston/commands/base"
 require "piston/repository"

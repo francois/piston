@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/test_helper"
 require "pathname"
 
-class TestWorkingCopyCreation < Test::Unit::TestCase
+class TestWorkingCopyCopying < Test::Unit::TestCase
   include Piston::Svn::Client
 
   def setup

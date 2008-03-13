@@ -6,7 +6,16 @@ module Piston
       include Piston::Svn::Client
 
       def checkout_to(path)
-        svn :checkout, "--quiet", "--revision", revision, path
+        answer = svn(:checkout, "--quiet", "--revision", revision, path)
+        if answer =~ /Checked out revision (\d+)[.]/ then
+          if revision == "HEAD" then
+            @revision = $1.to_i
+          elsif revision != $1.to_i then
+            raise Failed, "Did not get the revision I wanted to checkout.  Subversion checked out #{$1}, I wanted #{revision}"
+          end
+        else
+          raise Failed, "Could not checkout revision #{revision} from #{repository.url}\n#{answer}"
+        end
       end
 
       def remember_values

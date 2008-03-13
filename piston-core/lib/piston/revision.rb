@@ -1,5 +1,7 @@
 module Piston
   class Revision
+    include Enumerable
+
     class << self
       def logger=(logger)
         @@logger = logger

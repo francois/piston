@@ -15,17 +15,25 @@ module Piston
             raise Failed, "Did not get the revision I wanted to checkout.  Subversion checked out #{$1}, I wanted #{revision}"
           end
         else
-          raise Failed, "Could not checkout revision #{revision} from #{repository.url}\n#{answer}"
+          raise Failed, "Could not checkout revision #{revision} from #{repository.url} to #{path}\n#{answer}"
         end
       end
 
       def remember_values
         str = svn(:info, "--revision", revision, repository.url)
-        raise Piston::Svn::Client::Failed, "Could not get 'svn info' from #{repository.url} at revision #{revision}" if str.nil? || str.chomp.strip.empty?
+        raise Failed, "Could not get 'svn info' from #{repository.url} at revision #{revision}" if str.nil? || str.chomp.strip.empty?
         info = YAML.load(str)
         { Piston::Svn::UUID => info["Repository UUID"],
           Piston::Svn::ROOT => info["URL"],
           Piston::Svn::REMOTE_REV => info["Revision"]}
+      end
+
+      def each
+        raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @wcpath
+
+        svn(:ls, "--recursive", @wcpath).each do |relpath|
+          yield relpath.chomp
+        end
       end
     end
   end

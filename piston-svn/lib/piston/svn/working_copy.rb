@@ -46,6 +46,9 @@ module Piston
       end
 
       def remember(values)
+        values.each_pair do |k, v|
+          svn(:propset, k, v, path)
+        end
       end
 
       def finalize

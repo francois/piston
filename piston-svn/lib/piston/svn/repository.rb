@@ -29,6 +29,19 @@ module Piston
       def svnadmin(*args)
         self.class.svnadmin(*args)
       end
+
+      def at(revision)
+        rev = case
+              when revision == :head
+                "HEAD"
+              when revision.to_i != 0
+                revision.to_i
+              else
+                raise ArgumentError, "Invalid revision argument: #{revision.inspect}"
+              end
+
+        Piston::Svn::Revision.new(self, rev)
+      end
     end
   end
 end

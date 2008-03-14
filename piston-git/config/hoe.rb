@@ -1,10 +1,9 @@
-require "piston/version"
+require "piston_git/version"
 
 AUTHOR = "Francois Beausoleil"
 EMAIL = "francois@teksol.info"
 DESCRIPTION = "description of gem"
-GEM_NAME = "piston"
-
+GEM_NAME = "piston-git"
 RUBYFORGE_PROJECT = "piston"
 HOMEPATH = "http://#{RUBYFORGE_PROJECT}.rubyforge.org"
 DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
@@ -19,7 +18,7 @@ def rubyforge_username
     rescue
       puts <<-EOS
 ERROR: No rubyforge config file found: #{@config_file}
-Run "rubyforge setup" to prepare your env for access to Rubyforge
+Run 'rubyforge setup' to prepare your env for access to Rubyforge
  - See http://newgem.rubyforge.org/rubyforge.html for more details
       EOS
       exit
@@ -32,8 +31,8 @@ end
 REV = nil 
 # UNCOMMENT IF REQUIRED: 
 # REV = `svn info`.each {|line| if line =~ /^Revision:/ then k,v = line.split(': '); break v.chomp; else next; end} rescue nil
-VERS = Piston::VERSION::STRING + (REV ? ".#{REV}" : "")
-RDOC_OPTS = ["--quiet", "--title", "Piston Documentation",
+VERS = PistonGit::VERSION::STRING + (REV ? ".#{REV}" : "")
+RDOC_OPTS = ["--quiet", "--title", "piston-git documentation",
     "--opname", "index.html",
     "--line-numbers", 
     "--main", "README",
@@ -59,11 +58,7 @@ hoe = Hoe.new(GEM_NAME, VERS) do |p|
   
   # == Optional
   p.changes = p.paragraphs_of("History.txt", 0..1).join("\n\n")
-  p.extra_deps = [
-    ["piston-core", "= #{Piston::VERSION::STRING}"],
-    ["piston-svn", "= #{Piston::VERSION::STRING}"],
-    ["piston-git", "= #{Piston::VERSION::STRING}"]
-  ]
+  #p.extra_deps = []     # An array of rubygem dependencies [name, version], e.g. [ ['active_support', '>= 1.3.1'] ]
   
   #p.spec_extras = {}    # A hash of extra values to set in the gemspec.
   

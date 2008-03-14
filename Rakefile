@@ -1,4 +1,4 @@
-LIBS = %w(piston-core piston-svn piston)
+LIBS = %w(piston-core piston-git piston-svn piston)
 
 def each_lib
   LIBS.each do |libname|

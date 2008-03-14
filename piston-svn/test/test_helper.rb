@@ -5,11 +5,11 @@ require "rubygems"
 require "mocha"
 require "logger"
 
-require "piston/svn/repository"
+require "piston_svn/repository"
 require "piston/repository" # Part of piston-core
-require "piston/svn/working_copy"
+require "piston_svn/working_copy"
 require "piston/working_copy" # Part of piston-core
-require "piston/svn/revision"
+require "piston_svn/revision"
 require "piston/revision" # Part of piston-core
 
 module Test

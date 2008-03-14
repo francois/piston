@@ -4,7 +4,7 @@ require "pathname"
 class TestWorkingCopyExistence < Test::Unit::TestCase
   def setup
     @wcdir = Pathname.new("tmp/wc")
-    @wc = Piston::Svn::WorkingCopy.new(@wcdir)
+    @wc = PistonSvn::WorkingCopy.new(@wcdir)
   end
 
   def teardown

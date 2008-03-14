@@ -4,7 +4,7 @@ require "pathname"
 class TestWorkingCopyCreation < Test::Unit::TestCase
   def setup
     @wcdir = Pathname.new("tmp/wc")
-    @wc = Piston::Svn::WorkingCopy.new(@wcdir)
+    @wc = PistonSvn::WorkingCopy.new(@wcdir)
     @wc.stubs(:svn)
     @wc.stubs(:svn).with(:info, anything).returns("a:b")
   end
@@ -20,7 +20,7 @@ class TestWorkingCopyCreation < Test::Unit::TestCase
 
   def test_create_sets_local_revision
     @wc.expects(:svn).with(:info, @wcdir.parent).returns("Last Changed Rev: 1321\n")
-    @wc.expects(:svn).with(:propset, Piston::Svn::LOCAL_REV, 1321, @wcdir)
+    @wc.expects(:svn).with(:propset, PistonSvn::LOCAL_REV, 1321, @wcdir)
     @wc.create
   end
 end

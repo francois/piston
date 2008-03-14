@@ -1,4 +1,4 @@
-require "piston/svn/version"
+require "piston_svn/version"
 
 AUTHOR = "Francois Beausoleil"
 EMAIL = "francois@teksol.info"
@@ -31,7 +31,7 @@ end
 REV = nil 
 # UNCOMMENT IF REQUIRED: 
 # REV = `svn info`.each {|line| if line =~ /^Revision:/ then k,v = line.split(': '); break v.chomp; else next; end} rescue nil
-VERS = Piston::Svn::VERSION::STRING + (REV ? ".#{REV}" : "")
+VERS = PistonSvn::VERSION::STRING + (REV ? ".#{REV}" : "")
 RDOC_OPTS = ["--quiet", "--title", "piston-svn documentation",
     "--opname", "index.html",
     "--line-numbers", 
@@ -68,5 +68,5 @@ end
 
 CHANGES = hoe.paragraphs_of("History.txt", 0..1).join("\\n\\n")
 PATH    = (RUBYFORGE_PROJECT == GEM_NAME) ? RUBYFORGE_PROJECT : "#{RUBYFORGE_PROJECT}/#{GEM_NAME}"
-hoe.remote_rdoc_dir = File.join(PATH.gsub(/^#{RUBYFORGE_PROJECT}\/?/,''), "rdoc")
+hoe.remote_rdoc_dir = File.join(PATH.gsub(/^#{RUBYFORGE_PROJECT}\/?/,""), "rdoc")
 hoe.rsync_args = "-av --delete --ignore-errors"

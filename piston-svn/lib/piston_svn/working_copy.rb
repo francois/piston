@@ -1,11 +1,11 @@
-require "piston_core/working_copy"
-require "piston_svn"
-require "piston_svn/client"
 require "yaml"
 
 module PistonSvn
   class WorkingCopy < PistonCore::WorkingCopy
     extend PistonSvn::Client
+
+    # Register ourselves as a handler for working copies
+    PistonCore::WorkingCopy.add_handler self
 
     class << self
       def understands_dir?(dir)
@@ -23,10 +23,11 @@ module PistonSvn
     end
 
     def exist?
-      logger.debug {"svn info on #{path}"}
       result = svn(:info, path) rescue :failed
       logger.debug {"result: #{result.inspect}"}
-      result == :failed ? false : true
+      return false if result == :failed
+      return false if result.nil? || result.chomp.strip.empty?
+      return true if YAML.load(result).has_key?("Path")
     end
 
     def create

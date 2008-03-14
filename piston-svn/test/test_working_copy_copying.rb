@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + "/test_helper"
-require "pathname"
 
 class TestWorkingCopyCopying < Test::Unit::TestCase
   def setup

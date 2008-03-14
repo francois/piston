@@ -1,13 +1,9 @@
-$:.unshift File.dirname(__FILE__) + "/../../piston-core/lib"
-
 require "test/unit"
 require "rubygems"
 require "mocha"
 require "logger"
 
-require "piston_svn/repository"
-require "piston_svn/working_copy"
-require "piston_svn/revision"
+require File.dirname(__FILE__) + "/../config/requirements"
 
 module Test
   module Unit

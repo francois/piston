@@ -9,6 +9,8 @@ else
   require "piston/version"
   gem "piston-core", "= #{Piston::VERSION::STRING}"
   gem "piston-svn", "= #{Piston::VERSION::STRING}"
+  require "piston_core"
+  require "piston_svn"
 end
 
 # Chain to the real command-line client

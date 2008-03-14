@@ -1,4 +1,7 @@
 require "piston_core/version"
+require "piston_core/repository"
+require "piston_core/revision"
+require "piston_core/working_copy"
 
 module PistonCore
   class << self

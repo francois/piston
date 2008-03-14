@@ -2,10 +2,9 @@ require "rubygems"
 require "test/unit"
 require "mocha"
 require "logger"
+require "pathname"
 
-require "piston_core/commands/base"
-require "piston_core/repository"
-require "piston_core/working_copy"
+require File.dirname(__FILE__) + "/../config/requirements"
 
 module Test
   module Unit

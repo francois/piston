@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + "/test_helper"
 
 class TestRepositoryGuessing < Test::Unit::TestCase
   def setup
-    PistonCore::Repository.handlers.clear
+    PistonCore::Repository.send(:handlers).clear
   end
 
   def test_guess_when_no_handlers_raises
@@ -12,7 +12,7 @@ class TestRepositoryGuessing < Test::Unit::TestCase
   end
 
   def test_guess_asks_each_handler_in_turn
-    PistonCore::Repository.handlers << handler = mock("handler")
+    PistonCore::Repository.add_handler(handler = mock("handler"))
     handler.expects(:understands_url?).with("http://a.repos.com/trunk").returns(false)
     assert_raise PistonCore::Repository::UnhandledUrl do
       PistonCore::Repository.guess("http://a.repos.com/trunk")
@@ -27,7 +27,7 @@ class TestRepositoryGuessing < Test::Unit::TestCase
     handler_instance = mock("handler_instance")
     handler.expects(:new).with(url).returns(handler_instance)
 
-    PistonCore::Repository.handlers << handler
+    PistonCore::Repository.add_handler handler
     assert_equal handler_instance, PistonCore::Repository.guess(url)
   end
 end

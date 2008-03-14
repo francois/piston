@@ -1,10 +1,11 @@
-require "piston_core/repository"
-require "piston_svn/client"
 require "uri"
 
 module PistonSvn
   class Repository < PistonCore::Repository
     extend PistonSvn::Client
+
+    # Register ourselves as a repository handler
+    PistonCore::Repository.add_handler self
 
     class << self
       def understands_url?(url)

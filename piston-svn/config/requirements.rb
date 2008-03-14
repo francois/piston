@@ -12,4 +12,18 @@ require "rubygems"
   end
 end
 
-$:.unshift(File.join(File.dirname(__FILE__), %w[.. lib]))
+# general
+require "pathname"
+
+PISTON_SVN_ROOT = Pathname.new(File.dirname(__FILE__)).parent.realpath
+PISTON_CORE_ROOT = PISTON_SVN_ROOT.parent + "piston-core"
+$:.unshift(PISTON_CORE_ROOT + "lib") if PISTON_CORE_ROOT.directory?
+$:.unshift(PISTON_SVN_ROOT + "lib")
+
+# piston-core
+require "piston_core/repository"
+require "piston_core/revision"
+require "piston_core/working_copy"
+
+# piston-svn
+require "piston_svn"

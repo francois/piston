@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + "/test_helper"
-require "pathname"
 
 class TestWorkingCopyExistence < Test::Unit::TestCase
   def setup
@@ -21,7 +20,7 @@ class TestWorkingCopyExistence < Test::Unit::TestCase
   end
 
   def test_exist_true_when_svn_working_copy_at_path
-    @wc.expects(:svn).with(:info, @wcdir).returns("a:b")
+    @wc.expects(:svn).with(:info, @wcdir).returns("Path: b")
     assert @wc.exist?
   end
 end 

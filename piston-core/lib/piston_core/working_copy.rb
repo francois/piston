@@ -13,7 +13,7 @@ module PistonCore
 
       def guess(path)
         logger.debug {"Guessing the working copy type of #{path.inspect}"}
-        handler = self.handlers.detect do |handler|
+        handler = handlers.detect do |handler|
           handler.understands_dir?(path)
         end
 
@@ -22,9 +22,14 @@ module PistonCore
       end
 
       @@handlers = Array.new
+      def add_handler(handler)
+        @@handlers << handler
+      end
+
       def handlers
         @@handlers
       end
+      private :handlers
     end
 
     attr_reader :path

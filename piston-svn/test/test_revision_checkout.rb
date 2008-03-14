@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + "/test_helper"
-require "pathname"
 
 class TestRevisionCheckout < Test::Unit::TestCase
   def setup

@@ -34,7 +34,7 @@ module PistonCore
           create_tmpdir(tmpdir)
           revision.checkout_to(tmpdir)
           working_copy.create
-          working_copy.copy_from(tmpdir)
+          working_copy.copy_from(revision)
           working_copy.remember(revision.remember_values)
           working_copy.finalize
         ensure

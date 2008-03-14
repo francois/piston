@@ -17,7 +17,7 @@ module PistonCore
       def guess(url)
         logger.debug {"Guessing the repository type of #{url.inspect}"}
 
-        handler = self.handlers.detect do |handler|
+        handler = handlers.detect do |handler|
           handler.understands_url?(url)
         end
 
@@ -26,9 +26,14 @@ module PistonCore
       end
 
       @@handlers = Array.new
+      def add_handler(handler)
+        @@handlers << handler
+      end
+
       def handlers
         @@handlers
       end
+      private :handlers
     end
 
     attr_reader :url

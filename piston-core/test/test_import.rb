@@ -1,6 +1,4 @@
 require File.dirname(__FILE__) + "/test_helper"
-require "piston_core/commands/import"
-require "pathname"
 
 class TestImport < Test::Unit::TestCase
   def setup

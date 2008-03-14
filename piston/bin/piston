@@ -1,15 +1,17 @@
 #!/usr/bin/env ruby
-require "rubygems"
-require "pathname"
-
-path = Pathname.new(File.dirname(__FILE__)).realpath.parent
-$:.unshift path + "lib"
-require "piston/version"
-
-if ENV["NO_GEM"] then
-  $:.unshift((path + "../piston-core/lib").realpath)
+if ENV["NOGEM"] then
+  require "pathname"
+  root = Pathname.new(File.dirname(__FILE__)).parent
+  $:.unshift((root + "lib").realpath)
+  $:.unshift((root + "../piston-core/lib").realpath)
+  $:.unshift((root + "../piston-svn/lib").realpath)
+  $:.unshift((root + "../piston-git/lib").realpath)
 else
-  gem "piston-core", "= #{Piston::VERSION::STRING}" unless ENV["NO_GEM"]
+  require "piston/version"
+  gem "piston-core", "= #{Piston::VERSION::STRING}"
+  gem "piston-svn", "= #{Piston::VERSION::STRING}"
+  gem "piston-git", "= #{Piston::VERSION::STRING}"
 end
 
+# Chain to the real command-line client
 require "piston/core/cli"

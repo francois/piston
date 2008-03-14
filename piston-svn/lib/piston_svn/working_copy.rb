@@ -1,10 +1,10 @@
-require "piston/working_copy"
+require "piston_core/working_copy"
 require "piston_svn"
 require "piston_svn/client"
 require "yaml"
 
 module PistonSvn
-  class WorkingCopy < Piston::WorkingCopy
+  class WorkingCopy < PistonCore::WorkingCopy
     extend PistonSvn::Client
 
     class << self

@@ -1,8 +1,8 @@
-require "piston/revision"
+require "piston_core/revision"
 require "fileutils"
 
 module PistonSvn
-  class Revision < Piston::Revision
+  class Revision < PistonCore::Revision
     include PistonSvn::Client
 
     def checkout_to(path)

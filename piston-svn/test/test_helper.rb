@@ -6,11 +6,8 @@ require "mocha"
 require "logger"
 
 require "piston_svn/repository"
-require "piston/repository" # Part of piston-core
 require "piston_svn/working_copy"
-require "piston/working_copy" # Part of piston-core
 require "piston_svn/revision"
-require "piston/revision" # Part of piston-core
 
 module Test
   module Unit
@@ -42,6 +39,6 @@ module Test
 end
 
 Pathname.new(File.dirname(__FILE__) + "/../log").mkdir rescue nil
-Piston::WorkingCopy.logger =
-  Piston::Repository.logger =
+PistonCore::WorkingCopy.logger =
+  PistonCore::Repository.logger =
   Test::Unit::TestCase.logger

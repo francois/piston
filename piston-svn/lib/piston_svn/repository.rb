@@ -1,9 +1,9 @@
-require "piston/repository"
+require "piston_core/repository"
 require "piston_svn/client"
 require "uri"
 
 module PistonSvn
-  class Repository < Piston::Repository
+  class Repository < PistonCore::Repository
     extend PistonSvn::Client
 
     class << self

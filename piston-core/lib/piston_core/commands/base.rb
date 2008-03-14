@@ -1,4 +1,4 @@
-module Piston
+module PistonCore
   module Commands
     class Base
       class << self

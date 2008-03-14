@@ -1,6 +1,6 @@
-require "piston/revision"
+require "piston_core/revision"
 
-module Piston
+module PistonCore
   class Repository
     class << self
       def logger
@@ -9,7 +9,7 @@ module Piston
 
       def logger=(logger)
         @@logger = logger
-        Piston::Revision.logger = @@logger
+        PistonCore::Revision.logger = @@logger
       end
 
       def guess(url)
@@ -30,11 +30,11 @@ module Piston
 
     def at(revision)
       logger.debug {"Targeting #{self} at #{revision.inspect}"}
-      Piston::Revision.new(self, revision)
+      PistonCore::Revision.new(self, revision)
     end
 
     def to_s
-      "Piston::Repository(#{@url})"
+      "PistonCore::Repository(#{@url})"
     end
   end
 end

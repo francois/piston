@@ -1,11 +1,11 @@
 require File.dirname(__FILE__) + "/test_helper"
-require "piston/commands/import"
+require "piston_core/commands/import"
 require "pathname"
 
 class TestImport < Test::Unit::TestCase
   def setup
     @wc = stub_everything("working_copy")
-    @cmd = Piston::Commands::Import.new
+    @cmd = PistonCore::Commands::Import.new
     @cmd.stubs(:debug)
     @cmd.stubs(:info)
     @cmd.stubs(:warn)

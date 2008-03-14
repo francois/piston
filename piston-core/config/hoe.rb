@@ -1,4 +1,4 @@
-require "piston/core/version"
+require "piston_core/version"
 
 AUTHOR = "Francois Beausoleil"
 EMAIL = "francois@teksol.info"
@@ -31,7 +31,7 @@ end
 REV = nil 
 # UNCOMMENT IF REQUIRED: 
 # REV = `svn info`.each {|line| if line =~ /^Revision:/ then k,v = line.split(': '); break v.chomp; else next; end} rescue nil
-VERS = Piston::Core::VERSION::STRING + (REV ? ".#{REV}" : "")
+VERS = PistonCore::VERSION::STRING + (REV ? ".#{REV}" : "")
 RDOC_OPTS = ["--quiet", "--title", "piston-core documentation",
     "--opname", "index.html",
     "--line-numbers", 

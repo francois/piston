@@ -1,8 +1,8 @@
-require "piston/commands/base"
+require "piston_core/commands/base"
 
-module Piston
+module PistonCore
   module Commands
-    class Import < Piston::Commands::Base
+    class Import < PistonCore::Commands::Base
       attr_reader :options
 
       def temp_dir_name(working_copy)

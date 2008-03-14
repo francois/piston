@@ -3,9 +3,9 @@ require "test/unit"
 require "mocha"
 require "logger"
 
-require "piston/commands/base"
-require "piston/repository"
-require "piston/working_copy"
+require "piston_core/commands/base"
+require "piston_core/repository"
+require "piston_core/working_copy"
 
 module Test
   module Unit
@@ -37,7 +37,7 @@ module Test
 end
 
 Pathname.new(File.dirname(__FILE__) + "/../log").mkdir rescue nil
-Piston::WorkingCopy.logger =
-  Piston::Repository.logger =
-  Piston::Commands::Base.logger =
+PistonCore::WorkingCopy.logger =
+  PistonCore::Repository.logger =
+  PistonCore::Commands::Base.logger =
   Test::Unit::TestCase.logger

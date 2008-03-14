@@ -1,4 +1,4 @@
-module Piston
+module PistonCore
   class WorkingCopy
     class << self
       def logger=(logger)
@@ -27,7 +27,7 @@ module Piston
     end
 
     def to_s
-      "Piston::WorkingCopy(#{@path})"
+      "PistonCore::WorkingCopy(#{@path})"
     end
 
     def exist?

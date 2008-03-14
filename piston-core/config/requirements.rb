@@ -14,4 +14,4 @@ end
 
 $:.unshift(File.join(File.dirname(__FILE__), %w[.. lib]))
 
-require "piston/core"
+require "piston_core"

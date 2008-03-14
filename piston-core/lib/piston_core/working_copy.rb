@@ -1,5 +1,7 @@
 module PistonCore
   class WorkingCopy
+    class UnhandledWorkingCopy < RuntimeError; end
+
     class << self
       def logger=(logger)
         @@logger = logger
@@ -11,7 +13,17 @@ module PistonCore
 
       def guess(path)
         logger.debug {"Guessing the working copy type of #{path.inspect}"}
-        self.new(path)
+        handler = self.handlers.detect do |handler|
+          handler.understands_dir?(path)
+        end
+
+        raise UnhandledWorkingCopy, "Don't know what working copy type #{path} is." if handler.nil?
+        handler.new(path)
+      end
+
+      @@handlers = Array.new
+      def handlers
+        @@handlers
       end
     end
 

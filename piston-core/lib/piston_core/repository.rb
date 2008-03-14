@@ -2,6 +2,8 @@ require "piston_core/revision"
 
 module PistonCore
   class Repository
+    class UnhandledUrl < RuntimeError; end
+
     class << self
       def logger
         @@logger
@@ -14,7 +16,18 @@ module PistonCore
 
       def guess(url)
         logger.debug {"Guessing the repository type of #{url.inspect}"}
-        self.new(url)
+
+        handler = self.handlers.detect do |handler|
+          handler.understands_url?(url)
+        end
+
+        raise UnhandledUrl, "No internal handlers found for #{url.inspect}.  Do you want to help ?" if handler.nil?
+        handler.new(url)
+      end
+
+      @@handlers = Array.new
+      def handlers
+        @@handlers
       end
     end
 

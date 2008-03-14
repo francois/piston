@@ -61,8 +61,7 @@ hoe = Hoe.new(GEM_NAME, VERS) do |p|
   p.changes = p.paragraphs_of("History.txt", 0..1).join("\n\n")
   p.extra_deps = [
     ["piston-core", "= #{Piston::VERSION::STRING}"],
-    ["piston-svn", "= #{Piston::VERSION::STRING}"],
-    ["piston-git", "= #{Piston::VERSION::STRING}"]
+    ["piston-svn", "= #{Piston::VERSION::STRING}"]
   ]
   
   #p.spec_extras = {}    # A hash of extra values to set in the gemspec.
@@ -71,5 +70,5 @@ end
 
 CHANGES = hoe.paragraphs_of("History.txt", 0..1).join("\\n\\n")
 PATH    = (RUBYFORGE_PROJECT == GEM_NAME) ? RUBYFORGE_PROJECT : "#{RUBYFORGE_PROJECT}/#{GEM_NAME}"
-hoe.remote_rdoc_dir = File.join(PATH.gsub(/^#{RUBYFORGE_PROJECT}\/?/,''), "rdoc")
+hoe.remote_rdoc_dir = File.join(PATH.gsub(/^#{RUBYFORGE_PROJECT}\/?/,""), "rdoc")
 hoe.rsync_args = "-av --delete --ignore-errors"

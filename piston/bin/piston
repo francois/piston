@@ -5,13 +5,11 @@ if ENV["NOGEM"] then
   $:.unshift((root + "lib").realpath)
   $:.unshift((root + "../piston-core/lib").realpath)
   $:.unshift((root + "../piston-svn/lib").realpath)
-  $:.unshift((root + "../piston-git/lib").realpath)
 else
   require "piston/version"
   gem "piston-core", "= #{Piston::VERSION::STRING}"
   gem "piston-svn", "= #{Piston::VERSION::STRING}"
-  gem "piston-git", "= #{Piston::VERSION::STRING}"
 end
 
 # Chain to the real command-line client
-require "piston/core/cli"
+require "piston_core/cli"

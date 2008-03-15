@@ -6,19 +6,19 @@ require "logger"
 $:.unshift @root + "lib"
 $:.unshift @root + "../piston-core/lib"
 
-require "piston"
-require "piston/repository"
-require "piston/working_copy"
-require "piston/svn"
-require "piston/svn/client"
-require "piston/svn/repository"
-require "piston/svn/working_copy"
-require "piston/svn/revision"
+require "piston_core"
+require "piston_core/repository"
+require "piston_core/working_copy"
+require "piston_svn"
+require "piston_svn/client"
+require "piston_svn/repository"
+require "piston_svn/working_copy"
+require "piston_svn/revision"
 
 PISTON_DEFAULT_LOGGER = Logger.new(STDOUT)
-Piston::Repository.logger = Piston::WorkingCopy.logger = PISTON_DEFAULT_LOGGER
+PistonCore::Repository.logger = PistonCore::WorkingCopy.logger = PISTON_DEFAULT_LOGGER
 def logger; PISTON_DEFAULT_LOGGER; end
-include Piston::Svn::Client
+include PistonSvn::Client
 
 (@root + "tmp/repos").rmtree rescue nil
 (@root + "tmp/wc").rmtree rescue nil
@@ -27,10 +27,10 @@ include Piston::Svn::Client
 svnadmin :create, @root + "tmp/repos"
 svn :checkout, "file://#{(@root + 'tmp/repos').realpath}", @root + "tmp/wc"
 
-repos = Piston::Svn::Repository.new("http://svn.xlsuite.org/trunk/lib")
+repos = PistonSvn::Repository.new("http://svn.xlsuite.org/trunk/lib")
 rev = repos.at(:head)
 rev.checkout_to(@root + "tmp/.xlsuite.tmp")
-wc = Piston::Svn::WorkingCopy.new(@root + "tmp/wc/vendor")
+wc = PistonSvn::WorkingCopy.new(@root + "tmp/wc/vendor")
 wc.create
 wc.copy_from(rev)
 wc.remember(rev.remember_values)

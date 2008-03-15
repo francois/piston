@@ -15,3 +15,16 @@ require "piston_git/working_copy"
 
 PISTON_DEFAULT_LOGGER = Logger.new("log/test.log")
 PistonCore::Repository.logger = PistonCore::WorkingCopy.logger = PISTON_DEFAULT_LOGGER
+
+module Test
+  module Unit
+    module Assertions
+      def deny(boolean, message = nil)
+        message = build_message message, '<?> is not false or nil.', boolean
+        assert_block message do
+          not boolean
+        end
+      end
+    end
+  end
+end

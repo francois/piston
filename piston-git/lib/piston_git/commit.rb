@@ -5,8 +5,9 @@ module PistonGit
     alias_method :commit, :revision
 
     def checkout_to(dir)
-      git(:clone, repository.url, dir)
-      Dir.chdir(dir) do
+      @dir = dir
+      git(:clone, repository.url, @dir)
+      Dir.chdir(@dir) do
         git(:checkout, "-b", "my-#{revision}", revision)
         if revision == "HEAD" then
           response = git(:log, "-n", "1")
@@ -16,6 +17,14 @@ module PistonGit
 
       def remember_values
         { PistonGit::URL => repository.url, PistonGit::COMMIT => commit }
+      end
+
+      def each
+        raise ArgumentError, "Never cloned + checked out" if @dir.nil?
+        @dir.find do |path|
+          Find.prune if path.to_s =~ %r{/[.]git}
+          yield path.relative_path_from(@dir)
+        end
       end
     end
   end

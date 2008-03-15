@@ -22,6 +22,6 @@ class TestSvnRevisionCheckout < Test::Unit::TestCase
 
   private
   def new_revision(revision)
-    PistonSvn::Revision.new(@repos, revision)
+    Piston::Svn::Revision.new(@repos, revision)
   end
 end

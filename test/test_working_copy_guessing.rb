@@ -2,21 +2,21 @@ require File.dirname(__FILE__) + "/test_helper"
 
 class TestWorkingCopyGuessing < Test::Unit::TestCase
   def setup
-    PistonCore::WorkingCopy.send(:handlers).clear
+    Piston::WorkingCopy.send(:handlers).clear
     @dir = Pathname.new("tmp/wc")
   end
 
   def test_guess_when_no_handlers_raises
-    assert_raise PistonCore::WorkingCopy::UnhandledWorkingCopy do
-      PistonCore::WorkingCopy.guess(@dir)
+    assert_raise Piston::WorkingCopy::UnhandledWorkingCopy do
+      Piston::WorkingCopy.guess(@dir)
     end
   end
 
   def test_guess_asks_each_handler_in_turn
-    PistonCore::WorkingCopy.add_handler(handler = mock("handler"))
+    Piston::WorkingCopy.add_handler(handler = mock("handler"))
     handler.expects(:understands_dir?).with(@dir).returns(false)
-    assert_raise PistonCore::WorkingCopy::UnhandledWorkingCopy do
-      PistonCore::WorkingCopy.guess(@dir)
+    assert_raise Piston::WorkingCopy::UnhandledWorkingCopy do
+      Piston::WorkingCopy.guess(@dir)
     end
   end
 
@@ -26,7 +26,7 @@ class TestWorkingCopyGuessing < Test::Unit::TestCase
     handler_instance = mock("handler_instance")
     handler.expects(:new).with(@dir).returns(handler_instance)
 
-    PistonCore::WorkingCopy.add_handler handler
-    assert_equal handler_instance, PistonCore::WorkingCopy.guess(@dir)
+    Piston::WorkingCopy.add_handler handler
+    assert_equal handler_instance, Piston::WorkingCopy.guess(@dir)
   end
 end

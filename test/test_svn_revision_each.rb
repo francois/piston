@@ -7,7 +7,7 @@ class TestSvnRevisionEach < Test::Unit::TestCase
 
     @wcdir = Pathname.new("tmp/.wc.tmp")
 
-    @rev = PistonSvn::Revision.new(@repos, "HEAD")
+    @rev = Piston::Svn::Revision.new(@repos, "HEAD")
     @rev.stubs(:svn).returns("Checked out revision 111.\n")
     @rev.checkout_to(@wcdir)
   end

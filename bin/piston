@@ -1,17 +1,5 @@
 #!/usr/bin/env ruby
-if ENV["NOGEM"] then
-  require "pathname"
-  root = Pathname.new(File.dirname(__FILE__)).parent
-  $:.unshift((root + "lib").realpath)
-  $:.unshift((root + "../piston-core/lib").realpath)
-  $:.unshift((root + "../piston-svn/lib").realpath)
-else
-  require "piston/version"
-  gem "piston-core", "= #{Piston::VERSION::STRING}"
-  gem "piston-svn", "= #{Piston::VERSION::STRING}"
-  require "piston_core"
-  require "piston_svn"
-end
+require "piston"
 
 # Chain to the real command-line client
-require "piston_core/cli"
+require "piston/cli"

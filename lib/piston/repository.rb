@@ -1,6 +1,6 @@
-require "piston_core/revision"
+require "piston/revision"
 
-module PistonCore
+module Piston
   class Repository
     class UnhandledUrl < RuntimeError; end
 
@@ -11,7 +11,7 @@ module PistonCore
 
       def logger=(logger)
         @@logger = logger
-        PistonCore::Revision.logger = @@logger
+        Piston::Revision.logger = @@logger
       end
 
       def guess(url)
@@ -48,11 +48,11 @@ module PistonCore
 
     def at(revision)
       logger.debug {"Targeting #{self} at #{revision.inspect}"}
-      PistonCore::Revision.new(self, revision)
+      Piston::Revision.new(self, revision)
     end
 
     def to_s
-      "PistonCore::Repository(#{@url})"
+      "Piston::Repository(#{@url})"
     end
   end
 end

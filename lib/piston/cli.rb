@@ -1,22 +1,11 @@
-require "rubygems"
-require "pathname"
-
-PISTON_CORE_ROOT = Pathname.new(File.dirname(__FILE__)).realpath.parent.parent
-$:.unshift(PISTON_CORE_ROOT + "lib")
-
-require "piston_core"
-require "piston_core/version"
-
-require "piston_core/repository"
-require "piston_core/working_copy"
-require "piston_core/commands/import"
-
 require "main"
+require "piston/version"
+require "piston/commands"
 
 Main {
   program "piston"
   author "François Beausoleil <francois@teksol.info>"
-  version PistonCore::VERSION::STRING
+  version Piston::VERSION::STRING
 
   mixin :standard_options do
     option("verbose", "v") { default false }
@@ -78,14 +67,14 @@ Main {
 
       set_loggers!
 
-      cmd = PistonCore::Commands::Import.new(:lock => params["lock"].value,
+      cmd = Piston::Commands::Import.new(:lock => params["lock"].value,
                                          :verbose => params["verbose"].value,
                                          :quiet => params["quiet"].value,
                                          :force => params["force"].value,
                                          :dry_run => params["dry-run"].value)
-      repository = PistonCore::Repository.guess(params[:repository].value)
+      repository = Piston::Repository.guess(params[:repository].value)
       revision = repository.at(self.target_revision)
-      working_copy = PistonCore::WorkingCopy.guess(params[:directory].value)
+      working_copy = Piston::WorkingCopy.guess(params[:directory].value)
 
       cmd.run(revision, working_copy)
     end
@@ -95,10 +84,10 @@ Main {
 
   def run
     if params["version"].given? || ARGV.first == "version" then
-      puts PistonCore.version_message
+      puts Piston.version_message
       exit_success!
     elsif ARGV.empty?
-      puts PistonCore.version_message
+      puts Piston.version_message
       puts "\nNo mode given.  Call with help to find out the available options."
       exit_failure!
     else
@@ -108,8 +97,8 @@ Main {
   end
 
   def set_loggers!
-    PistonCore::Repository.logger = logger
-    PistonCore::WorkingCopy.logger = logger
-    PistonCore::Commands::Base.logger = logger
+    Piston::Repository.logger = logger
+    Piston::WorkingCopy.logger = logger
+    Piston::Commands::Base.logger = logger
   end
 }

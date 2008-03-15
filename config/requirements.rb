@@ -15,7 +15,4 @@ end
 $:.unshift(File.join(File.dirname(__FILE__), %w[.. lib]))
 
 require "piston"
-require "piston_core"
-require "piston_core/commands/import"
-require "piston_svn"
-require "piston_git"
+require "piston/commands"

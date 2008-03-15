@@ -9,7 +9,7 @@ class TestGitCommitEach < Test::Unit::TestCase
     @tmpdir = Pathname.new("tmp/.arepos.tmp.git")
     @tmpdir.rmtree rescue nil
     @tmpdir.mkdir
-    @commit = PistonGit::Commit.new(@repos, "ab"*20)
+    @commit = Piston::Git::Commit.new(@repos, "ab"*20)
     @commit.stubs(:git).returns("commit " + "ab" * 20)
     @commit.checkout_to(@tmpdir)
   end

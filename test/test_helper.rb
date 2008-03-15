@@ -35,7 +35,7 @@ module Test
 end
 
 Pathname.new(File.dirname(__FILE__) + "/../log").mkdir rescue nil
-PistonCore::WorkingCopy.logger =
-  PistonCore::Repository.logger =
-  PistonCore::Commands::Base.logger =
+Piston::WorkingCopy.logger =
+  Piston::Repository.logger =
+  Piston::Commands::Base.logger =
   Test::Unit::TestCase.logger

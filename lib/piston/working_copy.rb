@@ -1,4 +1,4 @@
-module PistonCore
+module Piston
   class WorkingCopy
     class UnhandledWorkingCopy < RuntimeError; end
 
@@ -44,7 +44,7 @@ module PistonCore
     end
 
     def to_s
-      "PistonCore::WorkingCopy(#{@path})"
+      "Piston::WorkingCopy(#{@path})"
     end
 
     def exist?

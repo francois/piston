@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + "/test_helper"
 class TestSvnWorkingCopyCopying < Test::Unit::TestCase
   def setup
     @wcdir = Pathname.new("tmp/wc")
-    @wc = PistonSvn::WorkingCopy.new(@wcdir)
+    @wc = Piston::Svn::WorkingCopy.new(@wcdir)
     @wc.stubs(:svn)
     @wc.stubs(:svn).with(:info, anything).returns("a:b")
   end

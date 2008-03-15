@@ -1,4 +1,4 @@
-module PistonCore
+module Piston
   class Revision
     include Enumerable
 
@@ -23,7 +23,7 @@ module PistonCore
     end
 
     def to_s
-      "PistonCore::Revision(#{@repository.url}@#{@revision})"
+      "Piston::Revision(#{@repository.url}@#{@revision})"
     end
 
     # Retrieve a copy of this repository into +dir+.

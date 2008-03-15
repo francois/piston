@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + "/test_helper"
 class TestImport < Test::Unit::TestCase
   def setup
     @wc = stub_everything("working_copy")
-    @cmd = PistonCore::Commands::Import.new
+    @cmd = Piston::Commands::Import.new
     @cmd.stubs(:debug)
     @cmd.stubs(:info)
     @cmd.stubs(:warn)

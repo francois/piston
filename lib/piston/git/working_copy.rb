@@ -10,6 +10,14 @@ module Piston
       def create
         path.mkdir rescue nil
       end
+
+      def exist?
+        path.directory?
+      end
+
+      def finalize
+        git(:add, path)
+      end
     end
   end
 end

@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + "/test_helper"
 
-class TestCommitRememberValues < Test::Unit::TestCase
+class TestCommitRememberance < Test::Unit::TestCase
   def setup
     @repos = mock("repository")
     @repos.stubs(:url).returns("git://github.com/francois/arepos.git")

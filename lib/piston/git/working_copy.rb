@@ -7,6 +7,20 @@ module Piston
       extend Piston::Git::Client
       def git(*args); self.class.git(*args); end
 
+      # Register ourselves as a handler for working copies
+      Piston::WorkingCopy.add_handler self
+
+      class << self
+        def understands_dir?(dir)
+          begin
+            response = git(:log, "-n", "1", dir)
+            !!(response =! /commit\s+[a-f\d]{40}/)
+          rescue BadCommand
+            false
+          end
+        end
+      end
+
       def create
         path.mkdir rescue nil
       end

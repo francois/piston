@@ -42,6 +42,12 @@ module Piston
           revision.copy_to(relpath, target)
         end
       end
+
+      def remember_values(values)
+        File.open(path + ".piston.yml", "wb") do |f|
+          f.write({"format" => 1, "handler" => values}.to_yaml)
+        end
+      end
     end
   end
 end

@@ -11,7 +11,8 @@ class TestGitWorkingCopyFinalization < Test::Unit::TestCase
   end
 
   def test_finalize_adds_path_to_git
-    @wc.expects(:git).with(:add, @wcdir)
+    Dir.expects(:chdir).with(@wcdir).yields
+    @wc.expects(:git).with(:add, ".")
     @wc.finalize
   end
 end

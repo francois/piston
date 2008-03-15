@@ -13,7 +13,8 @@ module Piston
         tmpdir_create_attempted = false
         begin
           debug {"Creating temporary directory: #{tmpdir}"}
-          tmpdir.mkdir
+          raise Errno::EEXIST if tmpdir.directory?
+          tmpdir.mkpath
         rescue Errno::EEXIST
           if tmpdir_create_attempted then
             raise

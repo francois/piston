@@ -32,7 +32,7 @@ class TestImport < Test::Unit::TestCase
     tmpdir = Pathname.new("tmp/newdir")
     begin
       tmpdir.rmtree rescue nil
-      tmpdir.mkdir
+      tmpdir.mkpath
       file = tmpdir + "a.rb"
       File.open(file, "wb") {|f| f.write "bla" }
       @cmd.create_tmpdir(tmpdir)

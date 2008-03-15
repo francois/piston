@@ -12,13 +12,13 @@ class TestGitWorkingCopyCreation < Test::Unit::TestCase
     @wcdir.rmtree rescue nil
   end
 
-  def test_create_does_a_simple_mkdir
-    @wcdir.expects(:mkdir)
+  def test_create_does_a_simple_mkpath
+    @wcdir.expects(:mkpath)
     @wc.create
   end
 
-  def test_create_succeeds_even_if_mkdir_fails
-    @wcdir.expects(:mkdir).raises(Errno::EEXIST)
+  def test_create_succeeds_even_if_mkpath_fails
+    @wcdir.expects(:mkpath).raises(Errno::EEXIST)
     assert_nothing_raised do
       @wc.create
     end

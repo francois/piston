@@ -12,17 +12,23 @@ module Piston
 
       class << self
         def understands_dir?(dir)
+          path = dir
           begin
-            response = git(:log, "-n", "1", "--", dir.parent)
-            !!(response =~ /commit\s+[a-f\d]{40}/)
+            while path.parent
+              response = git(:status, path)
+              return true if response =~ /# On branch /
+              path = path.parent
+            end
           rescue BadCommand
-            false
+            # NOP, as we return false below
           end
+
+          false
         end
       end
 
       def create
-        path.mkdir rescue nil
+        path.mkpath rescue nil
       end
 
       def exist?

@@ -13,8 +13,8 @@ module Piston
       class << self
         def understands_dir?(dir)
           begin
-            response = git(:log, "-n", "1", dir)
-            !!(response =! /commit\s+[a-f\d]{40}/)
+            response = git(:log, "-n", "1", "--", dir.parent)
+            !!(response =~ /commit\s+[a-f\d]{40}/)
           rescue BadCommand
             false
           end

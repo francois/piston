@@ -6,7 +6,7 @@ class TestGitWorkingCopyGuessing < Test::Unit::TestCase
   end
 
   def test_does_git_log_on_directory
-    Piston::Git::WorkingCopy.expects(:git).with(:log, "-n", "1", @dir).returns("commit " + "a"*40)
+    Piston::Git::WorkingCopy.expects(:git).with(:log, "-n", "1", "--", @dir.parent).returns("commit " + "a"*40)
     assert Piston::Git::WorkingCopy.understands_dir?(@dir)
   end
 

@@ -14,6 +14,7 @@ class TestWorkingCopyGuessing < Test::Unit::TestCase
 
   def test_guess_asks_each_handler_in_turn
     Piston::WorkingCopy.add_handler(handler = mock("handler"))
+    handler.stubs(:name).returns("aname")
     handler.expects(:understands_dir?).with(@dir).returns(false)
     assert_raise Piston::WorkingCopy::UnhandledWorkingCopy do
       Piston::WorkingCopy.guess(@dir)
@@ -22,6 +23,7 @@ class TestWorkingCopyGuessing < Test::Unit::TestCase
 
   def test_guess_returns_first_handler_that_understands_the_url
     handler = mock("handler")
+    handler.stubs(:name).returns("aname")
     handler.expects(:understands_dir?).with(@dir).returns(true)
     handler_instance = mock("handler_instance")
     handler.expects(:new).with(@dir).returns(handler_instance)

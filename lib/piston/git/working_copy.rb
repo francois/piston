@@ -54,6 +54,10 @@ module Piston
           f.write({"format" => 1, "handler" => values}.to_yaml)
         end
       end
+
+      def finalize
+        Dir.chdir(path) { git(:add, ".") }
+      end
     end
   end
 end

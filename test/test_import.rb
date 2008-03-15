@@ -15,32 +15,4 @@ class TestImport < Test::Unit::TestCase
     @wc.stubs(:path).returns(Pathname.new("tmp/a/dir"))
     assert_equal Pathname.new("tmp/a/.dir.tmp"), @cmd.temp_dir_name(@wc)
   end
-
-  def test_create_tmpdir_creates_specified_dir
-    tmpdir = Pathname.new("tmp/newdir")
-    begin
-      tmpdir.rmtree rescue nil
-      @cmd.create_tmpdir(tmpdir)
-      assert tmpdir.exist?, "#{tmpdir} doesn't exist"
-      assert tmpdir.directory?, "#{tmpdir} isn't a directory"
-    ensure
-      tmpdir.rmtree
-    end
-  end
-
-  def test_create_tmpdir_removes_existing_dir_and_creates_again
-    tmpdir = Pathname.new("tmp/newdir")
-    begin
-      tmpdir.rmtree rescue nil
-      tmpdir.mkpath
-      file = tmpdir + "a.rb"
-      File.open(file, "wb") {|f| f.write "bla" }
-      @cmd.create_tmpdir(tmpdir)
-      assert tmpdir.exist?, "#{tmpdir} doesn't exist"
-      assert tmpdir.directory?, "#{tmpdir} isn't a directory"
-      deny file.exist?, "#{file} still exists"
-    ensure
-      tmpdir.rmtree
-    end
-  end
 end

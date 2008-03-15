@@ -49,7 +49,7 @@ module Piston
         end
       end
 
-      def remember_values(values)
+      def remember(values)
         File.open(path + ".piston.yml", "wb") do |f|
           f.write({"format" => 1, "handler" => values}.to_yaml)
         end

@@ -9,30 +9,12 @@ module Piston
         working_copy.path.parent + ".#{working_copy.path.basename}.tmp"
       end
 
-      def create_tmpdir(tmpdir)
-        tmpdir_create_attempted = false
-        begin
-          debug {"Creating temporary directory: #{tmpdir}"}
-          raise Errno::EEXIST if tmpdir.directory?
-          tmpdir.mkpath
-        rescue Errno::EEXIST
-          if tmpdir_create_attempted then
-            raise
-          else
-            tmpdir.rmtree
-            tmpdir_create_attempted = true
-            retry
-          end
-        end
-      end
-
       def run(revision, working_copy)
         tmpdir = temp_dir_name(working_copy)
 
         abort("Path #{working_copy} already exists and --force not given.  Aborting...") if working_copy.exist? && !force
 
         begin
-          create_tmpdir(tmpdir)
           revision.checkout_to(tmpdir)
           working_copy.create
           working_copy.copy_from(revision)

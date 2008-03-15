@@ -1,5 +1,6 @@
 require "piston/git/client"
 require "piston/revision"
+require "fileutils"
 
 module Piston
   module Git
@@ -13,6 +14,7 @@ module Piston
         @dir = dir
         git(:clone, repository.url, @dir)
         Dir.chdir(@dir) do
+          logger.debug {"in dir #{@dir}"}
           git(:checkout, "-b", "my-#{revision}", revision)
           if revision == "HEAD" then
             response = git(:log, "-n", "1")
@@ -28,8 +30,13 @@ module Piston
           raise ArgumentError, "Never cloned + checked out" if @dir.nil?
           @dir.find do |path|
             Find.prune if path.to_s =~ %r{/[.]git}
+            next if @dir == path
             yield path.relative_path_from(@dir)
           end
+        end
+
+        def copy_to(relpath, abspath)
+          FileUtils.cp(@dir + relpath, abspath)
         end
       end
     end

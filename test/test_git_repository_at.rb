@@ -9,4 +9,9 @@ class TestGitRepositoryAt < Test::Unit::TestCase
     Piston::Git::Commit.expects(:new).with(@repos, "a93029").returns(commit = mock("commit"))
     assert_equal commit, @repos.at("a93029")
   end
+
+  def test_returns_a_piston_git_commit_at_head_when_appropriate
+    Piston::Git::Commit.expects(:new).with(@repos, "HEAD").returns(commit = mock("commit"))
+    assert_equal commit, @repos.at(:head)
+  end
 end

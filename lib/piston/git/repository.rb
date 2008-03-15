@@ -21,7 +21,12 @@ module Piston
       end
 
       def at(commit)
-        Piston::Git::Commit.new(self, commit)
+        case commit
+        when :head
+          Piston::Git::Commit.new(self, "HEAD")
+        else
+          Piston::Git::Commit.new(self, commit)
+        end
       end
     end
   end

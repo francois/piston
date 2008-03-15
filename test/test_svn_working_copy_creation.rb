@@ -16,10 +16,4 @@ class TestSvnWorkingCopyCreation < Test::Unit::TestCase
     @wc.expects(:svn).with(:mkdir, @wcdir)
     @wc.create
   end
-
-  def test_create_sets_local_revision
-    @wc.expects(:svn).with(:info, @wcdir.parent).returns("Last Changed Rev: 1321\n")
-    @wc.expects(:svn).with(:propset, Piston::Svn::LOCAL_REV, 1321, @wcdir)
-    @wc.create
-  end
 end

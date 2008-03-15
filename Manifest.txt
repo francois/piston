@@ -1,3 +1,4 @@
+.gitignore
 History.txt
 License.txt
 Manifest.txt
@@ -26,9 +27,6 @@ lib/piston/svn/working_copy.rb
 lib/piston/version.rb
 lib/piston/working_copy.rb
 log/.gitignore
-piston-core/log/test.log
-piston-git/log/test.log
-piston-svn/log/test.log
 samples/svn/import.rb
 script/destroy
 script/generate
@@ -42,6 +40,12 @@ test/test_git_commit_each.rb
 test/test_git_commit_rememberance.rb
 test/test_git_repository_at.rb
 test/test_git_repository_guessing.rb
+test/test_git_working_copy_copying.rb
+test/test_git_working_copy_creation.rb
+test/test_git_working_copy_existence.rb
+test/test_git_working_copy_finalization.rb
+test/test_git_working_copy_guessing.rb
+test/test_git_working_copy_rememberance.rb
 test/test_helper.rb
 test/test_import.rb
 test/test_piston.rb

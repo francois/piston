@@ -6,6 +6,10 @@ module Piston
     class WorkingCopy < Piston::WorkingCopy
       extend Piston::Git::Client
       def git(*args); self.class.git(*args); end
+
+      def create
+        path.mkdir rescue nil
+      end
     end
   end
 end

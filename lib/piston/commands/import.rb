@@ -39,7 +39,7 @@ module Piston
           working_copy.finalize
         ensure
           debug {"Removing temporary directory: #{tmpdir}"}
-          tmpdir.rmtree
+          tmpdir.rmtree rescue nil
         end
       end
     end

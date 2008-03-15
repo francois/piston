@@ -3,6 +3,9 @@ require "uri"
 
 module PistonGit
   class Repository < PistonCore::Repository
+    extend PistonGit::Client
+    def git(*args); self.class.git(*args); end
+
     PistonCore::Repository.add_handler self
 
     class << self

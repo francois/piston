@@ -1,7 +1,11 @@
+require "piston_git/client"
 require "piston_core/revision"
 
 module PistonGit
   class Commit < PistonCore::Revision
+    extend PistonGit::Client
+    def git(*args); self.class.git(*args); end
+
     alias_method :commit, :revision
 
     def checkout_to(dir)

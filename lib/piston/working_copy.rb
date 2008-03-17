@@ -66,7 +66,13 @@ module Piston
     # WorkingCopy will call Revision#copy_to with the full path to where the
     # file needs to be copied.
     def copy_from(revision)
-      logger.debug {"Copying from #{revision} to #{path}"}
+      revision.each do |relpath|
+        target = path + relpath
+        target.dirname.mkdir rescue nil
+
+        logger.debug {"Copying #{relpath} to #{target}"}
+        revision.copy_to(relpath, target)
+      end
     end
 
     # Stores a Hash of values that can be retrieved later.

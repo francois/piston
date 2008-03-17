@@ -39,16 +39,6 @@ module Piston
         git(:add, path)
       end
 
-      def copy_from(revision)
-        revision.each do |relpath|
-          target = path + relpath
-          target.dirname.mkdir rescue nil
-
-          logger.debug {"Copying #{relpath} to #{target}"}
-          revision.copy_to(relpath, target)
-        end
-      end
-
       def finalize
         Dir.chdir(path) { git(:add, ".") }
       end

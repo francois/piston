@@ -35,16 +35,6 @@ module Piston
         svn(:mkdir, path)
       end
 
-      def copy_from(revision)
-        revision.each do |relpath|
-          target = path + relpath
-          target.dirname.mkdir rescue nil
-
-          logger.debug {"Copying #{relpath} to #{target}"}
-          revision.copy_to(relpath, target)
-        end
-      end
-
       def recall(keys)
         hash = Hash.new
         keys.each do |k|

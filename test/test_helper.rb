@@ -15,11 +15,7 @@ module Test
         end
       end
     end
-  end
-end
 
-module Test
-  module Unit
     class TestCase
       class << self
         def logger

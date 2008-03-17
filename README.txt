@@ -134,12 +134,3 @@ repository than the one we checked out from originally.
 * <tt>piston:locked</tt>: The revision at which this folder is locked.  If
   this property is set and non-blank, Piston will skip the folder with
   an appropriate message.
-
-
-= Dependencies
-
-Piston depends on the following libraries:
-
-* yaml
-* uri
-* fileutils

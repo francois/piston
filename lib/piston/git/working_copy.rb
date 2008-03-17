@@ -49,12 +49,6 @@ module Piston
         end
       end
 
-      def remember(values)
-        File.open(path + ".piston.yml", "wb") do |f|
-          f.write({"format" => 1, "handler" => values}.to_yaml)
-        end
-      end
-
       def finalize
         Dir.chdir(path) { git(:add, ".") }
       end

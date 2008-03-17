@@ -71,7 +71,9 @@ module Piston
 
     # Stores a Hash of values that can be retrieved later.
     def remember(values)
-      logger.debug {"Remembering #{values.inspect}"}
+      File.open(path + ".piston.yml", "wb") do |f|
+        f.write({"format" => 1, "handler" => values}.to_yaml)
+      end
     end
 
     # Recalls a Hash of values from the working copy.

@@ -36,10 +36,6 @@ module Piston
       end
 
       def finalize
-        git(:add, path)
-      end
-
-      def finalize
         Dir.chdir(path) { git(:add, ".") }
       end
     end

@@ -12,7 +12,7 @@ module Piston
       end
 
       def guess(path)
-        path = path.kind_of?(Pathname) ? path : Pathname.new(path)
+        path = path.kind_of?(Pathname) ? path : Pathname.new(path.to_s)
         logger.debug {"Guessing the working copy type of #{path.inspect}"}
         handler = handlers.detect do |handler|
           logger.debug {"Asking #{handler.name} if it understands #{path}"}

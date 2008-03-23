@@ -14,7 +14,7 @@ module Piston
         def understands_dir?(dir)
           path = dir
           begin
-            while path.parent
+            while path.parent && path.to_s != "/"
               response = git(:status, path)
               return true if response =~ /# On branch /
               path = path.parent

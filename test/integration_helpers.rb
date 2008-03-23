@@ -20,6 +20,10 @@ def svnadmin(*args)
   runcmd(:svnadmin, *args)
 end
 
+def git(*args)
+  runcmd(:git, *args)
+end
+
 def piston(*args)
   runcmd(:ruby, "-I", PISTON_ROOT + "lib", PISTON_ROOT + "bin/piston", *args)
 end

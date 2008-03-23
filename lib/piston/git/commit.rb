@@ -31,11 +31,13 @@ module Piston
           @dir.find do |path|
             Find.prune if path.to_s =~ %r{/[.]git}
             next if @dir == path
+            next if File.directory?(path)
             yield path.relative_path_from(@dir)
           end
         end
 
         def copy_to(relpath, abspath)
+          Pathname.new(abspath).dirname.mkpath rescue nil
           FileUtils.cp(@dir + relpath, abspath)
         end
       end

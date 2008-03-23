@@ -1,4 +1,4 @@
-#!/usr/bin/env
+#!/usr/bin/env ruby
 require "piston"
 
 # Chain to the real command-line client

@@ -14,9 +14,13 @@ module Piston
           uri = URI.parse(url)
           return true if %w(git).include?(uri.scheme)
 
-          response = git("ls-remote", "--heads", url)
-          return false if response.nil? || response.strip.chomp.empty?
-          !!(response =~ /[a-f\d]{40}\s/)
+          begin
+            response = git("ls-remote", "--heads", url)
+            return false if response.nil? || response.strip.chomp.empty?
+            !!(response =~ /[a-f\d]{40}\s/)
+          rescue Piston::Git::Client::CommandError
+            false
+          end
         end
       end
 

@@ -14,13 +14,23 @@ module Piston
         def understands_dir?(dir)
           path = dir
           begin
-            while path.parent && path.to_s != "/"
-              response = git(:status, path)
-              return true if response =~ /# On branch /
+            begin
+              logger.debug {"git status on #{path}"}
+              Dir.chdir(path) do
+                response = git(:status)
+                return true if response =~ /# On branch /
+              end
+            rescue Errno::ENOENT
+              # NOP, we assume this is simply because the folder hasn't been created yet
               path = path.parent
+              retry unless path.to_s == "/"
+              return false
             end
           rescue BadCommand
             # NOP, as we return false below
+          rescue Piston::Git::Client::CommandError
+            # This is certainly not a Git repository
+            false
           end
 
           false

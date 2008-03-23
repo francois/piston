@@ -6,7 +6,8 @@ class TestGitWorkingCopyGuessing < Test::Unit::TestCase
   end
 
   def test_does_git_status_on_directory
-    Piston::Git::WorkingCopy.expects(:git).with(:status, @dir).returns("# On branch master
+    Dir.expects(:chdir).with(@dir).yields
+    Piston::Git::WorkingCopy.expects(:git).with(:status).returns("# On branch master
 nothing to commit (working directory clean)
 ")
     assert Piston::Git::WorkingCopy.understands_dir?(@dir)
@@ -16,9 +17,11 @@ nothing to commit (working directory clean)
     @wc = @dir
     @tmp = @wc.parent
     @root = @tmp.parent
-    Piston::Git::WorkingCopy.expects(:git).with(:status, @wc)
-    Piston::Git::WorkingCopy.expects(:git).with(:status, @tmp)
-    Piston::Git::WorkingCopy.expects(:git).with(:status, @root).returns("# On branch master
+
+    Dir.expects(:chdir).with(@dir).raises(Errno::ENOENT)
+    Dir.expects(:chdir).with(@tmp).raises(Errno::ENOENT)
+    Dir.expects(:chdir).with(@root).yields
+    Piston::Git::WorkingCopy.expects(:git).with(:status).returns("# On branch master
 nothing to commit (working directory clean)
 ")
     assert Piston::Git::WorkingCopy.understands_dir?(@dir)

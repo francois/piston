@@ -35,6 +35,12 @@ module Piston
         svn(:mkdir, path)
       end
 
+      def after_remember(path)
+        info = svn(:info, path)
+        return unless info =~ /\(not a versioned resource\)/i
+        svn(:add, path)
+      end
+
       def recall(keys)
         hash = Hash.new
         keys.each do |k|

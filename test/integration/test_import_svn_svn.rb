@@ -2,25 +2,27 @@ require File.dirname(__FILE__) + "/../test_helper"
 require File.dirname(__FILE__) + "/../integration_helpers"
 
 class TestImportSvnSvn < Test::Unit::TestCase
-  attr_reader :repos_path, :wc_path
+  attr_reader :root_path, :repos_path, :wc_path
 
   def setup
-    @repos_path = PISTON_ROOT + "tmp/import_real/repos"
-    @wc_path = PISTON_ROOT + "tmp/import_real/wc"
+    @root_path = Pathname.new("/tmp/import_svn_svn")
+    @repos_path = @root_path + "repos"
+    @wc_path = @root_path + "wc"
 
-    repos_path.parent.rmtree rescue nil
-    repos_path.parent.mkpath
-  end
+    root_path.rmtree rescue nil
+    root_path.mkpath
 
-  def teardown
-    repos_path.parent.rmtree rescue nil
-  end
-
-  def test_import
     svnadmin :create, repos_path
     svn :checkout, "file://#{repos_path}", wc_path
     svn :mkdir, wc_path + "trunk", wc_path + "tags", wc_path + "branches", wc_path + "trunk/vendor"
     svn :commit, wc_path, "--message", "'first commit'"
+  end
+
+  def teardown
+    root_path.rmtree rescue nil
+  end
+
+  def test_import
     piston :import, "http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement/", wc_path + "trunk/vendor/ssl_requirement"
 
     assert_equal "A      vendor/ssl_requirement
@@ -30,7 +32,7 @@ A      vendor/ssl_requirement/lib
 A      vendor/ssl_requirement/lib/ssl_requirement.rb
 A      vendor/ssl_requirement/.piston.yml
 A      vendor/ssl_requirement/README
-".split.sort, svn(:status, wc_path + "trunk/vendor/").gsub((wc_path + "trunk/").to_s, "").split.sort
+".split("\n").sort, svn(:status, wc_path + "trunk/vendor/").gsub((wc_path + "trunk/").to_s, "").split("\n").sort
 
     info = YAML.load(File.read(wc_path + "trunk/vendor/ssl_requirement/.piston.yml"))
     assert_equal 1, info["format"]

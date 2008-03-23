@@ -37,7 +37,7 @@ module Piston
 
       def after_remember(path)
         info = svn(:info, path)
-        return unless info =~ /\(not a versioned resource\)/i
+        return unless info =~ /\(not a versioned resource\)/i || info.empty?
         svn(:add, path)
       end
 

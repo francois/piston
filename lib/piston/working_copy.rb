@@ -77,11 +77,14 @@ module Piston
 
     # Stores a Hash of values that can be retrieved later.
     def remember(values)
-      File.open(path + ".piston.yml", "wb") do |f|
+      logger.debug {"Remembering #{values.inspect}"}
+      yaml_path = path + ".piston.yml"
+      File.open(yaml_path, "wb") do |f|
         f.write({"format" => 1, "handler" => values}.to_yaml)
       end
 
-      after_remember(path + ".piston.yml")
+      logger.debug {"Calling \#after_remember on #{yaml_path}"}
+      after_remember(yaml_path)
     end
 
     # Callback after #remember is done, to do whatever the

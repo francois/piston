@@ -80,6 +80,13 @@ module Piston
       File.open(path + ".piston.yml", "wb") do |f|
         f.write({"format" => 1, "handler" => values}.to_yaml)
       end
+
+      after_remember(path + ".piston.yml")
+    end
+
+    # Callback after #remember is done, to do whatever the
+    # working copy needs to do with the file.
+    def after_remember(path)
     end
 
     # Recalls a Hash of values from the working copy.

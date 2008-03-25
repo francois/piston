@@ -18,6 +18,7 @@ module Piston
         logger.debug {"Guessing the repository type of #{url.inspect}"}
 
         handler = handlers.detect do |handler|
+          logger.debug {"Asking #{handler}"}
           handler.understands_url?(url)
         end
 

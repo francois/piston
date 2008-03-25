@@ -14,11 +14,13 @@ module Piston
           case uri.scheme
           when "svn", /^svn\+/
             true
-          when "http", "file"
+          when "http", "https", "file"
             # Have to contact server to know
             result = svn(:info, url) rescue :failed
             result == :failed ? false : true
           else
+            # Don't know how to handle this scheme.
+            # Let someone else handle it
           end
         end
       end

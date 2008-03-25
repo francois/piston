@@ -1,16 +1,20 @@
+require "singleton"
+
 module Piston
   module Git
-    module Client
+    class Client
+      include Singleton
+
       class CommandError < RuntimeError; end
       class Failed < CommandError; end
       class BadCommand < CommandError; end
 
-      def git(*args)
-        run_cmd :git, *args
+      def logger
+        @logger ||= Log4r::Logger["handler::client"]
       end
 
-      def debug(&block)
-        logger.debug(&block) if logger
+      def git(*args)
+        run_cmd :git, *args
       end
 
       private
@@ -18,13 +22,13 @@ module Piston
         args.collect! {|arg| arg =~ /\s|\*|\?|"|\n|\r/ ? %Q('#{arg}') : arg}
         args.collect! {|arg| arg ? arg : '""'}
         cmd = %Q|#{executable} #{args.join(' ')}|
-          debug {cmd}
+        logger.debug {"> " + cmd}
 
         original_language = ENV["LANGUAGE"]
         begin
           ENV["LANGUAGE"] = "C"
           value = run_real(cmd)
-          debug {value} unless (value || "").strip.empty?
+          logger.debug {"< " + value} unless (value || "").strip.empty?
           return value
         ensure
           ENV["LANGUAGE"] = original_language
@@ -44,10 +48,8 @@ module Piston
 
         def run_real(cmd)
           begin
-            debug {"> #{cmd.inspect}"}
             pid, stdin, stdout, stderr = Open4::popen4(cmd)
             _, cmdstatus = Process.waitpid2(pid)
-            debug {"> #{cmdstatus.inspect}, success? #{cmdstatus.success?}, status: #{cmdstatus.exitstatus}"}
             return stdout.read if cmd =~ /status/ && cmdstatus.exitstatus == 1
             raise CommandError, "#{cmd.inspect} exited with status: #{cmdstatus.exitstatus}\n#{stderr.read}" unless cmdstatus.success?
             return stdout.read

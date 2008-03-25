@@ -4,9 +4,6 @@ require "piston/git/client"
 module Piston
   module Git
     class WorkingCopy < Piston::WorkingCopy
-      extend Piston::Git::Client
-      def git(*args); self.class.git(*args); end
-
       # Register ourselves as a handler for working copies
       Piston::WorkingCopy.add_handler self
 
@@ -26,7 +23,7 @@ module Piston
               retry unless path.to_s == "/"
               return false
             end
-          rescue BadCommand
+          rescue Piston::Git::Client::BadCommand
             # NOP, as we return false below
           rescue Piston::Git::Client::CommandError
             # This is certainly not a Git repository
@@ -35,6 +32,18 @@ module Piston
 
           false
         end
+
+        def client
+          @@client ||= Piston::Git::Client.instance
+        end
+
+        def git(*args)
+          client.git(*args)
+        end
+      end
+
+      def git(*args)
+        self.class.git(*args)
       end
 
       def create

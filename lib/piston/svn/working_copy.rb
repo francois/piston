@@ -3,8 +3,6 @@ require "yaml"
 module Piston
   module Svn
     class WorkingCopy < Piston::WorkingCopy
-      extend Piston::Svn::Client
-
       # Register ourselves as a handler for working copies
       Piston::WorkingCopy.add_handler self
 
@@ -13,14 +11,18 @@ module Piston
           result = svn(:info, dir) rescue :failed
           result == :failed ? false : true
         end
+
+        def client
+          @@client ||= Piston::Svn::Client.instance
+        end
+
+        def svn(*args)
+          client.svn(*args)
+        end
       end
 
       def svn(*args)
         self.class.svn(*args)
-      end
-
-      def svnadmin(*args)
-        self.class.svnadmin(*args)
       end
 
       def exist?

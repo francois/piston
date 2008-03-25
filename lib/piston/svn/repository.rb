@@ -3,8 +3,6 @@ require "uri"
 module Piston
   module Svn
     class Repository < Piston::Repository
-      extend Piston::Svn::Client
-
       # Register ourselves as a repository handler
       Piston::Repository.add_handler self
 
@@ -23,14 +21,18 @@ module Piston
             # Let someone else handle it
           end
         end
+
+        def client
+          @@client ||= Piston::Svn::Client.instance
+        end
+
+        def svn(*args)
+          client.svn(*args)
+        end
       end
 
       def svn(*args)
         self.class.svn(*args)
-      end
-
-      def svnadmin(*args)
-        self.class.svnadmin(*args)
       end
 
       def at(revision)

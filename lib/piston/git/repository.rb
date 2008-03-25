@@ -4,9 +4,6 @@ require "uri"
 module Piston
   module Git
     class Repository < Piston::Repository
-      extend Piston::Git::Client
-      def git(*args); self.class.git(*args); end
-
       Piston::Repository.add_handler self
 
       class << self
@@ -22,6 +19,18 @@ module Piston
             false
           end
         end
+
+        def client
+          @@client ||= Piston::Git::Client.instance
+        end
+
+        def git(*args)
+          client.git(*args)
+        end
+      end
+
+      def git(*args)
+        self.class.git(*args)
       end
 
       def at(commit)

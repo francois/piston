@@ -1,9 +1,17 @@
+require "singleton"
+
 module Piston
   module Svn
-    module Client
+    class Client
+      include Singleton
+
       class CommandError < RuntimeError; end
       class Failed < CommandError; end
       class BadCommand < CommandError; end
+
+      def logger
+        @logger ||= Log4r::Logger["handler::client"]
+      end
 
       def svnadmin(*args)
         run_cmd :svnadmin, *args
@@ -21,22 +29,18 @@ module Piston
         run_cmd :svnversion, *args
       end
 
-      def debug(&block)
-        logger.debug(&block) if logger
-      end
-
       private
       def run_cmd(executable, *args)
         args.collect! {|arg| arg =~ /\s|\*|\?|"|\n|\r/ ? %Q('#{arg}') : arg}
         args.collect! {|arg| arg ? arg : '""'}
         cmd = %Q|#{executable} #{args.join(' ')}|
-          debug {cmd}
+        logger.debug {"> " + cmd}
 
         original_language = ENV["LANGUAGE"]
         begin
           ENV["LANGUAGE"] = "C"
           value = run_real(cmd)
-          debug {value} unless (value || "").strip.empty?
+          logger.debug {"< " + value} unless (value || "").strip.empty?
           return value
         ensure
           ENV["LANGUAGE"] = original_language

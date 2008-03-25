@@ -4,7 +4,13 @@ require "fileutils"
 module Piston
   module Svn
     class Revision < Piston::Revision
-      include Piston::Svn::Client
+      def client
+        @client ||= Piston::Svn::Client.instance
+      end
+
+      def svn(*args)
+        client.svn(*args)
+      end
 
       def checkout_to(path)
         @wcpath = path.kind_of?(Pathname) ? path : Pathname.new(path)

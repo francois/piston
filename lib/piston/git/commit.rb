@@ -5,10 +5,15 @@ require "fileutils"
 module Piston
   module Git
     class Commit < Piston::Revision
-      extend Piston::Git::Client
-      def git(*args); self.class.git(*args); end
-
       alias_method :commit, :revision
+
+      def client
+        @client ||= Piston::Git::Client.instance
+      end
+
+      def git(*args)
+        client.git(*args)
+      end
 
       def checkout_to(dir)
         @dir = dir

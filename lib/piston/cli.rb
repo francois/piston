@@ -98,7 +98,7 @@ Main {
 
     Log4r::Logger.new("main", Log4r::DEBUG)
     Log4r::Logger.new("handler", Log4r::DEBUG)
-    Log4r::Logger.new("handler::backend", Log4r::DEBUG)
+    Log4r::Logger.new("handler::client", Log4r::DEBUG)
 
     Log4r::StderrOutputter.new("console", :level => Log4r::WARN)
     Log4r::StdoutOutputter.new("main", :level => params["verbose"].value ? Log4r::DEBUG : Log4r::INFO)

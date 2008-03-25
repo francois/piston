@@ -18,7 +18,7 @@ module Piston
           revision.checkout_to(tmpdir)
           working_copy.create
           working_copy.copy_from(revision)
-          working_copy.remember(revision.remember_values)
+          working_copy.remember({:lock => options[:lock]}, revision.remember_values)
           working_copy.finalize
         ensure
           debug {"Removing temporary directory: #{tmpdir}"}

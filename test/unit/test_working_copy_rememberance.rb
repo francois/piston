@@ -28,4 +28,14 @@ class TestWorkingCopyRememberance < Test::Unit::TestCase
     @wc.expects(:after_remember).with(@wcdir + ".piston.yml")
     @wc.remember("a" => "b")
   end
+
+  def test_remember_with_two_args_remembers_handler_values_separately
+    values = {"lock" => true}
+    handler_values = {"a" => "b"}
+
+    @wc.remember(values, handler_values)
+
+    actual = YAML.load((@wcdir + ".piston.yml").read)
+    assert_equal values.merge("format" => 1, "handler" => handler_values), actual
+  end
 end

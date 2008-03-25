@@ -76,11 +76,27 @@ module Piston
     end
 
     # Stores a Hash of values that can be retrieved later.
-    def remember(values)
-      logger.debug {"Remembering #{values.inspect}"}
+    def remember(*args)
+      case args.length
+      when 1
+        values, handler_values = Hash.new, args.shift
+      when 2
+        values, handler_values = args.shift, args.shift
+      else
+        raise ArgumentError, "Piston::WorkingCopy#\remember expected 1 or 2 arguments, received #{args.length}"
+      end
+
+      values["format"] = 1
+
+      # Stringify keys
+      values.keys.each do |key|
+        values[key.to_s] = values.delete(key)
+      end
+
+      logger.debug {"Remembering #{values.inspect} as well as #{handler_values.inspect}"}
       yaml_path = path + ".piston.yml"
       File.open(yaml_path, "wb") do |f|
-        f.write({"format" => 1, "handler" => values}.to_yaml)
+        f.write(values.merge("handler" => handler_values).to_yaml)
       end
 
       logger.debug {"Calling \#after_remember on #{yaml_path}"}

@@ -1,4 +1,5 @@
 require "main"
+require "log4r"
 require "piston/version"
 require "piston/commands"
 
@@ -61,11 +62,11 @@ Main {
 
     logger_level Logger::DEBUG
     def run
+      configure_logging!
+
       if params["revision"].given? && params["commit"].given? then
         raise ArgumentError, "Only one of --revision or --commit can be given.  Received both."
       end
-
-      set_loggers!
 
       cmd = Piston::Commands::Import.new(:lock => params["lock"].value,
                                          :verbose => params["verbose"].value,
@@ -92,9 +93,17 @@ Main {
     end
   end
 
-  def set_loggers!
-    Piston::Repository.logger = logger
-    Piston::WorkingCopy.logger = logger
-    Piston::Commands::Base.logger = logger
+  def configure_logging!
+    Log4r::Logger.root.level = Log4r::DEBUG
+
+    Log4r::Logger.new("main", Log4r::DEBUG)
+    Log4r::Logger.new("handler", Log4r::DEBUG)
+    Log4r::Logger.new("handler::backend", Log4r::DEBUG)
+
+    Log4r::StderrOutputter.new("console", :level => Log4r::WARN)
+    Log4r::StdoutOutputter.new("main", :level => params["verbose"].value ? Log4r::DEBUG : Log4r::INFO)
+
+    Log4r::Logger["main"].add "console", "main"
+    Log4r::Logger["handler"].add "console", "main"
   end
 }

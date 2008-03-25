@@ -61,7 +61,8 @@ hoe = Hoe.new(GEM_NAME, VERS) do |p|
   p.changes = p.paragraphs_of("History.txt", 0..1).join("\n\n")
   p.extra_deps = [
     ["main", "~> 2.8.0"],
-    ["open4", "~> 0.9.6"]
+    ["open4", "~> 0.9.6"],
+    ["log4r", "~> 1.0.5"]
   ]
 
   #p.spec_extras = {}    # A hash of extra values to set in the gemspec.

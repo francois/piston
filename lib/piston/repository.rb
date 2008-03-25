@@ -6,12 +6,7 @@ module Piston
 
     class << self
       def logger
-        @@logger
-      end
-
-      def logger=(logger)
-        @@logger = logger
-        Piston::Revision.logger = @@logger
+        @@logger ||= Log4r::Logger["handler"]
       end
 
       def guess(url)

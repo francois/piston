@@ -1,7 +1,7 @@
 require "test/unit"
 require "rubygems"
 require "mocha"
-require "logger"
+require "log4r"
 
 require File.dirname(__FILE__) + "/../config/requirements"
 
@@ -19,7 +19,7 @@ module Test
     class TestCase
       class << self
         def logger
-          @@logger ||= Logger.new("log/test.log")
+          @@logger ||= Log4r::Logger["test"]
         end
       end
 
@@ -30,8 +30,18 @@ module Test
   end
 end
 
-Pathname.new(File.dirname(__FILE__) + "/../log").mkdir rescue nil
-Piston::WorkingCopy.logger =
-  Piston::Repository.logger =
-  Piston::Commands::Base.logger =
-  Test::Unit::TestCase.logger
+LOG_DIR = Pathname.new(File.dirname(__FILE__) + "/../log")
+LOG_DIR.mkdir rescue nil
+
+Log4r::Logger.root.level = Log4r::DEBUG
+
+Log4r::Logger.new("main", Log4r::DEBUG)
+Log4r::Logger.new("handler", Log4r::DEBUG)
+Log4r::Logger.new("handler::backend", Log4r::DEBUG)
+Log4r::Logger.new("test", Log4r::DEBUG)
+
+Log4r::FileOutputter.new("log", :trunc => true, :filename => (LOG_DIR + "test.log").realpath.to_s)
+
+Log4r::Logger["main"].add "log"
+Log4r::Logger["handler"].add "log"
+Log4r::Logger["test"].add "log"

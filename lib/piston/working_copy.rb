@@ -3,12 +3,8 @@ module Piston
     class UnhandledWorkingCopy < RuntimeError; end
 
     class << self
-      def logger=(logger)
-        @@logger = logger
-      end
-
       def logger
-        @@logger
+        @@logger ||= Log4r::Logger["handler"]
       end
 
       def guess(path)

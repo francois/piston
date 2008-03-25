@@ -3,12 +3,8 @@ module Piston
     include Enumerable
 
     class << self
-      def logger=(logger)
-        @@logger = logger
-      end
-
       def logger
-        @@logger
+        @@logger ||= Log4r::Logger["handler"]
       end
     end
 

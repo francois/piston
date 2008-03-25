@@ -2,12 +2,8 @@ module Piston
   module Commands
     class Base
       class << self
-        def logger=(logger)
-          @@logger = logger
-        end
-
         def logger
-          @@logger
+          @@logger ||= Log4r::Logger["main"]
         end
       end
 

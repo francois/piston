@@ -10,7 +10,7 @@ module Piston
       end
 
       def guess(url)
-        logger.debug {"Guessing the repository type of #{url.inspect}"}
+        logger.info {"Guessing the repository type of #{url.inspect}"}
 
         handler = handlers.detect do |handler|
           logger.debug {"Asking #{handler}"}
@@ -43,7 +43,7 @@ module Piston
     end
 
     def at(revision)
-      logger.debug {"Targeting #{self} at #{revision.inspect}"}
+      logger.info {"Targeting #{self} at #{revision.inspect}"}
       Piston::Revision.new(self, revision)
     end
 

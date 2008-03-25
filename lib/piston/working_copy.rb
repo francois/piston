@@ -9,7 +9,7 @@ module Piston
 
       def guess(path)
         path = path.kind_of?(Pathname) ? path : Pathname.new(path.to_s)
-        logger.debug {"Guessing the working copy type of #{path.inspect}"}
+        logger.info {"Guessing the working copy type of #{path.inspect}"}
         handler = handlers.detect do |handler|
           logger.debug {"Asking #{handler.name} if it understands #{path}"}
           handler.understands_dir?(path)

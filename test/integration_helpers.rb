@@ -1,5 +1,9 @@
 PISTON_ROOT = Pathname.new(File.dirname(__FILE__)).parent.realpath
 
+def logger
+  @logger ||= Log4r::Logger["test"]
+end
+
 def runcmd(cmd, *args)
   cmdline = [cmd]
   cmdline += args

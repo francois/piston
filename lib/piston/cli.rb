@@ -50,7 +50,7 @@ Main {
 
     argument "directory" do
       optional
-      default :repository
+      default nil
       description "Where to put the Pistonized repository"
     end
 
@@ -72,11 +72,7 @@ Main {
                                          :quiet => params["quiet"].value,
                                          :force => params["force"].value,
                                          :dry_run => params["dry-run"].value)
-      repository = Piston::Repository.guess(params[:repository].value)
-      revision = repository.at(self.target_revision)
-      working_copy = Piston::WorkingCopy.guess(params[:directory].value)
-
-      cmd.run(revision, working_copy)
+      cmd.run(params[:repository].value, self.target_revision, params[:directory].value)
     end
   end
 

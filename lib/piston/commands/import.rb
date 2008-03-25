@@ -9,7 +9,14 @@ module Piston
         working_copy.path.parent + ".#{working_copy.path.basename}.tmp"
       end
 
-      def run(revision, working_copy)
+      def run(repository_url, target_revision, wcdir)
+        repository = Piston::Repository.guess(repository_url)
+        revision = repository.at(target_revision)
+
+        wcdir = wcdir.nil? ? repository.basename : wcdir
+        debug {"repository_url: #{repository_url.inspect}, target_revision: #{target_revision.inspect}, wcdir: #{wcdir.inspect}"}
+        working_copy = Piston::WorkingCopy.guess(wcdir)
+
         tmpdir = temp_dir_name(working_copy)
 
         abort("Path #{working_copy} already exists and --force not given.  Aborting...") if working_copy.exist? && !force

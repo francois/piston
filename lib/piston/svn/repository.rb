@@ -45,6 +45,14 @@ module Piston
 
         Piston::Svn::Revision.new(self, rev)
       end
+
+      def basename
+        if self.url =~ /trunk|branches|tags/ then
+          self.url.sub(%r{/(?:trunk|branches|tags).*$}, "").split("/").last
+        else
+          self.url.split("/").last
+        end
+      end
     end
   end
 end

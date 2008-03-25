@@ -32,6 +32,10 @@ module Piston
           Piston::Git::Commit.new(self, commit)
         end
       end
+
+      def basename
+        self.url.split("/").last.sub(".git", "")
+      end
     end
   end
 end

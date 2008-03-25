@@ -1,0 +1,7 @@
+--- 
+format: 1
+handler: 
+  piston:remote-revision: 9088
+  piston:root: http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
+  piston:uuid: 5ecf4fe2-1ee6-0310-87b1-e25e094e27de
+lock: false

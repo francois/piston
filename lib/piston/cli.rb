@@ -94,14 +94,15 @@ Main {
   end
 
   def configure_logging!
-    Log4r::Logger.root.level = Log4r::ALL
+    Log4r::Logger.root.level = params["verbose"].value ? Log4r::DEBUG : Log4r::INFO
 
     Log4r::Logger.new("main")
     Log4r::Logger.new("handler")
     Log4r::Logger.new("handler::client")
+    Log4r::Logger.new("handler::client::out")
 
     Log4r::StderrOutputter.new("stderr", :level => Log4r::WARN)
-    Log4r::StdoutOutputter.new("stdout", :level => params["verbose"].value ? Log4r::DEBUG : Log4r::INFO)
+    Log4r::StdoutOutputter.new("stdout")
 
     Log4r::Logger["main"].add "stdout", "stderr"
     Log4r::Logger["handler"].add "stdout", "stderr"

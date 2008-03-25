@@ -35,10 +35,11 @@ LOG_DIR.mkdir rescue nil
 
 Log4r::Logger.root.level = Log4r::DEBUG
 
-Log4r::Logger.new("main", Log4r::DEBUG)
-Log4r::Logger.new("handler", Log4r::DEBUG)
-Log4r::Logger.new("handler::backend", Log4r::DEBUG)
-Log4r::Logger.new("test", Log4r::DEBUG)
+Log4r::Logger.new("main")
+Log4r::Logger.new("handler")
+Log4r::Logger.new("handler::client")
+Log4r::Logger.new("handler::client::out")
+Log4r::Logger.new("test")
 
 Log4r::FileOutputter.new("log", :trunc => true, :filename => (LOG_DIR + "test.log").realpath.to_s)
 

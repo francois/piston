@@ -13,6 +13,10 @@ module Piston
         @logger ||= Log4r::Logger["handler::client"]
       end
 
+      def out_logger
+        @out_logger ||= Log4r::Logger["handler::client::out"]
+      end
+
       def git(*args)
         run_cmd :git, *args
       end
@@ -28,7 +32,7 @@ module Piston
         begin
           ENV["LANGUAGE"] = "C"
           value = run_real(cmd)
-          logger.debug {"< " + value} unless (value || "").strip.empty?
+          out_logger.info {"< " + value} unless (value || "").strip.empty?
           return value
         ensure
           ENV["LANGUAGE"] = original_language

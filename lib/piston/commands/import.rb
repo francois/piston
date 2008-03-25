@@ -21,7 +21,10 @@ module Piston
 
         tmpdir = temp_dir_name(working_copy)
 
-        abort("Path #{working_copy} already exists and --force not given.  Aborting...") if working_copy.exist? && !force
+        if working_copy.exist? && !force then
+          logger.fatal "Path #{working_copy} already exists and --force not given.  Aborting..."
+          abort
+        end
 
         begin
           logger.info {"Checking out the repository"}

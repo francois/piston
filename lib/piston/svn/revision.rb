@@ -12,6 +12,10 @@ module Piston
         client.svn(*args)
       end
 
+      def name
+        "r#{revision}"
+      end
+
       def checkout_to(path)
         @wcpath = path.kind_of?(Pathname) ? path : Pathname.new(path)
         answer = svn(:checkout, "--revision", revision, repository.url, path)

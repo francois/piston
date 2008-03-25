@@ -15,6 +15,10 @@ module Piston
         client.git(*args)
       end
 
+      def name
+        commit[0,7]
+      end
+
       def checkout_to(dir)
         @dir = dir
         git(:clone, repository.url, @dir)

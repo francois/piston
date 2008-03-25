@@ -11,7 +11,7 @@ module Piston
 
       def initialize(options={})
         @options = options
-        debug {"#{self.class.name} with options #{options.inspect}"}
+        logger.debug {"#{self.class.name} with options #{options.inspect}"}
       end
 
       def verbose
@@ -28,26 +28,6 @@ module Piston
 
       def logger
         self.class.logger
-      end
-
-      def debug(msg=nil)
-        logger.debug { msg || yield }
-      end
-
-      def info(msg=nil)
-        logger.info { msg || yield }
-      end
-
-      def warn(msg=nil)
-        logger.warn { msg || yield }
-      end
-
-      def error(msg=nil)
-        logger.error { msg || yield }
-      end
-
-      def fatal(msg=nil)
-        logger.fatal { msg || yield }
       end
     end
   end

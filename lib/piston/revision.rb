@@ -14,6 +14,10 @@ module Piston
       @repository, @revision = repository, revision
     end
 
+    def name
+      @revision
+    end
+
     def logger
       self.class.logger
     end

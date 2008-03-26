@@ -46,7 +46,7 @@ module Piston
         end
 
         def copy_to(relpath, abspath)
-          Pathname.new(abspath).dirname.mkpath rescue nil
+          Pathname.new(abspath).dirname.mkpath
           FileUtils.cp(@dir + relpath, abspath)
         end
       end

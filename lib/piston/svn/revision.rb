@@ -51,7 +51,7 @@ module Piston
       def copy_to(relpath, abspath)
         raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @wcpath
 
-        Pathname.new(abspath).dirname.mkdir rescue nil
+        Pathname.new(abspath).dirname.mkpath
         FileUtils.cp(@wcpath + relpath, abspath)
       end
     end

@@ -95,8 +95,8 @@ module Piston
     end
 
     # Recalls a Hash of values from the working copy.
-    # The expected keys are passed as parameters.
-    def recall(keys)
+    def recall
+      YAML.load(File.read(yaml_path))
     end
 
     def finalize
@@ -110,4 +110,3 @@ module Piston
     end
   end
 end
-

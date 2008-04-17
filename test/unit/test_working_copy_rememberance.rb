@@ -38,4 +38,11 @@ class TestWorkingCopyRememberance < Test::Unit::TestCase
     actual = YAML.load((@wcdir + ".piston.yml").read)
     assert_equal values.merge("format" => 1, "handler" => handler_values), actual
   end
+
+  def test_recall_returns_hash_of_values
+    values = {"a" => "b", "handler" => {"b" => "c"}}
+    File.expects(:read).with(@wcdir + ".piston.yml").returns(:data)
+    YAML.expects(:load).with(:data).returns(values)
+    assert_equal values, @wc.recall
+  end
 end

@@ -35,7 +35,8 @@ class TestImportGitGit < Test::Unit::TestCase
 
     info = YAML.load(File.read(wc_path + "vendor/attachment_fu/.piston.yml"))
     assert_equal 1, info["format"]
-    assert_equal "git://github.com/technoweenie/attachment_fu.git", info["handler"][Piston::Git::URL]
+    assert_equal "git://github.com/technoweenie/attachment_fu.git", info["repository_url"]
+    assert_equal "Piston::Git::Repository", info["repository_class"]
 
     response = `git-ls-remote git://github.com/technoweenie/attachment_fu.git`
     head_commit = response.grep(/HEAD/).first.chomp.split(/\s+/).first

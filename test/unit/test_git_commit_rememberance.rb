@@ -10,10 +10,6 @@ class TestGitCommitRememberance < Test::Unit::TestCase
     @values = @commit.remember_values
   end
 
-  def test_remembers_original_repository_url
-    assert_equal @repos.url, @values[Piston::Git::URL]
-  end
-
   def test_remembers_original_commit
     assert_equal @values[Piston::Git::COMMIT], @commit.commit
   end

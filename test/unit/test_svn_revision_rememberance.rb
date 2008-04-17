@@ -29,12 +29,6 @@ class TestSvnRevisionRememberance < Test::Unit::TestCase
     assert_equal "some-long-uuid", rev.remember_values[Piston::Svn::UUID]
   end
 
-  def test_remembers_repos_url
-    rev = new_revision("HEAD")
-    rev.expects(:svn).with(:info, "--revision", "HEAD", @repos.url).returns(@info.to_yaml)
-    assert_equal @repos.url, rev.remember_values[Piston::Svn::ROOT]
-  end
-
   def test_remembers_repos_revision
     rev = new_revision("HEAD")
     rev.expects(:svn).with(:info, "--revision", "HEAD", @repos.url).returns(@info.to_yaml)

@@ -37,7 +37,8 @@ module Piston
           working_copy.copy_from(revision)
 
           logger.debug {"Remembering values"}
-          working_copy.remember({:lock => options[:lock]}, revision.remember_values)
+          working_copy.remember({:repository_url => repository.url, :lock => options[:lock], :repository_class => repository.class.name},
+                                revision.remember_values)
 
           logger.debug {"Finalizing working copy"}
           working_copy.finalize

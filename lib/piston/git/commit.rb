@@ -32,7 +32,7 @@ module Piston
         end
 
         def remember_values
-          { Piston::Git::URL => repository.url, Piston::Git::COMMIT => commit }
+          { Piston::Git::COMMIT => commit }
         end
 
         def each

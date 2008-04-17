@@ -45,7 +45,8 @@ class TestImportSvnGit < Test::Unit::TestCase
 
     info = YAML.load(File.read(wc_path + "vendor/ssl_requirement/.piston.yml"))
     assert_equal 1, info["format"]
-    assert_equal "http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement", info["handler"][Piston::Svn::ROOT]
+    assert_equal "http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement/", info["repository_url"]
+    assert_equal "Piston::Svn::Repository", info["repository_class"]
     assert_equal "5ecf4fe2-1ee6-0310-87b1-e25e094e27de", info["handler"][Piston::Svn::UUID]
   end
 end

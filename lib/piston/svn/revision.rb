@@ -35,7 +35,6 @@ module Piston
         raise Failed, "Could not get 'svn info' from #{repository.url} at revision #{revision}" if str.nil? || str.chomp.strip.empty?
         info = YAML.load(str)
         { Piston::Svn::UUID => info["Repository UUID"],
-          Piston::Svn::ROOT => info["URL"],
           Piston::Svn::REMOTE_REV => info["Revision"]}
       end
 

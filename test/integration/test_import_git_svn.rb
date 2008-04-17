@@ -30,8 +30,10 @@ class TestImportGitSvn < Test::Unit::TestCase
     info = YAML.load(File.read(wc_path + "trunk/vendor/attachment_fu/.piston.yml"))
     assert_equal 1, info["format"]
     assert_equal "git://github.com/technoweenie/attachment_fu.git", info["handler"][Piston::Git::URL]
-    assert_equal "416fbb0017fa4ecaccfca4bcada592d694d532e1", info["handler"][Piston::Git::COMMIT]
 
+    response = `git-ls-remote git://github.com/technoweenie/attachment_fu.git`
+    head_commit = response.grep(/HEAD/).first.chomp.split(/\s+/).first
+    assert_equal head_commit, info["handler"][Piston::Git::COMMIT]
   end
 
   ADD_STATUS = %Q(A      vendor/attachment_fu

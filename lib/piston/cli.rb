@@ -86,8 +86,21 @@ Main {
                                          :force => params["force"].value,
                                          :dry_run => params["dry-run"].value,
                                          :repository_type => params["repository-type"].value)
-                                       
-      cmd.run(params[:repository].value, self.target_revision, params[:directory].value)
+
+      begin
+        cmd.run(params[:repository].value, self.target_revision, params[:directory].value)
+      rescue Piston::Repository::UnhandledUrl => e
+        supported_types = Piston::Repository.handlers.collect do |handler|
+          handler.repository_type
+        end
+        puts "Unsure how to handle:"
+        puts "\t#{params[:repository].value.inspect}."
+        puts "You should try using --repository-type. Supported types are:"
+        supported_types.each do |type|
+          puts "\t#{type}"
+        end
+        exit_failure!
+      end
     end
   end
 

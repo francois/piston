@@ -16,14 +16,9 @@ module Piston
           logger.debug {"Asking #{handler}"}
           handler.understands_url?(url)
         end
-
-        if handler.nil?
-          supported_types = handlers.collect do |handler|
-            handler.repository_type
-          end
-          message = "No internal handlers found for #{url.inspect}. You should check out --repository-type. Supported types are: #{supported_types.join(', ')}"
-          raise UnhandledUrl, message
-        end
+        
+        raise UnhandledUrl unless handler
+        
         handler.new(url)
       end
 
@@ -35,7 +30,6 @@ module Piston
       def handlers
         @@handlers
       end
-      private :handlers
     end
 
     attr_reader :url

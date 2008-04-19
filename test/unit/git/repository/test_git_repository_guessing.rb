@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/../test_helper"
+require File.dirname(__FILE__) + "/../../../test_helper"
 
 class TestGitRepositoryGuessing < Test::Unit::TestCase
   def test_understands_git_protocol

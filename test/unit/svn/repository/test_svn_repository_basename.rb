@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/../test_helper"
+require File.dirname(__FILE__) + "/../../../test_helper"
 
 class TestSvnRepositoryBasename < Test::Unit::TestCase
   def test_basename_is_urls_path_last_component

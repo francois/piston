@@ -86,6 +86,7 @@ Main {
                                          :force => params["force"].value,
                                          :dry_run => params["dry-run"].value,
                                          :repository_type => params["repository-type"].value)
+                                       
       cmd.run(params[:repository].value, self.target_revision, params[:directory].value)
     end
   end

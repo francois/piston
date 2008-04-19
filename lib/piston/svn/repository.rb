@@ -29,6 +29,10 @@ module Piston
         def svn(*args)
           client.svn(*args)
         end
+        
+        def repository_type
+          'svn'
+        end
       end
 
       def svn(*args)

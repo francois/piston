@@ -17,7 +17,13 @@ module Piston
           handler.understands_url?(url)
         end
 
-        raise UnhandledUrl, "No internal handlers found for #{url.inspect}.  Do you want to help ?" if handler.nil?
+        if handler.nil?
+          supported_types = handlers.collect do |handler|
+            handler.repository_type
+          end
+          message = "No internal handlers found for #{url.inspect}. You should check out --repository-type. Supported types are: #{supported_types.join(', ')}"
+          raise UnhandledUrl, message
+        end
         handler.new(url)
       end
 

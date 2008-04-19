@@ -65,6 +65,12 @@ Main {
       default false
       description "Automatically lock down the revision/commit to protect against blanket updates"
     end
+    
+    option("repository-type") do
+      argument :required
+      default nil
+      description "Force a specific repository type, for when it's not possible to guess"
+    end
 
     logger_level Logger::DEBUG
     def run
@@ -78,7 +84,8 @@ Main {
                                          :verbose => params["verbose"].value,
                                          :quiet => params["quiet"].value,
                                          :force => params["force"].value,
-                                         :dry_run => params["dry-run"].value)
+                                         :dry_run => params["dry-run"].value,
+                                         :repository_type => params["repository-type"].value)
       cmd.run(params[:repository].value, self.target_revision, params[:directory].value)
     end
   end

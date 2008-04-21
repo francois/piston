@@ -13,21 +13,20 @@ module Piston
         options[:repository_type]
       end
       
-      def determine_repository(repository_url)
-        if repository_type
+      def select_repository(repository_url)
+        if repository_type then
           logger.info {"Forced repository type to #{repository_type}"}
           repository_class_name = "Piston::#{repository_type.downcase.capitalize}::Repository"
           repository_class = constantize(repository_class_name)
-          repository = repository_class.new(repository_url)
+          repository_class.new(repository_url)
         else
           logger.info {"Guessing the repository type"}
-          repository = Piston::Repository.guess(repository_url)
+          Piston::Repository.guess(repository_url)
         end
-        repository
       end
 
       def run(repository_url, target_revision, wcdir)
-        repository = determine_repository(repository_url)
+        repository = select_repository(repository_url)
         revision = repository.at(target_revision)
 
         wcdir = wcdir.nil? ? repository.basename : wcdir
@@ -67,7 +66,7 @@ module Piston
       end
       
       protected
-      # riped out of activesupport
+      # Copied from ActiveSupport
       def constantize(camel_cased_word)
         unless /\A(?:::)?([A-Z]\w*(?:::[A-Z]\w*)*)\z/ =~ camel_cased_word
           raise NameError, "#{camel_cased_word.inspect} is not a valid constant name!"
@@ -75,7 +74,6 @@ module Piston
       
         Object.module_eval("::#{$1}", __FILE__, __LINE__)
       end
-      
     end
   end
 end

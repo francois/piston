@@ -16,8 +16,9 @@ module Piston
           logger.debug {"Asking #{handler}"}
           handler.understands_url?(url)
         end
-
-        raise UnhandledUrl, "No internal handlers found for #{url.inspect}.  Do you want to help ?" if handler.nil?
+        
+        raise UnhandledUrl unless handler
+        
         handler.new(url)
       end
 
@@ -29,7 +30,6 @@ module Piston
       def handlers
         @@handlers
       end
-      private :handlers
     end
 
     attr_reader :url

@@ -65,6 +65,12 @@ Main {
       default false
       description "Automatically lock down the revision/commit to protect against blanket updates"
     end
+    
+    option("repository-type") do
+      argument :required
+      default nil
+      description "Force a specific repository type, for when it's not possible to guess"
+    end
 
     logger_level Logger::DEBUG
     def run
@@ -78,8 +84,23 @@ Main {
                                          :verbose => params["verbose"].value,
                                          :quiet => params["quiet"].value,
                                          :force => params["force"].value,
-                                         :dry_run => params["dry-run"].value)
-      cmd.run(params[:repository].value, self.target_revision, params[:directory].value)
+                                         :dry_run => params["dry-run"].value,
+                                         :repository_type => params["repository-type"].value)
+
+      begin
+        cmd.run(params[:repository].value, self.target_revision, params[:directory].value)
+      rescue Piston::Repository::UnhandledUrl => e
+        supported_types = Piston::Repository.handlers.collect do |handler|
+          handler.repository_type
+        end
+        puts "Unsure how to handle:"
+        puts "\t#{params[:repository].value.inspect}."
+        puts "You should try using --repository-type. Supported types are:"
+        supported_types.each do |type|
+          puts "\t#{type}"
+        end
+        exit_failure!
+      end
     end
   end
 

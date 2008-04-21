@@ -27,6 +27,10 @@ module Piston
         def git(*args)
           client.git(*args)
         end
+        
+        def repository_type
+          'git'
+        end
       end
 
       def git(*args)

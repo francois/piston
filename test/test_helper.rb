@@ -2,6 +2,7 @@ require "test/unit"
 require "rubygems"
 require "mocha"
 require "log4r"
+require "fileutils"
 
 require File.dirname(__FILE__) + "/../config/requirements"
 
@@ -41,6 +42,7 @@ Log4r::Logger.new("handler::client")
 Log4r::Logger.new("handler::client::out")
 Log4r::Logger.new("test")
 
+FileUtils.touch("#{LOG_DIR}/test.log")
 Log4r::FileOutputter.new("log", :trunc => true, :filename => (LOG_DIR + "test.log").realpath.to_s)
 
 Log4r::Logger["main"].add "log"

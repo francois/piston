@@ -1,3 +1,6 @@
 *.swp
 *.log
 pkg
+*.iml
+*.ipr
+*.iws

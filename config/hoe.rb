@@ -64,7 +64,6 @@ hoe = Hoe.new(GEM_NAME, VERS) do |p|
   # ~> 2.8.0 really means "depend on 2.8.0 to 2.8.0.9999", and not 2.8.0 to 2.8.9
   p.extra_deps = [
     ["main", "~> 2.8"],
-    ["open4", "~> 0.9"],
     ["log4r", "~> 1.0"],
     ["activesupport", "~> 2.1"]
   ]

@@ -1,6 +1,8 @@
 module Piston
   class WorkingCopy
     class UnhandledWorkingCopy < RuntimeError; end
+    class NotWorkingCopy < RuntimeError; end
+    
 
     class << self
       def logger
@@ -46,6 +48,10 @@ module Piston
     end
 
     def exist?
+    end
+    
+    def pistonized?
+      File.exist?(yaml_path)
     end
 
     # Creates the initial working copy for pistonizing a new repository.

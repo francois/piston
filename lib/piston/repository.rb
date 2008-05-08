@@ -11,7 +11,7 @@ module Piston
 
       def guess(url)
         logger.info {"Guessing the repository type of #{url.inspect}"}
-
+        
         handler = handlers.detect do |handler|
           logger.debug {"Asking #{handler}"}
           handler.understands_url?(url)
@@ -49,6 +49,10 @@ module Piston
 
     def to_s
       "Piston::Repository(#{@url})"
+    end
+    
+    def ==(other)
+      url == other.url
     end
   end
 end

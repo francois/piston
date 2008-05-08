@@ -13,6 +13,10 @@ module Piston
     def initialize(repository, revision)
       @repository, @revision = repository, revision
     end
+    
+    def ==(other)
+      revision == other.revision && repository == other.repository
+    end
 
     def name
       @revision

@@ -80,8 +80,7 @@ Main {
         raise ArgumentError, "Only one of --revision or --commit can be given.  Received both."
       end
 
-      cmd = Piston::Commands::Import.new(:lock => params["lock"].value,
-                                         :verbose => params["verbose"].value,
+      cmd = Piston::Commands::Import.new(:verbose => params["verbose"].value,
                                          :quiet => params["quiet"].value,
                                          :force => params["force"].value,
                                          :dry_run => params["dry-run"].value,
@@ -101,6 +100,13 @@ Main {
         end
         exit_failure!
       end
+
+      # Lock the working copy, if the user asked for it
+      cmd = Piston::Commands::LockUnlock.new(:verbose => params["verbose"].value,
+                                             :quiet => params["quiet"].value,
+                                             :force => params["force"].value,
+                                             :dry_run => params["dry-run"].value)
+      cmd.run(params["directory"].value, true) if params["lock"].value
     end
   end
   

@@ -161,7 +161,30 @@ Main {
       end
     end
   end
-  
+
+  mode "update" do
+    mixin :standard_options
+    mixin :revision_or_commit
+
+    argument("directory") { optional }
+
+    def run
+      configure_logging!
+
+      if params["revision"].given? && params["commit"].given? then
+        raise ArgumentError, "Only one of --revision or --commit can be given.  Received both."
+      end
+
+      cmd = Piston::Commands::Update.new(:lock => params["lock"].value,
+                                         :verbose => params["verbose"].value,
+                                         :quiet => params["quiet"].value,
+                                         :force => params["force"].value,
+                                         :dry_run => params["dry-run"].value)
+
+      cmd.run(params["director"].value, target_revision)
+    end
+  end
+
   option("version", "v")
 
   def run

@@ -28,11 +28,3 @@ namespace :test do
     end
   end
 end
-
-Rake::TestTask.new("test") do |t|
-  Rake::Task["test:units"].invoke
-  Rake::Task["test:integration"].invoke
-
-  # Don't run the default test task
-  exit 0
-end

@@ -31,7 +31,7 @@ module Test
   end
 end
 
-LOG_DIR = Pathname.new(File.dirname(__FILE__) + "/../log")
+LOG_DIR = Pathname.new(File.dirname(__FILE__) + "/../log") unless Object::const_defined?(:LOG_DIR)
 LOG_DIR.mkdir rescue nil
 
 Log4r::Logger.root.level = Log4r::DEBUG

@@ -108,17 +108,19 @@ Main {
     mixin :standard_options
     
     argument "directory" do
-      required
-      description "Where to put the lock"
+      argument_required
+      optional
+      description "Which directory to lock"
     end
 
     logger_level Logger::DEBUG
     def run
       configure_logging!
-      cmd = Piston::Commands::Lock.new(  :wcdir => params["directory"].value,
-                                         :verbose => params["verbose"].value,
-                                         :quiet => params["quiet"].value,
-                                         :force => params["force"].value)
+
+      cmd = Piston::Commands::LockUnlock.new(:wcdir => params["directory"].value,
+                                             :verbose => params["verbose"].value,
+                                             :quiet => params["quiet"].value,
+                                             :force => params["force"].value)
       begin
         cmd.run(true)
         puts "#{params["directory"].value} locked"
@@ -132,17 +134,19 @@ Main {
     mixin :standard_options
     
     argument "directory" do
-      required
-      description "Where to put the lock"
+      argument_required
+      optional
+      description "Which directory to lock"
     end
 
     logger_level Logger::DEBUG
     def run
       configure_logging!
-      cmd = Piston::Commands::Lock.new(  :wcdir => params["directory"].value,
-                                         :verbose => params["verbose"].value,
-                                         :quiet => params["quiet"].value,
-                                         :force => params["force"].value)
+
+      cmd = Piston::Commands::LockUnlock.new(:wcdir => params["directory"].value,
+                                             :verbose => params["verbose"].value,
+                                             :quiet => params["quiet"].value,
+                                             :force => params["force"].value)
       begin
         cmd.run(false)
         puts "#{params["directory"].value} unlocked"

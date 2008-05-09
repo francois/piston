@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + "/../test_helper"
 
-class TestImport < Test::Unit::TestCase
+class TestLock < Test::Unit::TestCase
   
   def setup
     @values_mock = {:lock => "false", "handler" => { :repository => "repository" }}

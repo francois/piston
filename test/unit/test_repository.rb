@@ -63,7 +63,9 @@ class TestRepository < Test::Unit::TestCase
   end
   
   def test_at
-    assert_equal Piston::Revision.new(@repository, "2"), @repository.at("2")
+    revision = @repository.at("2")
+    assert_equal @repository, revision.repository
+    assert_equal "2", revision.revision
   end
   
   def test_to_s

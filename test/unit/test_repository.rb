@@ -3,7 +3,6 @@ require File.dirname(__FILE__) + "/../test_helper"
 class TestRepository < Test::Unit::TestCase
   
   def setup
-    turn_all_methods_public(Piston::Repository)
     Piston::Repository.class_variable_set(:@@handlers, [Piston::Git::Repository, Piston::Svn::Repository])
     @repository = Piston::Repository.new("url")
   end

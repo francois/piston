@@ -37,7 +37,7 @@ module Piston
       {}
     end
 
-    # Yields each file of this revision in turn to our callers.
+    # Yields each file of this revision in turn to our caller.
     def each
     end
 

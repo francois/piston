@@ -1,3 +1,5 @@
+require "subclass_responsibility_error"
+
 require "piston/repository"
 require "piston/revision"
 require "piston/working_copy"

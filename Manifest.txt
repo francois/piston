@@ -27,6 +27,7 @@ lib/piston/svn/revision.rb
 lib/piston/svn/working_copy.rb
 lib/piston/version.rb
 lib/piston/working_copy.rb
+lib/subclass_responsibility_error.rb
 log/.gitignore
 samples/common.rb
 samples/import_git_git.rb
@@ -73,8 +74,6 @@ test/unit/svn/working_copy/test_finalization.rb
 test/unit/svn/working_copy/test_guessing.rb
 test/unit/svn/working_copy/test_rememberance.rb
 test/unit/test_import.rb
-test/unit/test_piston.rb
-test/unit/test_repository_guessing.rb
 test/unit/working_copy/test_guessing.rb
 test/unit/working_copy/test_rememberance.rb
 tmp/.gitignore

@@ -43,8 +43,7 @@ module Piston
     end
 
     def at(revision)
-      logger.info {"Targeting #{self} at #{revision.inspect}"}
-      Piston::Revision.new(self, revision)
+      raise SubclassResponsibilityError, "Piston::Repository#at should be implemented by a subclass."
     end
 
     def to_s

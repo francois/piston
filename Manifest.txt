@@ -13,6 +13,7 @@ lib/piston/commands.rb
 lib/piston/commands/base.rb
 lib/piston/commands/import.rb
 lib/piston/commands/lock_unlock.rb
+lib/piston/commands/info.rb
 lib/piston/git.rb
 lib/piston/git/client.rb
 lib/piston/git/commit.rb

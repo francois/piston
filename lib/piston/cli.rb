@@ -161,6 +161,32 @@ Main {
       end
     end
   end
+  
+  
+  mode "info" do
+    mixin :standard_options
+    
+    argument "directory" do
+      argument_required
+      optional
+      description "Which directory to get info"
+    end
+
+    logger_level Logger::DEBUG
+    def run
+      configure_logging!
+
+      cmd = Piston::Commands::Info.new(:wcdir => params["directory"].value,
+                                             :verbose => params["verbose"].value,
+                                             :quiet => params["quiet"].value,
+                                             :force => params["force"].value)
+      begin
+        cmd.run(params["directory"].value)
+      rescue Piston::WorkingCopy::NotWorkingCopy
+        puts "The #{params["directory"].value} is not Pistonized"
+      end
+    end
+  end
 
   mode "update" do
     mixin :standard_options

@@ -43,14 +43,14 @@ module Piston
         svn(:add, path)
       end
 
-      def recall(keys)
-        hash = Hash.new
-        keys.each do |k|
-          hash[k] = svn(:propget, k, path)
-        end
-
-        hash
-      end
+      # def recall(keys)
+      #   hash = Hash.new
+      #   keys.each do |k|
+      #     hash[k] = svn(:propget, k, path)
+      #   end
+      # 
+      #   hash
+      # end
 
       def finalize
         targets = []
@@ -58,21 +58,6 @@ module Piston
           svn(:add, item)
         end
       end
-      
-      def info
-        values = recall
-        result = []
-        result << "+---------------------------Piston Info----------------------------------+"
-        result << "Directory: #{path}"
-        result << "Repository type: SVN"
-        result << "Repository: #{values["repository_url"]}"
-        values
-        # result << "Commit: #{values["handler"]["commit"]}"
-        # result << "Lock: #{values["lock"]}"
-        # result << "+------------------------------------------------------------------------+"
-        # result.join("\n")
-      end
-      
       
     end
   end

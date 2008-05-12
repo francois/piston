@@ -57,22 +57,7 @@ module Piston
       def finalize
         Dir.chdir(path) { git(:add, ".") }
       end
-      
-      def info
-        values = recall
-        result = []
-        result << "+---------------------------Piston Info----------------------------------+"
-        result << "Directory: #{path}"
-        values["repository_class"] =~ /Piston::(.*)::Repository/
-        result << "Repository type: #{$1}"
-        result << "Repository: #{values["repository_url"]}"
-        result << "Commit: #{values["handler"]["commit"]}" if values["handler"]["commit"]
-        result << "Remote Revision: #{values["handler"]["piston:remote-revision"]}" if values["handler"]["piston:remote-revision"]
-        result << "Lock: #{values["lock"]}"
-        result << "+------------------------------------------------------------------------+"
-        result.join("\n")
-      end
-      
+            
     end
   end
 end

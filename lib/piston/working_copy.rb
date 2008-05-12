@@ -108,6 +108,22 @@ module Piston
     def finalize
       logger.debug {"Finalizing #{path}"}
     end
+    
+    def info
+      values = recall
+      result = []
+      result << "+---------------------------Piston Info----------------------------------+"
+      result << "Directory: #{path}"
+      values["repository_class"] =~ /Piston::(.*)::Repository/
+      result << "Repository type: #{$1}"
+      result << "Repository: #{values["repository_url"]}"
+      result << "Commit: #{values["handler"]["commit"]}" if values["handler"]["commit"]
+      result << "Remote Revision: #{values["handler"]["piston:remote-revision"]}" if values["handler"]["piston:remote-revision"]
+      result << "Lock: #{values["lock"]}"
+      result << "+------------------------------------------------------------------------+"
+      result.join("\n")
+    end
+    
 
     protected
     # The path to the piston YAML file.

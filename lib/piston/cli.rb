@@ -106,7 +106,12 @@ Main {
                                              :quiet => params["quiet"].value,
                                              :force => params["force"].value,
                                              :dry_run => params["dry-run"].value)
-      cmd.run(params["directory"].value, true) if params["lock"].value
+      if params["lock"].value 
+        cmd.run(params["directory"].value, params["lock"].value)
+      else
+        cmd.run(params["directory"].value, false)
+      end
+      
     end
   end
   

@@ -42,18 +42,17 @@ module Piston
       def at(revision)
         if revision.respond_to?(:keys) then
           rev = revision[Piston::Svn::REMOTE_REV]
+          Piston::Svn::Revision.new(self, rev, revision)
         else
-          rev = case
-                when revision == :head
-                "HEAD"
-                when revision.to_i != 0
-                  revision.to_i
-                else
-                  raise ArgumentError, "Invalid revision argument: #{revision.inspect}"
-                end
+          case
+          when revision == :head
+            Piston::Svn::Revision.new(self, "HEAD")
+          when revision.to_i != 0
+            Piston::Svn::Revision.new(self, revision.to_i)
+          else
+            raise ArgumentError, "Invalid revision argument: #{revision.inspect}"
+          end
         end
-
-        Piston::Svn::Revision.new(self, rev)
       end
 
       def basename

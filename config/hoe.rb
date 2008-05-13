@@ -62,7 +62,8 @@ hoe = Hoe.new(GEM_NAME, VERS) do |p|
   p.extra_deps = [
     ["main", "~> 2.8.0"],
     ["open4", "~> 0.9.6"],
-    ["log4r", "~> 1.0.5"]
+    ["log4r", "~> 1.0.5"],
+    ["activesupport", "~> 2.0.2"]
   ]
 
   #p.spec_extras = {}    # A hash of extra values to set in the gemspec.

@@ -1,5 +1,6 @@
 require "main"
 require "log4r"
+require "activesupport"
 require "piston/version"
 require "piston/commands"
 

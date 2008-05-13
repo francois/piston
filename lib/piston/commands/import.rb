@@ -32,7 +32,7 @@ module Piston
         wcdir = wcdir.nil? ? repository.basename : wcdir
         logger.info {"Guessing the working copy type"}
         logger.debug {"repository_url: #{repository_url.inspect}, target_revision: #{target_revision.inspect}, wcdir: #{wcdir.inspect}"}
-        working_copy = Piston::WorkingCopy.guess(wcdir)
+        working_copy = guess_wc(wcdir)
 
         tmpdir = temp_dir_name(working_copy)
 

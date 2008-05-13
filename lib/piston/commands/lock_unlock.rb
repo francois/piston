@@ -6,7 +6,7 @@ module Piston
       attr_reader :options
 
       def run(wcdir, lock)
-        working_copy = Piston::WorkingCopy.guess(wcdir)
+        working_copy = guess_wc(wcdir)
         raise Piston::WorkingCopy::NotWorkingCopy if !working_copy.exist? || !working_copy.pistonized?
 
         values = working_copy.recall

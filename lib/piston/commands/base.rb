@@ -29,6 +29,10 @@ module Piston
       def logger
         self.class.logger
       end
+      
+      def guess_wc(wcdir)
+        working_copy = Piston::WorkingCopy.guess(wcdir)
+      end
     end
   end
 end

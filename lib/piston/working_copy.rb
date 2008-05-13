@@ -55,7 +55,8 @@ module Piston
     end
 
     def validate!
-      raise NotWorkingCopy unless self.exist? && self.pistonized?
+      raise NotWorkingCopy unless self.pistonized?
+      self
     end
 
     # Creates the initial working copy for pistonizing a new repository.

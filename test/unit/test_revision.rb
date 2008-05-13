@@ -23,4 +23,8 @@ class TestRevision < Test::Unit::TestCase
   def test_name
     assert_equal @revision_number, @revision.name
   end
+
+  def test_default_recalled_values_are_an_empty_hash
+    assert_equal Hash.new, @revision.recalled_values
+  end
 end

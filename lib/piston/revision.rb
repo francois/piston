@@ -10,7 +10,7 @@ module Piston
 
     attr_reader :repository, :revision, :recalled_values
 
-    def initialize(repository, revision, recalled_values = nil)
+    def initialize(repository, revision, recalled_values={})
       @repository, @revision, @recalled_values = repository, revision, recalled_values
     end
     

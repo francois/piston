@@ -8,7 +8,7 @@ module Piston
       def run(wcdir)
         working_copy = Piston::WorkingCopy.guess(wcdir)
         raise Piston::WorkingCopy::NotWorkingCopy if !working_copy.exist? || !working_copy.pistonized?
-        puts working_copy.info
+        working_copy.info.to_yaml
       end
     end
   end

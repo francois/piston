@@ -186,7 +186,7 @@ Main {
                                              :quiet => params["quiet"].value,
                                              :force => params["force"].value)
       begin
-        cmd.run(params["directory"].value)
+        puts cmd.run(params["directory"].value)
       rescue Piston::WorkingCopy::NotWorkingCopy
         puts "The #{params["directory"].value} is not Pistonized"
       end

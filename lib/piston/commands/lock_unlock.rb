@@ -14,7 +14,8 @@ module Piston
         working_copy.remember(values, values["handler"])
         working_copy.finalize
 
-        logger.info "Locked #{working_copy} against automatic updates"
+        text = lock ? "Locked" : "Unlocked"
+        logger.info "#{text} #{working_copy} against automatic updates"
       end
     end
   end

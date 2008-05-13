@@ -35,10 +35,10 @@ class TestInfo < Test::Unit::TestCase
   private
   def run_and_verify
     yield
-    lock_unlock_command.run(@wcdir)
+    info_command.run(@wcdir)
   end
 
-  def lock_unlock_command
+  def info_command
     Piston::WorkingCopy.expects(:guess).with(@wcdir).returns(@wc)
     Piston::Commands::Info.new(:verbose => "verbose",
                                      :quiet => "quiet", :force => "force")

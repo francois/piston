@@ -6,8 +6,7 @@ module Piston
       attr_reader :options
 
       def run(wcdir, lock)
-        working_copy = guess_wc(wcdir)
-        working_copy.validate!
+        working_copy = working_copy!(wcdir)
 
         values = working_copy.recall
         values["lock"] = lock

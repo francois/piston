@@ -31,7 +31,13 @@ module Piston
       end
       
       def guess_wc(wcdir)
-        working_copy = Piston::WorkingCopy.guess(wcdir)
+        Piston::WorkingCopy.guess(wcdir)
+      end
+      
+      def working_copy!(wcdir)
+        wc = guess_wc(wcdir)
+        wc.validate!
+        wc
       end
     end
   end

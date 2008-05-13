@@ -6,8 +6,7 @@ module Piston
       # +wcdir+ is the working copy we're going to change.
       # +to+ is the new target revision we want to be at after update returns.
       def run(wcdir, to)
-        working_copy = guess_wc(wcdir)
-        working_copy.validate!
+        working_copy = working_copy!(wcdir)
 
         logger.debug {"Recalling previously saved values"}
         values = working_copy.recall

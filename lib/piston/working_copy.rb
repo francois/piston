@@ -54,6 +54,10 @@ module Piston
       yaml_path.exist? && yaml_path.file?
     end
 
+    def validate!
+      raise NotWorkingCopy unless self.exist? && self.pistonized?
+    end
+
     # Creates the initial working copy for pistonizing a new repository.
     def create
       logger.debug {"Creating working copy at #{path}"}

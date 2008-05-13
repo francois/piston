@@ -7,7 +7,7 @@ module Piston
 
       def run(wcdir, lock)
         working_copy = guess_wc(wcdir)
-        raise Piston::WorkingCopy::NotWorkingCopy if !working_copy.exist? || !working_copy.pistonized?
+        working_copy.validate!
 
         values = working_copy.recall
         values["lock"] = lock

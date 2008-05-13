@@ -5,29 +5,19 @@ class TestInfo < Test::Unit::TestCase
     @values = {"lock" => false}
     @wcdir = "tmp/wcdir"
     @wc = mock("WorkingCopy")
+    @wc.stubs(:validate!)
   end
   
   def test_info
     run_and_verify do
-      @wc.expects(:exist?).returns(true)
-      @wc.expects(:pistonized?).returns(true)
       @wc.expects(:info)
     end
   end
 
-  def test_run_when_directory_not_exist
+  def test_validates_working_copy_before_working
     assert_raise(Piston::WorkingCopy::NotWorkingCopy) do
       run_and_verify do
-        @wc.expects(:exist?).returns(false)
-      end
-    end
-  end
-  
-  def test_run_when_directory_exist_but_yml_not_exit
-    assert_raise(Piston::WorkingCopy::NotWorkingCopy) do
-      run_and_verify do
-        @wc.expects(:exist?).returns(true)
-        @wc.expects(:pistonized?).returns(false)
+        @wc.expects(:validate!).raises(Piston::WorkingCopy::NotWorkingCopy)
       end
     end
   end

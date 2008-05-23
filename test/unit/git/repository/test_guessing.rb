@@ -5,6 +5,11 @@ class TestGitRepositoryGuessing < Test::Unit::TestCase
     assert Piston::Git::Repository.understands_url?("git://github.com/francois/piston.git")
   end
 
+  def test_understands_git_ssh_protocol
+    Piston::Git::Repository.expects(:git).with("ls-remote", "--heads", "git@github.com:francois/piston.git").returns("ab"*20 + " refs/heads/master")
+    assert Piston::Git::Repository.understands_url?("git@github.com:francois/piston.git")
+  end
+
   def test_understand_http_when_heads_returned
     Piston::Git::Repository.expects(:git).with("ls-remote", "--heads", "http://github.com/francois/piston.git").returns("ab"*20 + " refs/heads/master")
     assert Piston::Git::Repository.understands_url?("http://github.com/francois/piston.git")

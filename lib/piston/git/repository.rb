@@ -8,8 +8,8 @@ module Piston
 
       class << self
         def understands_url?(url)
-          uri = URI.parse(url)
-          return true if %w(git).include?(uri.scheme)
+          uri = URI.parse(url) rescue nil
+          return true if uri && %w(git).include?(uri.scheme)
 
           begin
             response = git("ls-remote", "--heads", url)

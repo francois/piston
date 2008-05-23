@@ -4,6 +4,10 @@ require "fileutils"
 module Piston
   module Svn
     class Revision < Piston::Revision
+      class InvalidRevision < RuntimeError; end
+      class RepositoryMoved < InvalidRevision; end
+      class UuidChanged < InvalidRevision; end
+
       def client
         @client ||= Piston::Svn::Client.instance
       end
@@ -52,6 +56,18 @@ module Piston
 
         Pathname.new(abspath).dirname.mkpath
         FileUtils.cp(@wcpath + relpath, abspath)
+      end
+
+      def validate!
+        data = svn(:info, "--revision", revision, repository.url)
+        info = YAML.load(data)
+        actual_uuid = info["Repository UUID"]
+        raise RepositoryMoved, "Repository at #{repository.url} does not exist anymore:\n#{data}" if actual_uuid.blank?
+        raise UuidChanged, "Expected repository at #{repository.url} to have UUID #{recalled_uuid} but found #{actual_uuid}" if recalled_uuid != actual_uuid
+      end
+
+      def recalled_uuid
+        recalled_values[Piston::Svn::UUID]
       end
     end
   end

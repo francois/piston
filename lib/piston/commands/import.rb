@@ -32,7 +32,7 @@ module Piston
         wcdir = wcdir.nil? ? repository.basename : wcdir
         logger.info {"Guessing the working copy type"}
         logger.debug {"repository_url: #{repository_url.inspect}, target_revision: #{target_revision.inspect}, wcdir: #{wcdir.inspect}"}
-        working_copy = Piston::WorkingCopy.guess(wcdir)
+        working_copy = guess_wc(wcdir)
 
         tmpdir = temp_dir_name(working_copy)
 
@@ -63,16 +63,6 @@ module Piston
           logger.debug {"Removing temporary directory: #{tmpdir}"}
           tmpdir.rmtree rescue nil
         end
-      end
-      
-      protected
-      # Copied from ActiveSupport
-      def constantize(camel_cased_word)
-        unless /\A(?:::)?([A-Z]\w*(?:::[A-Z]\w*)*)\z/ =~ camel_cased_word
-          raise NameError, "#{camel_cased_word.inspect} is not a valid constant name!"
-        end
-      
-        Object.module_eval("::#{$1}", __FILE__, __LINE__)
       end
     end
   end

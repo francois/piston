@@ -4,6 +4,8 @@ require "mocha"
 require "log4r"
 require "fileutils"
 
+require "turn" rescue nil
+
 require File.dirname(__FILE__) + "/../config/requirements"
 
 module Test

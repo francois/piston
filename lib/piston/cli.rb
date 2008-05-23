@@ -1,5 +1,6 @@
 require "main"
 require "log4r"
+require "activesupport"
 require "piston/version"
 require "piston/commands"
 
@@ -106,7 +107,12 @@ Main {
                                              :quiet => params["quiet"].value,
                                              :force => params["force"].value,
                                              :dry_run => params["dry-run"].value)
-      cmd.run(params["directory"].value, true) if params["lock"].value
+      if params["lock"].value 
+        cmd.run(params["directory"].value, params["lock"].value)
+      else
+        cmd.run(params["directory"].value, false)
+      end
+      
     end
   end
   
@@ -156,6 +162,32 @@ Main {
       begin
         cmd.run(false)
         puts "#{params["directory"].value} unlocked"
+      rescue Piston::WorkingCopy::NotWorkingCopy
+        puts "The #{params["directory"].value} is not Pistonized"
+      end
+    end
+  end
+  
+  
+  mode "info" do
+    mixin :standard_options
+    
+    argument "directory" do
+      argument_required
+      optional
+      description "Which directory to get info"
+    end
+
+    logger_level Logger::DEBUG
+    def run
+      configure_logging!
+
+      cmd = Piston::Commands::Info.new(:wcdir => params["directory"].value,
+                                             :verbose => params["verbose"].value,
+                                             :quiet => params["quiet"].value,
+                                             :force => params["force"].value)
+      begin
+        puts cmd.run(params["directory"].value)
       rescue Piston::WorkingCopy::NotWorkingCopy
         puts "The #{params["directory"].value} is not Pistonized"
       end

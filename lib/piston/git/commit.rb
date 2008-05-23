@@ -5,6 +5,9 @@ require "fileutils"
 module Piston
   module Git
     class Commit < Piston::Revision
+      class InvalidCommit < RuntimeError; end
+      class Gone < InvalidCommit; end
+
       alias_method :commit, :revision
 
       def client
@@ -13,6 +16,19 @@ module Piston
 
       def git(*args)
         client.git(*args)
+      end
+
+      def recalled_commit_id
+        recalled_values[Piston::Git::COMMIT]
+      end
+
+      def validate!
+        begin
+          data = git(:ls_remote, @repository.url)
+          self
+        rescue Piston::Git::Client::CommandError
+          raise Piston::Git::Commit::Gone, "Repository at #{@repository.url} does not exist anymore"
+        end
       end
 
       def name

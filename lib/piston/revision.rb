@@ -8,10 +8,10 @@ module Piston
       end
     end
 
-    attr_reader :repository, :revision
+    attr_reader :repository, :revision, :recalled_values
 
-    def initialize(repository, revision)
-      @repository, @revision = repository, revision
+    def initialize(repository, revision, recalled_values={})
+      @repository, @revision, @recalled_values = repository, revision, recalled_values
     end
     
     def name

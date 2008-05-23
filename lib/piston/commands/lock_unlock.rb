@@ -6,15 +6,15 @@ module Piston
       attr_reader :options
 
       def run(wcdir, lock)
-        working_copy = Piston::WorkingCopy.guess(wcdir)
-        raise Piston::WorkingCopy::NotWorkingCopy if !working_copy.exist? || !working_copy.pistonized?
+        working_copy = working_copy!(wcdir)
 
         values = working_copy.recall
         values["lock"] = lock
         working_copy.remember(values, values["handler"])
         working_copy.finalize
 
-        logger.info "Locked #{working_copy} against automatic updates"
+        text = lock ? "Locked" : "Unlocked"
+        logger.info "#{text} #{working_copy} against automatic updates"
       end
     end
   end

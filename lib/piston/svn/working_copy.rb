@@ -43,21 +43,13 @@ module Piston
         svn(:add, path)
       end
 
-      def recall(keys)
-        hash = Hash.new
-        keys.each do |k|
-          hash[k] = svn(:propget, k, path)
-        end
-
-        hash
-      end
-
       def finalize
         targets = []
         Dir[path + "*"].each do |item|
           svn(:add, item)
         end
       end
+      
     end
   end
 end

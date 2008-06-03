@@ -10,7 +10,11 @@ class TestGitCommitRememberance < Test::Unit::TestCase
     @values = @commit.remember_values
   end
 
-  def test_remembers_original_commit
-    assert_equal @values[Piston::Git::COMMIT], @commit.commit
+  def test_remembers_original_commit_sha1
+    assert_equal @values[Piston::Git::COMMIT], @commit.sha1
+  end
+
+  def test_remembers_original_branch_name
+    assert_equal @values[Piston::Git::BRANCH], @commit.revision
   end
 end

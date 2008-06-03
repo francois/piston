@@ -9,6 +9,7 @@ module Piston
       class Gone < InvalidCommit; end
 
       alias_method :commit, :revision
+      attr_reader :sha1
 
       def client
         @client ||= Piston::Git::Client.instance
@@ -40,13 +41,13 @@ module Piston
         git(:clone, repository.url, @dir)
         Dir.chdir(@dir) do
           logger.debug {"in dir #{@dir}"}
-          git(:checkout, "-b", "my-#{revision}", revision)
+          git(:checkout, "-b", "my-#{commit}", commit)
           response = git(:log, "-n", "1")
-          @revision = $1 if response =~ /commit\s+([a-f\d]{40})/i
+          @sha1 = $1 if response =~ /commit\s+([a-f\d]{40})/i
         end
 
         def remember_values
-          { Piston::Git::COMMIT => commit }
+          { Piston::Git::COMMIT => @sha1, Piston::Git::BRANCH => commit }
         end
 
         def each

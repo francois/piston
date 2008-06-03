@@ -7,5 +7,6 @@ module Piston
   module Git
     URL = "url"
     COMMIT = "commit"
+    BRANCH = "branch"
   end
 end

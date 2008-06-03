@@ -24,4 +24,9 @@ class TestGitRepositoryGuessing < Test::Unit::TestCase
     Piston::Git::Repository.expects(:git).with("ls-remote", "--heads", "ssh://francois@github.com/francois/piston.git").returns("ab"*20 + " refs/heads/master")
     assert Piston::Git::Repository.understands_url?("ssh://francois@github.com/francois/piston.git")
   end
+
+  def test_asks_base_url_when_named_branch_in_url
+    Piston::Git::Repository.expects(:git).with("ls-remote", "--heads", "ssh://francois@github.com/francois/piston.git").returns("ab"*20 + " refs/heads/master")
+    assert Piston::Git::Repository.understands_url?("ssh://francois@github.com/francois/piston.git?convert")
+  end
 end

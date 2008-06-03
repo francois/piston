@@ -4,7 +4,11 @@ require "mocha"
 require "log4r"
 require "fileutils"
 
-require "turn" rescue nil
+begin
+  require "turn"
+rescue LoadError
+  # NOP: ignore, this is not a real dependency
+end
 
 require File.dirname(__FILE__) + "/../config/requirements"
 

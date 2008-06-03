@@ -37,6 +37,35 @@ class TestImportGitSvn < Test::Unit::TestCase
     assert_equal head_commit, info["handler"][Piston::Git::COMMIT]
   end
 
+  def test_import_from_branch
+    piston(:import, "--revision", "origin/rewrite", "git://github.com/technoweenie/attachment_fu.git", wc_path + "trunk/vendor/attachment_fu")
+
+    assert File.directory?(wc_path + "trunk/vendor/attachment_fu/vendor"),
+        "Could not find vendor director in attachment_fu imported directory: please check that there still exists a rewrite branch on GitHub AND that the rewrite branch has a vendor/ directory."
+
+    info = YAML.load(File.read(wc_path + "trunk/vendor/attachment_fu/.piston.yml"))
+    assert_equal 1, info["format"]
+    assert_equal "git://github.com/technoweenie/attachment_fu.git", info["repository_url"]
+    assert_equal "Piston::Git::Repository", info["repository_class"]
+
+    response = `git-ls-remote git://github.com/technoweenie/attachment_fu.git`
+    head_commit = response.grep(/refs\/heads\/rewrite/).first.chomp.split(/\s+/).first
+    assert_equal head_commit, info["handler"][Piston::Git::COMMIT]
+    assert_equal "origin/rewrite", info["handler"][Piston::Git::BRANCH]
+  end
+
+  def test_import_from_tag
+    piston(:import, "--revision", "1.9.1", "git://github.com/francois/piston.git", wc_path + "trunk/vendor/piston")
+
+    info = YAML.load(File.read(wc_path + "trunk/vendor/piston/.piston.yml"))
+    assert_equal 1, info["format"]
+    assert_equal "git://github.com/francois/piston.git", info["repository_url"]
+    assert_equal "Piston::Git::Repository", info["repository_class"]
+
+    assert_equal "684301c8b5cc1c95fe1568fb80e8f4da20c2a235", info["handler"][Piston::Git::COMMIT]
+    assert_equal "1.9.1", info["handler"][Piston::Git::BRANCH]
+  end
+
   ADD_STATUS = %Q(A      vendor/attachment_fu
 A      vendor/attachment_fu/test
 A      vendor/attachment_fu/test/test_helper.rb

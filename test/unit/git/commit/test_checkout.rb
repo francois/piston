@@ -12,6 +12,7 @@ class TestGitCommitCheckout < Test::Unit::TestCase
     @commit = Piston::Git::Commit.new(@repos, @sha1)
     @commit.expects(:git).with(:clone, @repos.url, @reposdir)
     @commit.expects(:git).with(:checkout, "-b", "my-#{@sha1}", @sha1)
+    @commit.expects(:git).with(:log, "-n", "1").returns("commit 922b12a6bcbb6f6a2cec60bcf5de17118086080a\nAuthor: Fran\303\247ois Beausoleil <francois@teksol.info>\nDate:   Fri Mar 14 13:28:41 2008 -0400\n\n    Changed how dependencies are found and managed, by using config/requirements.rb everywhere.\n    \n    Updated test/test_helper.rb where appropriate.\n")
     Dir.expects(:chdir).with(@reposdir).yields
     @commit.checkout_to(@reposdir)
   end

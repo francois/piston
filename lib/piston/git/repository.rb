@@ -51,6 +51,10 @@ module Piston
       def basename
         self.url.split("/").last.sub(".git", "")
       end
+
+      def branchname
+        self.url.split("?")[1]
+      end
     end
   end
 end

@@ -1,4 +1,6 @@
-== 0.0.1 2008-03-12
+== 1.9.3 2008-06-03
 
-* 1 major enhancement:
-  * Initial release
+* Import git branches using --revision origin/BRANCH_NAME, or a tag
+  using --revision TAG_NAME, or even a specific commit using
+  --revision COMMIT_ID.  In fact, use a committish and you'll be fine,
+  even HEAD^3.

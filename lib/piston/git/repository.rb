@@ -33,6 +33,13 @@ module Piston
         end
       end
 
+      attr_reader :branchname
+
+      def initialize(url)
+        @branchname = url.split("?")[1]
+        super(url.sub(/\?.+$/, ""))
+      end
+
       def git(*args)
         self.class.git(*args)
       end
@@ -50,10 +57,6 @@ module Piston
 
       def basename
         self.url.split("/").last.sub(".git", "")
-      end
-
-      def branchname
-        self.url.split("?")[1]
       end
     end
   end

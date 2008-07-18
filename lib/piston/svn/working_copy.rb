@@ -49,7 +49,27 @@ module Piston
           svn(:add, item)
         end
       end
-      
+
+      # Returns all defined externals (recursively) of this WC.
+      # Returns a Hash:
+      #   {"vendor/rails" => {:revision => "HEAD", :url => "http://dev.rubyonrails.org/svn/rails/trunk"},
+      #    "vendor/plugins/will_paginate" => {:revision => 1234, :url => "http://will_paginate.org/svn/trunk"}}
+      def externals
+        externals = svn(:proplist, "--recursive", "--verbose")
+        return Hash.new if externals.blank?
+        returning(Hash.new) do |result|
+          YAML.load(externals).each_pair do |dir, props|
+            next if props["svn:externals"].blank?
+            next unless dir =~ /Properties on '([^']+)'/
+            basedir = self.path + $1
+            exts = props["svn:externals"]
+            exts.split("\n").each do |external|
+              subdir, url = external.split(/\s+/)
+              result[basedir + subdir] = {:revision => "HEAD", :url => url}
+            end
+          end
+        end
+      end
     end
   end
 end

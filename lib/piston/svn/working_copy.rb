@@ -64,8 +64,15 @@ module Piston
             basedir = self.path + $1
             exts = props["svn:externals"]
             exts.split("\n").each do |external|
-              subdir, url = external.split(/\s+/)
-              result[basedir + subdir] = {:revision => "HEAD", :url => url}
+              data = external.match(/^([^\s]+)\s+(?:(?:-r|--revision)\s*(\d+)\s+)?(.+)$/)
+              case data.length
+              when 4
+                subdir, rev, url = data[1], data[2].nil? ? "HEAD" : data[2].to_i, data[3]
+              else
+                raise SyntaxError, "Could not parse svn:externals on #{basedir}: #{external}"
+              end
+
+              result[basedir + subdir] = {:revision => rev, :url => url}
             end
           end
         end

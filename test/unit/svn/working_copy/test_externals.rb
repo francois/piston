@@ -21,6 +21,11 @@ class TestWorkingCopyExternals < Test::Unit::TestCase
     assert_equal({@wcdir + "vendor/rails" => {:revision => 8726, :url => "http://dev.rubyonrails.org/svn/rails/trunk"}}, @wc.externals)
   end
 
+  def test_parse_externals_with_long_revision
+    @wc.stubs(:svn).returns(LONG_VERSION_RAILS_EXTERNALS)
+    assert_equal({@wcdir + "vendor/rails" => {:revision => 8726, :url => "http://dev.rubyonrails.org/svn/rails/trunk"}}, @wc.externals)
+  end
+
   EMPTY_EXTERNALS = ""
   SIMPLE_RAILS_EXTERNALS = <<EOF
   Properties on 'vendor':
@@ -30,6 +35,11 @@ EOF
   VERSIONED_RAILS_EXTERNALS = <<EOF
   Properties on 'vendor':
     svn:externals : rails -r8726 http://dev.rubyonrails.org/svn/rails/trunk
+
+EOF
+  LONG_VERSION_RAILS_EXTERNALS = <<EOF
+  Properties on 'vendor':
+    svn:externals : rails --revision 8726 http://dev.rubyonrails.org/svn/rails/trunk
 
 EOF
 end

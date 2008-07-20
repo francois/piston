@@ -13,7 +13,7 @@ class TestWorkingCopyExternals < Test::Unit::TestCase
 
   def test_parse_simple_externals
     @wc.stubs(:svn).returns(SIMPLE_RAILS_EXTERNALS)
-    assert_equal({@wcdir + "vendor/rails" => {:revision => "HEAD", :url => "http://dev.rubyonrails.org/svn/rails/trunk"}}, @wc.externals)
+    assert_equal({@wcdir + "vendor/rails" => {:revision => :head, :url => "http://dev.rubyonrails.org/svn/rails/trunk"}}, @wc.externals)
   end
 
   def test_parse_externals_with_revision

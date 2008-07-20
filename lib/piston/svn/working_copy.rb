@@ -52,7 +52,7 @@ module Piston
 
       # Returns all defined externals (recursively) of this WC.
       # Returns a Hash:
-      #   {"vendor/rails" => {:revision => "HEAD", :url => "http://dev.rubyonrails.org/svn/rails/trunk"},
+      #   {"vendor/rails" => {:revision => :head, :url => "http://dev.rubyonrails.org/svn/rails/trunk"},
       #    "vendor/plugins/will_paginate" => {:revision => 1234, :url => "http://will_paginate.org/svn/trunk"}}
       def externals
         externals = svn(:proplist, "--recursive", "--verbose")
@@ -67,7 +67,7 @@ module Piston
               data = external.match(/^([^\s]+)\s+(?:(?:-r|--revision)\s*(\d+)\s+)?(.+)$/)
               case data.length
               when 4
-                subdir, rev, url = data[1], data[2].nil? ? "HEAD" : data[2].to_i, data[3]
+                subdir, rev, url = data[1], data[2].nil? ? :head : data[2].to_i, data[3]
               else
                 raise SyntaxError, "Could not parse svn:externals on #{basedir}: #{external}"
               end

@@ -111,6 +111,28 @@ Main {
     end
   end
   
+  mode "convert" do
+    mixin :standard_options
+    
+    argument "directories" do
+      argument_required
+      optional
+      arity -1
+      description "Which directory/directories to convert from svn:externals to Piston.  Not specifying this argument recursively converts the whole directory tree starting from the current dir."
+    end
+
+    logger_level Logger::DEBUG
+    def run
+      configure_logging!
+
+      cmd = Piston::Commands::Convert.new(:verbose => params["verbose"].value,
+                                          :quiet => params["quiet"].value,
+                                          :force => params["force"].value)
+      dirs = cmd.run(params["directories"].values.map {|dir| Pathname.new(dir)})
+      puts "#{dirs.length} directories converted"
+    end
+  end
+  
   mode "lock" do
     mixin :standard_options
     

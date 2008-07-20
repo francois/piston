@@ -77,6 +77,10 @@ module Piston
           end
         end
       end
+
+      def remove_external_references(*targets)
+        svn(:propdel, "svn:externals", *targets)
+      end
     end
   end
 end

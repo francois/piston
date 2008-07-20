@@ -17,6 +17,8 @@ module Piston
             logger.info "Importing #{dir.relative_path_from(wc.path)} from #{args[:url]}"
             importer.run(args[:url], args[:revision], dir)
           end
+
+          wc.remove_external_references(*targets)
         end
       end
     end

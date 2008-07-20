@@ -26,6 +26,16 @@ class TestWorkingCopyExternals < Test::Unit::TestCase
     assert_equal({@wcdir + "vendor/rails" => {:revision => 8726, :url => "http://dev.rubyonrails.org/svn/rails/trunk"}}, @wc.externals)
   end
 
+  def test_remove_external_references_calls_svn_propdel
+    @wc.expects(:svn).with(:propdel, "svn:externals", @wcdir+"vendor")
+    @wc.remove_external_references(@wcdir+"vendor")
+  end
+
+  def test_remove_external_references_calls_svn_propdel_with_multiple_dirs
+    @wc.expects(:svn).with(:propdel, "svn:externals", @wcdir+"vendor", @wcdir+"vendor/plugins")
+    @wc.remove_external_references(@wcdir+"vendor", @wcdir+"vendor/plugins")
+  end
+
   EMPTY_EXTERNALS = ""
   SIMPLE_RAILS_EXTERNALS = <<EOF
   Properties on 'vendor':

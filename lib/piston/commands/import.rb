@@ -5,14 +5,10 @@ module Piston
     class Import < Piston::Commands::Base
       attr_reader :options
 
-      def temp_dir_name(working_copy)
-        working_copy.path.parent + ".#{working_copy.path.basename}.tmp"
-      end
-      
       def repository_type
         options[:repository_type]
       end
-      
+
       def select_repository(repository_url)
         if repository_type then
           logger.info {"Forced repository type to #{repository_type}"}
@@ -53,7 +49,7 @@ module Piston
 
           logger.debug {"Remembering values"}
           working_copy.remember({:repository_url => repository.url, :lock => options[:lock], :repository_class => repository.class.name},
-                                revision.remember_values)
+          revision.remember_values)
 
           logger.debug {"Finalizing working copy"}
           working_copy.finalize

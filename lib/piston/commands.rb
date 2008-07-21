@@ -1,5 +1,1 @@
-require "piston/commands/import"
-require "piston/commands/lock_unlock"
-# require "piston/commands/update"
-require "piston/commands/info"
-require "piston/commands/convert"
+Dir[File.dirname(__FILE__) + "/commands/**/*.rb"].each {|f| require f}

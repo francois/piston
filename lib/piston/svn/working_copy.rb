@@ -78,6 +78,10 @@ module Piston
         end
       end
 
+      def update(from, to, todir)
+        copy_from(to)
+      end
+
       def remove_external_references(*targets)
         svn(:propdel, "svn:externals", *targets)
       end

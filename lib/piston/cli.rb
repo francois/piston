@@ -47,9 +47,17 @@ Main {
     end
   end
 
+  mixin :lock_options do
+    option("lock") do
+      default false
+      description "Automatically lock down the revision/commit to protect against blanket updates"
+    end
+  end
+
   mode "import" do
     mixin :standard_options
     mixin :revision_or_commit
+    mixin :lock_options
 
     argument "repository" do
       required
@@ -62,11 +70,6 @@ Main {
       description "Where to put the Pistonized repository"
     end
 
-    option("lock") do
-      default false
-      description "Automatically lock down the revision/commit to protect against blanket updates"
-    end
-    
     option("repository-type") do
       argument :required
       default nil
@@ -206,7 +209,7 @@ Main {
       begin
         puts cmd.run(params["directory"].value)
       rescue Piston::WorkingCopy::NotWorkingCopy
-        puts "The #{params["directory"].value} is not Pistonized"
+        puts "#{params["directory"].value} is not Pistonized"
       end
     end
   end
@@ -214,9 +217,11 @@ Main {
   mode "update" do
     mixin :standard_options
     mixin :revision_or_commit
+    mixin :lock_options
 
     argument("directory") { optional }
 
+    logger_level Logger::DEBUG
     def run
       configure_logging!
 
@@ -230,7 +235,7 @@ Main {
                                          :force => params["force"].value,
                                          :dry_run => params["dry-run"].value)
 
-      cmd.run(params["director"].value, target_revision)
+      cmd.run(params["directory"].value, target_revision)
     end
   end
 

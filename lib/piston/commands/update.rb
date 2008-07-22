@@ -27,8 +27,8 @@ module Piston
 
         begin
           working_copy.update(from_revision, to_revision, tmpdir)
-          working_copy.remember({:repository_url => repository.url, :lock => options[:lock], :repository_class => repository.class.name},
-              to_revision.remember_values)
+          working_copy.remember({:repository_url => repository.url, :lock => options[:lock],
+              :repository_class => repository.class.name}, to_revision.remember_values)
         rescue
           logger.debug {"Removing temporary directory: #{tmpdir}"}
           tmpdir.rmtree rescue nil

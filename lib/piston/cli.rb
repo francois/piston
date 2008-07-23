@@ -256,7 +256,7 @@ Main {
   end
 
   def configure_logging!
-    Log4r::Logger.root.level = Log4r::INFO
+    Log4r::Logger.root.level = Log4r::DEBUG
 
     case params["verbose"].value
     when 0

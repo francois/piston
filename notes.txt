@@ -13,3 +13,11 @@ $ svn checkout --revision NEWHEAD --ignore-externals REPOSITORY_URL
 $ # copy NEWHEAD over my WC
 $ svn merge --revision MYLASTCHANGE:HEAD
 $ # if merge errors, complain and abort
+
+
+= Integration tests to verify
+
+* Handles adds
+* Handles deletes
+* Handles copies
+* Maybe handle renames

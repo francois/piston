@@ -80,6 +80,14 @@ module Piston
 
       def update(from, to, todir)
         copy_from(to)
+        merge_changes(from, to, todir)
+      end
+
+      def merge_changes(from, to, todir)
+        data = svn(:info, path + "/.piston.yml")
+        info = YAML.load(data)
+        initial_revision = info["Last Changed Rev"].to_i.succ
+        svn(:merge, "--revision", "#{initial_revision}:#{to.revision}", from.url, path)
       end
 
       def remove_external_references(*targets)

@@ -79,7 +79,9 @@ module Piston
       end
 
       def update(from, to, todir)
+        logger.info "Copying new changes in place"
         copy_from(to)
+        logger.info "Merging local changes into working copy"
         merge_changes(from, to, todir)
       end
 

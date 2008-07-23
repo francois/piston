@@ -14,7 +14,6 @@ class TestMerging < Test::Unit::TestCase
   end
 
   def test_merging_asks_svn_for_dot_piston_yaml_info
-    @from.stubs(:url).returns("http://svn.mycompany.com/project/vendor")
     @to.stubs(:revision).returns(9999)
     @wc.stubs(:svn).returns()
     @wc.expects(:svn).with(:info, @wcdir + ".piston.yml").returns(PISTON_YML_INFO)
@@ -23,10 +22,9 @@ class TestMerging < Test::Unit::TestCase
   end
 
   def test_merging_asks_svn_to_merge_all_changes_since_last_change_plus_one_on_dot_piston_yml_file
-    @from.stubs(:url).returns("http://svn.mycompany.com/project/vendor")
     @to.stubs(:revision).returns(9999)
     @wc.stubs(:svn).with(:info, anything).returns(PISTON_YML_INFO)
-    @wc.expects(:svn).with(:merge, "--revision", "#{9223+1}:#{@to.revision}", @from.url, @wcdir).returns()
+    @wc.expects(:svn).with(:merge, "--revision", "9223:#{@to.revision}", @wcdir, @wcdir).returns()
     @wc.merge_changes(@from, @to, @todir)
   end
 

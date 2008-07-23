@@ -235,7 +235,13 @@ Main {
                                          :force => params["force"].value,
                                          :dry_run => params["dry-run"].value)
 
-      cmd.run(params["directory"].value, target_revision)
+      begin
+        cmd.run(params["directory"].value, target_revision)
+      rescue
+        $stderr.puts $!.message
+        $stderr.puts $!.backtrace.join("\n")
+        exit_failure!
+      end
     end
   end
 

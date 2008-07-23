@@ -17,7 +17,7 @@ class TestMerging < Test::Unit::TestCase
     @from.stubs(:url).returns("http://svn.mycompany.com/project/vendor")
     @to.stubs(:revision).returns(9999)
     @wc.stubs(:svn).returns()
-    @wc.expects(:svn).with(:info, @wcdir + "/.piston.yml").returns(PISTON_YML_INFO)
+    @wc.expects(:svn).with(:info, @wcdir + ".piston.yml").returns(PISTON_YML_INFO)
 
     @wc.merge_changes(@from, @to, @todir)
   end

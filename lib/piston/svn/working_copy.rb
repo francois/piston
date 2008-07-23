@@ -86,7 +86,7 @@ module Piston
       end
 
       def merge_changes(from, to, todir)
-        data = svn(:info, path + ".piston.yml")
+        data = svn(:info, yaml_path)
         info = YAML.load(data)
         initial_revision = info["Last Changed Rev"].to_i.succ
         svn(:merge, "--revision", "#{initial_revision}:#{to.revision}", from.url, path)

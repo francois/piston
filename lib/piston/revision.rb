@@ -14,6 +14,10 @@ module Piston
       @repository, @revision, @recalled_values = repository, revision, recalled_values
     end
     
+    def url
+      repository.url
+    end
+    
     def name
       @revision
     end

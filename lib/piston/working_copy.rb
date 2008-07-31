@@ -118,7 +118,11 @@ module Piston
     def info
       recall
     end
-    
+
+    # Update this working copy from +from+ to +to+, which means merging local changes back in
+    def update(from, to, todir)
+      logger.debug {"Updating"}
+    end
 
     protected
     # The path to the piston YAML file.

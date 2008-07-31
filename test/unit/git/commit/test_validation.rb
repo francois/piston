@@ -8,7 +8,7 @@ class TestGitCommitValidation < Test::Unit::TestCase
 
   def test_is_invalid_if_cannot_ls_remote_repository
     commit = new_commit("HEAD")
-    commit.expects(:git).with(:ls_remote, @repository.url).raises(Piston::Git::Client::CommandError)
+    commit.expects(:git).with("ls-remote", @repository.url).raises(Piston::Git::Client::CommandError)
     assert_raise Piston::Git::Commit::Gone do
       commit.validate!
     end
@@ -16,7 +16,7 @@ class TestGitCommitValidation < Test::Unit::TestCase
 
   def test_is_valid_when_ls_remote_succeeds
     commit = new_commit("HEAD")
-    commit.expects(:git).with(:ls_remote, @repository.url).returns(INFO)
+    commit.expects(:git).with("ls-remote", @repository.url).returns(INFO)
     assert_nothing_raised do
       commit.validate!
     end

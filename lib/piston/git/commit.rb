@@ -25,7 +25,7 @@ module Piston
 
       def validate!
         begin
-          data = git(:ls_remote, @repository.url)
+          data = git("ls-remote", @repository.url)
           self
         rescue Piston::Git::Client::CommandError
           raise Piston::Git::Commit::Gone, "Repository at #{@repository.url} does not exist anymore"

@@ -219,7 +219,10 @@ Main {
     mixin :revision_or_commit
     mixin :lock_options
 
-    argument("directory") { optional }
+    argument("directory") do
+      optional
+      default '.'
+    end
 
     logger_level Logger::DEBUG
     def run

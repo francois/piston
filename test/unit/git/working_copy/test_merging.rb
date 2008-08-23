@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/../../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
 class TestMerging < Test::Unit::TestCase
   def setup
@@ -11,9 +11,5 @@ class TestMerging < Test::Unit::TestCase
     @from  = mock("fromrevision")
     @to    = mock("torevision")
     @todir = @wcdir + "/.vendor"
-  end
-
-  def test_flunk
-    flunk
   end
 end

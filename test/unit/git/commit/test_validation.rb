@@ -1,7 +1,8 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestGitCommitValidation < Test::Unit::TestCase
+class Piston::Git::TestGitCommitValidation < PistonTestCase
   def setup
+    super
     @repository = mock("repository")
     @repository.stubs(:url).returns("git://my-git-repos/my-project.git")
   end

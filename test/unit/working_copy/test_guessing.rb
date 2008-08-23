@@ -1,9 +1,10 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../test_helper")
 
-class TestWorkingCopyGuessing < Test::Unit::TestCase
+class TestWorkingCopyGuessing < PistonTestCase
   def setup
+    super
     Piston::WorkingCopy.send(:handlers).clear
-    @dir = Pathname.new("tmp/wc")
+    @dir = mkpath("tmp/wc")
   end
 
   def test_guess_when_no_handlers_raises

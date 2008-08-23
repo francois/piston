@@ -1,14 +1,10 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestGitWorkingCopyRememberance < Test::Unit::TestCase
+class Piston::Git::TestGitWorkingCopyRememberance < PistonTestCase
   def setup
-    @wcdir = Pathname.new("tmp/wc")
-    @wcdir.mkdir rescue nil
+    super
+    @wcdir = mkpath("tmp/wc")
     @wc = Piston::Git::WorkingCopy.new(@wcdir)
-  end
-
-  def teardown
-    @wcdir.rmtree
   end
 
   def test_creates_dot_piston_dot_yml_file

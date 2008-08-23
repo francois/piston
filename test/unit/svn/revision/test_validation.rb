@@ -1,7 +1,8 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestSvnRevisionValidation < Test::Unit::TestCase
+class Piston::Svn::TestSvnRevisionValidation < PistonTestCase
   def setup
+    super
     @repository = mock("repository")
     @repository.stubs(:url).returns("svn://svn.my-repos.com/projects/libcalc/trunk")
   end

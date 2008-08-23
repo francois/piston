@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestGitRepositoryGuessing < Test::Unit::TestCase
+class Piston::Git::TestGitRepositoryGuessing < PistonTestCase
   def test_understands_git_protocol
     assert Piston::Git::Repository.understands_url?("git://github.com/francois/piston.git")
   end

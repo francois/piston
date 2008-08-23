@@ -1,7 +1,8 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestGitRepositoryAt < Test::Unit::TestCase
+class Piston::Git::TestGitRepositoryAt < PistonTestCase
   def setup
+    super
     @repos = Piston::Git::Repository.new("git://a.repos.com/project.git")
   end
 

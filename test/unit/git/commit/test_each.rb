@@ -1,21 +1,15 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
-require "find"
 
-class TestGitCommitEach < Test::Unit::TestCase
+class Piston::Git::TestGitCommitEach < PistonTestCase
   def setup
+    super
     @repos = mock("repository")
     @repos.stubs(:url).returns("git://github.com/francois/arepos.git")
-
-    @tmpdir = Pathname.new("tmp/.arepos.tmp.git")
-    @tmpdir.rmtree rescue nil
-    @tmpdir.mkdir
+    @tmpdir = mkpath("tmp/.arepos.tmp.git")
+    
     @commit = Piston::Git::Commit.new(@repos, "ab"*20)
     @commit.stubs(:git).returns("commit " + "ab" * 20)
     @commit.checkout_to(@tmpdir)
-  end
-
-  def teardown
-    @tmpdir.rmtree
   end
 
   def test_prunes_search_tree_on_dot_git_directory

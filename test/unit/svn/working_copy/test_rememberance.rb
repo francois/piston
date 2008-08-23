@@ -1,9 +1,9 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestSvnWorkingCopyRememberance < Test::Unit::TestCase
+class Piston::Svn::TestSvnWorkingCopyRememberance < PistonTestCase
   def setup
-    @wcdir = Pathname.new("tmp/wc")
-    @wcdir.mkpath
+    super
+    @wcdir = mkpath("tmp/wc")
     @wc = Piston::Svn::WorkingCopy.new(@wcdir)
     @wc.stubs(:svn)
     @wc.stubs(:svn).with(:info, anything).returns("a:b")

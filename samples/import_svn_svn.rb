@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 # Import an SVN repository into an SVN working copy.
-require File.dirname(__FILE__) + "/common"
+require "#{File.dirname(__FILE__)}/common"
 
 @root = @root + "tmp/svn_svn"
 @root.rmtree rescue nil

@@ -10,7 +10,9 @@ rescue LoadError
   # NOP: ignore, this is not a real dependency
 end
 
-require File.dirname(__FILE__) + "/../config/requirements"
+require File.expand_path("#{File.dirname(__FILE__)}/../config/requirements")
+require File.expand_path("#{File.dirname(__FILE__)}/integration_helpers")
+require "find"
 
 module Test
   module Unit
@@ -37,7 +39,38 @@ module Test
   end
 end
 
-LOG_DIR = Pathname.new(File.dirname(__FILE__) + "/../log") unless Object::const_defined?(:LOG_DIR)
+class PistonTestCase < Test::Unit::TestCase
+  attr_reader :pathnames
+  def setup
+    super
+    @pathnames = []
+  end
+
+  def teardown
+    pathnames.each do |pathname|
+      pathname.rmtree if File.exists?(pathname)
+    end
+    super
+  end
+
+  def run(*args)
+    return if method_name.to_sym == :default_test
+    super
+  end
+
+  def mkpath(path_or_pathname)
+    if path_or_pathname.is_a?(Pathname)
+      path = path_or_pathname
+    else
+      path = Pathname.new(path_or_pathname)
+    end
+    path.mkpath
+    pathnames.push(path)
+    path
+  end
+end
+
+LOG_DIR = Pathname.new(File.expand_path("#{File.dirname(__FILE__)}/../log")) unless Object::const_defined?(:LOG_DIR)
 LOG_DIR.mkdir rescue nil
 
 Log4r::Logger.root.level = Log4r::DEBUG

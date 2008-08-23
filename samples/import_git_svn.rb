@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 # Import a Git project into a Subversion working copy.
-require File.dirname(__FILE__) + "/common"
+require "#{File.dirname(__FILE__)}/common"
 
 @root = @root + "tmp/git_svn"
 @root.rmtree rescue nil

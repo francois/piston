@@ -1,17 +1,14 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
-require File.dirname(__FILE__) + "/../integration_helpers"
 
-class TestImportGitGit < Test::Unit::TestCase
+class TestImportGitGit < PistonTestCase
   attr_reader :root_path, :repos_path, :wc_path
 
   def setup
-    @root_path = Pathname.new("/tmp/import_git_git")
+    super
+    @root_path = mkpath("/tmp/import_git_git")
     @wc_path = @root_path + "wc"
+    mkpath(@wc_path)
 
-    root_path.rmtree rescue nil
-    root_path.mkpath
-
-    wc_path.mkpath
     Dir.chdir(wc_path) do
       git(:init)
       File.open(wc_path + "README", "wb") {|f| f.write "Hello World!"}
@@ -20,10 +17,6 @@ class TestImportGitGit < Test::Unit::TestCase
       git(:add, ".")
       git(:commit, "-m", "'first commit'")
     end
-  end
-
-  def teardown
-    root_path.rmtree rescue nil
   end
 
   def test_import

@@ -1,9 +1,9 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestMerging < Test::Unit::TestCase
+class Piston::Git::TestMerging < PistonTestCase
   def setup
-    @wcdir = Pathname.new("tmp/wc")
-    @wcdir.mkdir rescue nil
+    super
+    @wcdir = mkpath("tmp/wc")
     @repos = mock("repository")
     @repos.stubs(:url).returns("git://github.com/technoweenie/attachment_fu.git")
     @wc = Piston::Git::WorkingCopy.new(@wcdir)

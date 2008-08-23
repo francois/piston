@@ -1,7 +1,8 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestSvnRevisionEach < Test::Unit::TestCase
+class Piston::Svn::TestSvnRevisionEach < PistonTestCase
   def setup
+    super
     @repos = mock("repository")
     @repos.stubs(:url).returns("http://a.repos.com/project/trunk")
 

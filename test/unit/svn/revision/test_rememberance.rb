@@ -1,9 +1,9 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestSvnRevisionRememberance < Test::Unit::TestCase
+class Piston::Svn::TestSvnRevisionRememberance < PistonTestCase
   def setup
-    @wcdir = Pathname.new("tmp/wc")
-    @wcdir.mkdir rescue nil
+    super
+    @wcdir = mkpath("tmp/wc")
     @repos = mock("repository")
     @repos.stubs(:url).returns("http://a.repos.com/svn/trunk")
 
@@ -17,10 +17,6 @@ class TestSvnRevisionRememberance < Test::Unit::TestCase
         "Last Changed Author" => "me",
         "Last Changed Rev" => "9283",
         "Last Changed Date" => "2008-03-11 20:44:24 -0400 (Tue, 11 Mar 2008)"}
-  end
-
-  def teardown
-    @wcdir.rmtree rescue nil
   end
 
   def test_remembers_repos_uuid

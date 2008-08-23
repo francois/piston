@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestGitRepositoryBranchname < Test::Unit::TestCase
+class Piston::Git::TestGitRepositoryBranchname < PistonTestCase
   def test_branchname_is_nil_when_no_branch_in_url
     assert_nil Piston::Git::Repository.new("git://github.com/francois/piston.git").branchname
   end

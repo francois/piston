@@ -1,7 +1,8 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class TestRepository < Test::Unit::TestCase
+class TestRepository < PistonTestCase
   def setup
+    super
     Piston::Repository.send(:handlers).clear
   end
 

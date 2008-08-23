@@ -1,7 +1,8 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestGitCommitRememberance < Test::Unit::TestCase
+class Piston::Git::TestGitCommitRememberance < PistonTestCase
   def setup
+    super
     @repos = mock("repository")
     @repos.stubs(:url).returns("git://github.com/francois/arepos.git")
 

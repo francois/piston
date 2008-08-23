@@ -1,15 +1,10 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../test_helper")
 
-class TestWorkingCopyValidate < Test::Unit::TestCase
+class TestWorkingCopyValidate < PistonTestCase
   def setup
-    @wcdir = Pathname.new("tmp/wc")
-    @wcdir.rmtree rescue nil
-    @wcdir.mkpath
+    super
+    @wcdir = mkpath("tmp/wc")
     @wc = Piston::WorkingCopy.new(@wcdir)
-  end
-
-  def teardown
-    @wcdir.rmtree rescue nil
   end
 
   def test_exists_when_the_directory_exists

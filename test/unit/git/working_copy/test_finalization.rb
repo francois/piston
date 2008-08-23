@@ -1,13 +1,10 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestGitWorkingCopyFinalization < Test::Unit::TestCase
+class Piston::Git::TestGitWorkingCopyFinalization < PistonTestCase
   def setup
-    @wcdir = Pathname.new("tmp/wc")
+    super
+    @wcdir = mkpath("tmp/wc")
     @wc = Piston::Git::WorkingCopy.new(@wcdir)
-  end
-
-  def teardown
-    @wcdir.rmtree rescue nil
   end
 
   def test_finalize_adds_path_to_git

@@ -66,8 +66,8 @@ module Piston
         puts "exist? #{todir.exist?}"
         puts "file? #{todir.file?}"
         puts "directory? #{todir.directory?}"
-        (todir + "*").children.reject {|item| item == ".git"}.each {|item| puts "rm -rf #{item}"; FileUtils.rm_rf(item)}
-        (path + "*").chidlren.reject {|item| item == ".git"}.each {|item| puts "cp -r #{item}"; FileUtils.cp_r(item, todir)}
+        todir.children.reject {|item| item == ".git"}.each {|item| puts "rm -rf #{item}"; FileUtils.rm_rf(item)}
+        path.children.reject {|item| item == ".git"}.each {|item| puts "cp -r #{item}"; FileUtils.cp_r(item, todir)}
         Dir.chdir(todir) do
           git(:add, ".")
           deletions = git(:status).split("\n").grep(/deleted:/).map {|row| row.split(":", 2).last}

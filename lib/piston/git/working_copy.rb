@@ -58,30 +58,23 @@ module Piston
         Dir.chdir(path) { git(:add, ".") }
       end
 
-      def update(from, to, todir)
-        Dir.chdir(todir) do
-          git(:checkout, "-b", "mine", from.commit)
-        end
-        puts "todir: #{todir}"
-        puts "exist? #{todir.exist?}"
-        puts "file? #{todir.file?}"
-        puts "directory? #{todir.directory?}"
-        content_files = todir.children.reject {|item| item == ".git"}
-        content_files.each do |item|
+      def update(from, to, tmpdir, lock)
+        puts "tmpdir: #{tmpdir}"
+        puts "exist? #{tmpdir.exist?}"
+        puts "file? #{tmpdir.file?}"
+        puts "directory? #{tmpdir.directory?}"
+        path.children.reject {|item| ['.git', '.piston.yml'].include?(item.basename.to_s)}.each do |item|
           puts "rm -rf #{item}"
           FileUtils.rm_rf(item)
         end
-        content_files.each do |item|
-          puts "cp -r #{item}"
-          FileUtils.cp_r(item, todir)
+        tmpdir.children.reject {|item| item.basename.to_s == '.git'}.each do |item|
+          puts "cp -r #{item} #{path}"
+          FileUtils.cp_r(item, path)
         end
-        Dir.chdir(todir) do
+        FileUtils.rm_rf(tmpdir)
+        Dir.chdir(path) do
+          remember(recall.merge(:lock => lock), to.remember_values)
           git(:add, ".")
-          deletions = git(:status).split("\n").grep(/deleted:/).map {|row| row.split(":", 2).last}
-          git(:rm, *deletions) unless deletions.empty?
-          `gitk --all`
-          git(:commit, "-m", "my local changes based on #{from.commit}")
-          git(:rebase, to.branch_name)
         end
       end
     end

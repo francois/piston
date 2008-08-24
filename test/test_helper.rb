@@ -24,22 +24,16 @@ module Test
         end
       end
     end
-
-    class TestCase
-      class << self
-        def logger
-          @@logger ||= Log4r::Logger["test"]
-        end
-      end
-
-      def logger
-        self.class.logger
-      end
-    end
   end
 end
 
 class PistonTestCase < Test::Unit::TestCase
+  class << self
+    def logger
+      @@logger ||= Log4r::Logger["test"]
+    end
+  end
+  
   attr_reader :pathnames
   def setup
     super
@@ -67,6 +61,10 @@ class PistonTestCase < Test::Unit::TestCase
     path.mkpath
     pathnames.push(path)
     path
+  end
+
+  def logger
+    self.class.logger
   end
 end
 

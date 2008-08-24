@@ -93,4 +93,29 @@ A      vendor/parent/.piston.yml
 A      vendor/parent/README
 A      vendor/parent/file_in_first_commit
 )
+
+  def test_update
+    piston(:import, parent_path, wc_path + "trunk/vendor/parent")
+
+    Dir.chdir(wc_path) do
+      svn(:commit, "-m", "'next commit'")
+    end
+
+    Dir.chdir(parent_path) do
+      File.open(parent_path + "README", "wb") {|f| f.write "Readme - second commit"}
+      FileUtils.rm(parent_path + "file_in_first_commit")
+      File.open(parent_path + "file_in_second_commit", "wb") {|f| f.write "file_in_second_commit"}
+      git(:add, ".")
+      git(:commit, "-m", "'second commit'")
+    end
+
+    piston(:update, wc_path + "trunk/vendor/parent")
+
+    assert_equal CHANGE_STATUS.split("\n").sort, svn(:status, wc_path + "trunk/vendor").gsub((wc_path + "trunk/").to_s, "").split("\n").sort
+  end
+
+  CHANGE_STATUS = %Q(M      vendor/parent/.piston.yml
+M      vendor/parent/README
+?      vendor/parent/file_in_second_commit
+)
 end

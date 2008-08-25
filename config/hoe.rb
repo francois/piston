@@ -59,11 +59,14 @@ hoe = Hoe.new(GEM_NAME, VERS) do |p|
   
   # == Optional
   p.changes = p.paragraphs_of("History.txt", 0..1).join("\n\n")
+
+  # Don't specify dependencies using the full version or else it won't be the effect that was intended.
+  # ~> 2.8.0 really means "depend on 2.8.0 to 2.8.0.9999", and not 2.8.0 to 2.8.9
   p.extra_deps = [
-    ["main", "~> 2.8.0"],
-    ["open4", "~> 0.9.6"],
-    ["log4r", "~> 1.0.5"],
-    ["activesupport", "~> 2.0.2"]
+    ["main", "~> 2.8"],
+    ["open4", "~> 0.9"],
+    ["log4r", "~> 1.0"],
+    ["activesupport", "~> 2.0"]
   ]
 
   #p.spec_extras = {}    # A hash of extra values to set in the gemspec.

@@ -48,7 +48,7 @@ class Piston::TestCase < Test::Unit::TestCase
   end
 
   def run(*args)
-    return if method_name.to_sym == :default_test
+    return if method_name.to_sym == :default_test && self.class == Piston::TestCase
     super
   end
 

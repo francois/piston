@@ -45,8 +45,8 @@ tasks/environment.rake
 tasks/samples.rake
 tasks/test.rake
 tasks/website.rake
-test/integration/test_import_git_git.rb
-test/integration/test_import_git_svn.rb
+test/integration/test_git_git.rb
+test/integration/test_git_svn.rb
 test/integration/test_import_svn_git.rb
 test/integration/test_import_svn_svn.rb
 test/integration_helpers.rb

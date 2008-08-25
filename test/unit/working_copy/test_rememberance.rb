@@ -15,7 +15,7 @@ class TestWorkingCopyRememberance < PistonTestCase
   def test_writes_values_as_yaml_under_handler_key
     expected = {"a" => "b"}
     @wc.remember({}, expected)
-    actual = YAML.load((@wcdir + ".piston.yml").read)
+    actual = YAML.load_file(@wcdir + ".piston.yml")
     assert_equal expected, actual["handler"]
   end
 
@@ -30,14 +30,13 @@ class TestWorkingCopyRememberance < PistonTestCase
 
     @wc.remember(values, handler_values)
 
-    actual = YAML.load((@wcdir + ".piston.yml").read)
+    actual = YAML.load_file(@wcdir + ".piston.yml")
     assert_equal values.merge("format" => 1, "handler" => handler_values), actual
   end
 
   def test_recall_returns_hash_of_values
     values = {"a" => "b", "handler" => {"b" => "c"}}
-    File.expects(:read).with(@wcdir + ".piston.yml").returns(:data)
-    YAML.expects(:load).with(:data).returns(values)
+    YAML.expects(:load_file).with(@wcdir + ".piston.yml").returns(values)
     assert_equal values, @wc.recall
   end
 end

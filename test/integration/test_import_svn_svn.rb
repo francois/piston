@@ -27,7 +27,7 @@ A      vendor/ssl_requirement/.piston.yml
 A      vendor/ssl_requirement/README
 ".split("\n").sort, svn(:status, wc_path + "trunk/vendor/").gsub((wc_path + "trunk/").to_s, "").split("\n").sort
 
-    info = YAML.load(File.read(wc_path + "trunk/vendor/ssl_requirement/.piston.yml"))
+    info = YAML.load_file(wc_path + "trunk/vendor/ssl_requirement/.piston.yml")
     assert_equal 1, info["format"]
     assert_equal "http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement/", info["repository_url"]
     assert_equal "Piston::Svn::Repository", info["repository_class"]

@@ -15,7 +15,7 @@ RUBYFORGE_USERNAME = "unknown"
 def rubyforge_username
   unless @config
     begin
-      @config = YAML.load(File.read(File.expand_path(@config_file)))
+      @config = YAML.load_file(File.expand_path(@config_file))
     rescue
       puts <<-EOS
 ERROR: No rubyforge config file found: #{@config_file}

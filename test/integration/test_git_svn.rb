@@ -34,7 +34,7 @@ class TestGitSvn < PistonTestCase
 
     assert_equal ADD_STATUS.split("\n").sort, svn(:status, wc_path + "trunk/vendor").gsub((wc_path + "trunk/").to_s, "").split("\n").sort
 
-    info = YAML.load(File.read(wc_path + "trunk/vendor/parent/.piston.yml"))
+    info = YAML.load_file(wc_path + "trunk/vendor/parent/.piston.yml")
     assert_equal 1, info["format"]
     assert_equal parent_path.to_s, info["repository_url"]
     assert_equal "Piston::Git::Repository", info["repository_class"]

@@ -107,7 +107,7 @@ module Piston
 
     # Recalls a Hash of values from the working copy.
     def recall
-      YAML.load(File.read(yaml_path))
+      YAML.load_file(yaml_path)
     end
 
     def finalize

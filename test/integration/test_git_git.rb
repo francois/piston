@@ -38,7 +38,7 @@ class TestGitGit < PistonTestCase
       assert_equal IMPORT_STATUS.split("\n").sort, git(:status).split("\n").sort
     end
 
-    info = YAML.load(File.read(wc_path + "vendor/parent/.piston.yml"))
+    info = YAML.load_file(wc_path + "vendor/parent/.piston.yml")
     assert_equal 1, info["format"]
     assert_equal parent_path.to_s, info["repository_url"]
     assert_equal "Piston::Git::Repository", info["repository_class"]

@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class TestImportSvnGit < PistonTestCase
+class TestImportSvnGit < Piston::TestCase
   attr_reader :root_path, :repos_path, :wc_path
 
   def setup

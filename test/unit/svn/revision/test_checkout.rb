@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class Piston::Svn::TestSvnRevisionCheckout < PistonTestCase
+class Piston::Svn::TestSvnRevisionCheckout < Piston::TestCase
   def setup
     super
     @wcdir = Pathname.new("tmp/wc")

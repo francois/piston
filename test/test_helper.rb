@@ -27,7 +27,7 @@ module Test
   end
 end
 
-class PistonTestCase < Test::Unit::TestCase
+class Piston::TestCase < Test::Unit::TestCase
   class << self
     def logger
       @@logger ||= Log4r::Logger["test"]

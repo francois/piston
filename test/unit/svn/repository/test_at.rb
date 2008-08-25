@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class Piston::Svn::TestSvnRepositoryAt < PistonTestCase
+class Piston::Svn::TestSvnRepositoryAt < Piston::TestCase
   def setup
     super
     @repos = Piston::Svn::Repository.new("http://bla.com/svn/repos/trunk")

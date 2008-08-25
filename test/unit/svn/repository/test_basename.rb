@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class Piston::Svn::TestSvnRepositoryBasename < PistonTestCase
+class Piston::Svn::TestSvnRepositoryBasename < Piston::TestCase
   def test_basename_is_urls_path_last_component
     assert_equal "piston", basename("http://svn.rubyforge.org/var/svn/piston")
   end

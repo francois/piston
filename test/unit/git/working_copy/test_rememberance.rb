@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class Piston::Git::TestGitWorkingCopyRememberance < PistonTestCase
+class Piston::Git::TestGitWorkingCopyRememberance < Piston::TestCase
   def setup
     super
     @wcdir = mkpath("tmp/wc")

@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class Piston::Svn::TestSvnRepositoryGuessing < PistonTestCase
+class Piston::Svn::TestSvnRepositoryGuessing < Piston::TestCase
   def test_guesses_with_svn_protocol
     assert Piston::Svn::Repository.understands_url?("svn://a.host.com/")
   end

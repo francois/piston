@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../test_helper")
 
-class TestWorkingCopyRememberance < PistonTestCase
+class TestWorkingCopyRememberance < Piston::TestCase
   def setup
     super
     @wcdir = mkpath("tmp/wc")

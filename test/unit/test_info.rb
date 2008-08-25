@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class TestInfo < PistonTestCase
+class TestInfo < Piston::TestCase
   def setup
     super
     @values = {"lock" => false}

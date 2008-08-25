@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class TestGitGit < PistonTestCase
+class TestGitGit < Piston::TestCase
   attr_reader :root_path, :repos_path, :parent_path, :wc_path
 
   def setup

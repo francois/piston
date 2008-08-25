@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class Piston::Git::TestGitCommitRememberance < PistonTestCase
+class Piston::Git::TestGitCommitRememberance < Piston::TestCase
   def setup
     super
     @repos = mock("repository")

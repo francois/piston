@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class TestImport < PistonTestCase
+class TestImport < Piston::TestCase
   def setup
     super
     @wc = stub_everything("working_copy")

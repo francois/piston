@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class Piston::Git::TestGitCommitCheckout < PistonTestCase
+class Piston::Git::TestGitCommitCheckout < Piston::TestCase
   def setup
     super
     @repos = mock("repos")

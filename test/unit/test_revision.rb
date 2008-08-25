@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class TestRevision < PistonTestCase
+class TestRevision < Piston::TestCase
   def setup
     super
     @repository = mock("repository")

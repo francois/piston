@@ -26,9 +26,7 @@ module Piston
         to_revision.checkout_to(tmpdir)
 
         begin
-          working_copy.update(from_revision, to_revision, tmpdir)
-          working_copy.remember({:repository_url => repository.url, :lock => options[:lock],
-              :repository_class => repository.class.name}, to_revision.remember_values)
+          working_copy.update(from_revision, to_revision, tmpdir, options[:lock])
         ensure
           logger.debug {"Removing temporary directory: #{tmpdir}"}
           tmpdir.rmtree rescue nil

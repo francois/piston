@@ -1,15 +1,10 @@
-require File.dirname(__FILE__) + "/../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../test_helper")
 
-class TestWorkingCopyRememberance < Test::Unit::TestCase
+class TestWorkingCopyRememberance < PistonTestCase
   def setup
-    @wcdir = Pathname.new("tmp/wc")
-    @wcdir.rmtree rescue nil
-    @wcdir.mkpath
+    super
+    @wcdir = mkpath("tmp/wc")
     @wc = Piston::WorkingCopy.new(@wcdir)
-  end
-
-  def teardown
-    @wcdir.rmtree rescue nil
   end
 
   def test_remember_generates_piston_yml_file_in_wc

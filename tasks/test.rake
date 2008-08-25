@@ -1,5 +1,13 @@
 require "rake/testtask"
 
+Rake.application.instance_variable_get("@tasks").delete("test")
+Rake::TestTask.new("test") do |t|
+  t.libs << "test"
+  t.test_files = FileList['test/**/test_*.rb']
+  t.verbose = true
+  t.warning = false
+end
+
 namespace :test do
   Rake::TestTask.new("units") do |t|
     t.libs << "test"

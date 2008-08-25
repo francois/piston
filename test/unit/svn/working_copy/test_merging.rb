@@ -1,9 +1,9 @@
-require File.dirname(__FILE__) + "/../../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestMerging < Test::Unit::TestCase
+class Piston::Svn::TestMerging < PistonTestCase
   def setup
+    super
     @wcdir = Pathname.new("tmp/wc")
-    @wcdir.mkdir rescue nil
     @repos = mock("repository")
     @repos.stubs(:url).returns("http://a.repos.com/svn/trunk")
     @wc = Piston::Svn::WorkingCopy.new(@wcdir)

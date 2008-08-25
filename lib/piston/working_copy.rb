@@ -35,7 +35,7 @@ module Piston
 
     def initialize(path)
       @path = path.kind_of?(Pathname) ? path : Pathname.new(path)
-      logger.debug {"Initialized on #{@path}"}
+      logger.debug {"In)itialized on #{@path}"}
     end
 
     def logger

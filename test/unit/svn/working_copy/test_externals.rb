@@ -1,8 +1,9 @@
-require File.dirname(__FILE__) + "/../../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestWorkingCopyExternals < Test::Unit::TestCase
+class Piston::Svn::TestWorkingCopyExternals < PistonTestCase
   def setup
-    @wcdir = Pathname.new("tmp/wc")
+    super
+    @wcdir = mkpath("tmp/wc")
     @wc = Piston::Svn::WorkingCopy.new(@wcdir)
   end
 

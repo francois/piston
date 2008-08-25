@@ -1,7 +1,8 @@
-require File.dirname(__FILE__) + "/../../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestSvnRevisionCheckout < Test::Unit::TestCase
+class Piston::Svn::TestSvnRevisionCheckout < PistonTestCase
   def setup
+    super
     @wcdir = Pathname.new("tmp/wc")
     @repos = mock("repository")
     @repos.stubs(:url).returns("http://a.repos.com/trunk")

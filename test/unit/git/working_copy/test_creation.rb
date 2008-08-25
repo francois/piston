@@ -1,15 +1,11 @@
-require File.dirname(__FILE__) + "/../../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestGitWorkingCopyCreation < Test::Unit::TestCase
+class Piston::Git::TestGitWorkingCopyCreation < PistonTestCase
   def setup
-    @wcdir = Pathname.new("tmp/wc")
-    @wcdir.rmtree rescue nil
+    super
+    @wcdir = mkpath("tmp/wc")
     @wc = Piston::Git::WorkingCopy.new(@wcdir)
     @wc.stubs(:git)
-  end
-
-  def teardown
-    @wcdir.rmtree rescue nil
   end
 
   def test_create_does_a_simple_mkpath

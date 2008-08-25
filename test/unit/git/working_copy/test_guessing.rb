@@ -1,8 +1,9 @@
-require File.dirname(__FILE__) + "/../../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestGitWorkingCopyGuessing < Test::Unit::TestCase
+class Piston::Git::TestGitWorkingCopyGuessing < PistonTestCase
   def setup
-    @dir = Pathname.new("tmp/wc")
+    super
+    @dir = mkpath("tmp/wc")
   end
 
   def test_does_git_status_on_directory

@@ -4,7 +4,7 @@ require "pathname"
 require "logger"
 
 @root = Pathname.new(File.dirname(__FILE__)).parent
-$:.unshift @root + "lib"
+$:.unshift("#{@root}lib"
 
 require "piston"
 require "piston/svn"

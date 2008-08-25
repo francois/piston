@@ -1,7 +1,8 @@
-require File.dirname(__FILE__) + "/../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class TestInfo < Test::Unit::TestCase
+class TestInfo < PistonTestCase
   def setup
+    super
     @values = {"lock" => false}
     @wcdir = "tmp/wcdir"
     @wc = mock("WorkingCopy")

@@ -1,14 +1,12 @@
-require File.dirname(__FILE__) + "/../../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestGitWorkingCopyExistence < Test::Unit::TestCase
+class Piston::Git::TestGitWorkingCopyExistence < PistonTestCase
   def setup
+    super
     @wcdir = Pathname.new("tmp/wc")
     @wc = Piston::Git::WorkingCopy.new(@wcdir)
   end
 
-  def teardown
-    @wcdir.rmtree rescue nil
-  end
 
   def test_exist_false_when_no_dir
     deny @wc.exist?

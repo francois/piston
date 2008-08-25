@@ -4,3 +4,5 @@ pkg
 *.iml
 *.ipr
 *.iws
+.config
+InstalledFiles

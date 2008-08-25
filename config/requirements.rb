@@ -12,7 +12,7 @@ require "rubygems"
   end
 end
 
-$:.unshift(File.join(File.dirname(__FILE__), %w[.. lib]))
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), %w[.. lib])))
 
 require "piston"
 require "piston/commands"

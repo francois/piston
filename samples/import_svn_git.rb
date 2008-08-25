@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 # Import an SVN repository into a Git working copy.
-require File.dirname(__FILE__) + "/common"
+require "#{File.dirname(__FILE__)}/common"
 
 @root = @root + "tmp/svn_git"
 @root.rmtree rescue nil

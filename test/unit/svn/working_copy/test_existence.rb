@@ -1,13 +1,10 @@
-require File.dirname(__FILE__) + "/../../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestSvnWorkingCopyExistence < Test::Unit::TestCase
+class Piston::Svn::TestSvnWorkingCopyExistence < PistonTestCase
   def setup
+    super
     @wcdir = Pathname.new("tmp/wc")
     @wc = Piston::Svn::WorkingCopy.new(@wcdir)
-  end
-
-  def teardown
-    @wcdir.rmtree rescue nil
   end
 
   def test_exist_false_when_dir_not_present

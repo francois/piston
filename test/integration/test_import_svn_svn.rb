@@ -1,25 +1,18 @@
-require File.dirname(__FILE__) + "/../test_helper"
-require File.dirname(__FILE__) + "/../integration_helpers"
+require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
-class TestImportSvnSvn < Test::Unit::TestCase
+class TestImportSvnSvn < PistonTestCase
   attr_reader :root_path, :repos_path, :wc_path
 
   def setup
-    @root_path = Pathname.new("/tmp/import_svn_svn")
+    super
+    @root_path = mkpath("/tmp/import_svn_svn")
     @repos_path = @root_path + "repos"
     @wc_path = @root_path + "wc"
-
-    root_path.rmtree rescue nil
-    root_path.mkpath
 
     svnadmin :create, repos_path
     svn :checkout, "file://#{repos_path}", wc_path
     svn :mkdir, wc_path + "trunk", wc_path + "tags", wc_path + "branches", wc_path + "trunk/vendor"
     svn :commit, wc_path, "--message", "'first commit'"
-  end
-
-  def teardown
-    root_path.rmtree rescue nil
   end
 
   def test_import

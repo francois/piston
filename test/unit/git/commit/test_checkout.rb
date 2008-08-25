@@ -1,7 +1,8 @@
-require File.dirname(__FILE__) + "/../../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestGitCommitCheckout < Test::Unit::TestCase
+class Piston::Git::TestGitCommitCheckout < PistonTestCase
   def setup
+    super
     @repos = mock("repos")
     @repos.stubs(:url).returns("git://a.repos.com/project.git")
     @reposdir = Pathname.new("tmp/.repos.tmp.git")

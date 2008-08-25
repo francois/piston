@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + "/../../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestGitRepositoryBasename < Test::Unit::TestCase
+class Piston::Git::TestGitRepositoryBasename < PistonTestCase
   def test_basename_is_urls_last_component_minus_dot_git
     assert_equal "piston", basename("git://github.com/francois/piston.git")
   end

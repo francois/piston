@@ -1,8 +1,9 @@
-require File.dirname(__FILE__) + "/../../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestSvnWorkingCopyGuessing < Test::Unit::TestCase
+class Piston::Svn::TestSvnWorkingCopyGuessing < PistonTestCase
   def setup
-    @dir = Pathname.new("tmp/wc")
+    super
+    @dir = mkpath("tmp/wc")
   end
 
   def test_does_svn_info_on_directory

@@ -1,17 +1,13 @@
-require File.dirname(__FILE__) + "/../../../test_helper"
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 
-class TestSvnWorkingCopyFinalization < Test::Unit::TestCase
+class Piston::Svn::TestSvnWorkingCopyFinalization < PistonTestCase
   def setup
-    @wcdir = Pathname.new("tmp/wc")
+    super
+    @wcdir = mkpath("tmp/wc")
     @wc = Piston::Svn::WorkingCopy.new(@wcdir)
   end
 
-  def teardown
-    @wcdir.rmtree rescue nil
-  end
-
   def test_finalize_adds_all_top_level_entries_to_working_copy
-    @wcdir.mkdir
     File.open(@wcdir + "a.rb", "wb") {|f| f.write "Hello World!"}
     File.open(@wcdir + "b.rb", "wb") {|f| f.write "Hello World!"}
     @wc.expects(:svn).with(:add, (@wcdir + "a.rb").to_s)

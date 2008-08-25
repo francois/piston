@@ -1,3 +1,8 @@
+
+* Thanks to Brian Takita (btakita), piston update with a Git repository works!
+* Thanks to mattknox and scambra for manifest updates.
+* Thanks to Marcos Tapajós (tapajos) for many small improvements.
+
 == 1.9.3 2008-06-03
 
 * Import git branches using --revision origin/BRANCH_NAME, or a tag

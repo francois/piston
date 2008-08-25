@@ -1,20 +1,3 @@
-= Update workflow (when Git is available)
-
-$ git clone ORIGINAL_URL TMPDIR
-$ git checkout -b mine ORIGINAL_COMMIT_SHA1
-$ # apply my changes
-$ git rebase ORIGINAL_BRANCH_NAME
-$ # if no errors, copy resulting data back
-$ # if merge errors, complain and abort
-
-= Update workflow (old Subversion)
-
-$ svn checkout --revision NEWHEAD --ignore-externals REPOSITORY_URL
-$ # copy NEWHEAD over my WC
-$ svn merge --revision MYLASTCHANGE:HEAD
-$ # if merge errors, complain and abort
-
-
 = Integration tests to verify
 
 * Handles adds

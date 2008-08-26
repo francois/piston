@@ -1,7 +1,7 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
 class TestGitGit < Piston::TestCase
-  attr_reader :root_path, :repos_path, :parent_path, :wc_path
+  attr_reader :root_path, :parent_path, :wc_path
 
   def setup
     super
@@ -32,7 +32,9 @@ class TestGitGit < Piston::TestCase
   end
 
   def test_import
-    piston(:import, parent_path, wc_path + "vendor/parent")
+    Dir.chdir(wc_path) do
+      piston(:import, parent_path, "vendor/parent")
+    end
 
     Dir.chdir(wc_path) do
       assert_equal IMPORT_STATUS.split("\n").sort, git(:status).split("\n").sort
@@ -59,7 +61,9 @@ class TestGitGit < Piston::TestCase
 )
 
   def test_update
-    piston(:import, parent_path, wc_path + "vendor/parent")
+    Dir.chdir(wc_path) do
+      piston(:import, parent_path, "vendor/parent")
+    end
 
     Dir.chdir(wc_path) do
       git(:add, ".")
@@ -74,7 +78,9 @@ class TestGitGit < Piston::TestCase
       git(:commit, "-m", "'second commit'")
     end
 
-    piston(:update, wc_path + "vendor/parent")
+    Dir.chdir(wc_path) do
+      piston(:update, "vendor/parent")
+    end
 
     Dir.chdir(wc_path) do
       assert_equal CHANGE_STATUS.split("\n"), git(:status).split("\n")

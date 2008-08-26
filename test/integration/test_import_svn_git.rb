@@ -21,7 +21,9 @@ class TestImportSvnGit < Piston::TestCase
   end
 
   def test_import
-    piston :import, "http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement/", wc_path + "vendor/ssl_requirement"
+    Dir.chdir(wc_path) do
+      piston :import, "http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement/", "vendor/ssl_requirement"
+    end
 
     Dir.chdir(wc_path) do
       assert_equal %Q(# On branch master

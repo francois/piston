@@ -3,10 +3,9 @@ require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 class Piston::Git::TestGitWorkingCopyExistence < Piston::TestCase
   def setup
     super
-    @wcdir = Pathname.new("tmp/wc")
-    @wc = Piston::Git::WorkingCopy.new(@wcdir)
+    @wc = Piston::Git::WorkingCopy.new("tmp/wc")
+    @wcdir = @wc.path
   end
-
 
   def test_exist_false_when_no_dir
     deny @wc.exist?

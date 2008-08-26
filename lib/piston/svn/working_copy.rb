@@ -78,15 +78,7 @@ module Piston
         end
       end
 
-      def update(from, to, tmpdir, lock)
-        logger.info "Copying new changes in place"
-        copy_from(to)
-        logger.info "Merging local changes into working copy"
-        merge_changes(from, to, tmpdir)
-        remember(recall.merge(:lock => lock), to.remember_values)
-      end
-
-      def merge_changes(from, to, tmpdir)
+      def merge_changes(to)
         data = svn(:info, yaml_path)
         info = YAML.load(data)
         initial_revision = info["Last Changed Rev"].to_i
@@ -97,6 +89,15 @@ module Piston
 
       def remove_external_references(*targets)
         svn(:propdel, "svn:externals", *targets)
+      end
+      
+      protected
+      def do_update(to, lock)
+        logger.info "Copying new changes in place"
+        copy_from(to)
+        logger.info "Merging local changes into working copy"
+        merge_changes(to)
+        remember(recall.merge(:lock => lock), to.remember_values)
       end
     end
   end

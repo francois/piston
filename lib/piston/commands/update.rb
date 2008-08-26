@@ -22,15 +22,7 @@ module Piston
 
         logger.info {"Updating from #{from_revision} to #{to_revision}"}
 
-        tmpdir = temp_dir_name(working_copy)
-        to_revision.checkout_to(tmpdir)
-
-        begin
-          working_copy.update(from_revision, to_revision, tmpdir, options[:lock])
-        ensure
-          logger.debug {"Removing temporary directory: #{tmpdir}"}
-          tmpdir.rmtree rescue nil
-        end
+        working_copy.update(to_revision, options[:lock])
       end
     end
   end

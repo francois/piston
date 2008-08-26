@@ -53,7 +53,7 @@ class Piston::TestCase < Test::Unit::TestCase
   end
 
   def mkpath(path_or_pathname)
-    returning(path_or_pathname.is_a?(Pathname) ? path_or_pathname : Pathname.new(path_or_pathname)) do |path|
+    returning(path_or_pathname.is_a?(Pathname) ? path_or_pathname : Pathname.new(File.expand_path(path_or_pathname))) do |path|
       path.mkpath
       pathnames.push(path)
     end

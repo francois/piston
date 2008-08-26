@@ -8,7 +8,7 @@ module Piston
       end
     end
 
-    attr_reader :repository, :revision, :recalled_values
+    attr_reader :repository, :revision, :recalled_values, :dir
 
     def initialize(repository, revision, recalled_values={})
       @repository, @revision, @recalled_values = repository, revision, recalled_values
@@ -33,6 +33,7 @@ module Piston
     # Retrieve a copy of this repository into +dir+.
     def checkout_to(dir)
       logger.debug {"Checking out #{@repository}@#{@revision} into #{dir}"}
+      @dir = dir.kind_of?(Pathname) ? dir : Pathname.new(dir)
     end
 
     # What values does this revision want to remember for the future ?

@@ -20,7 +20,7 @@ class TestWorkingCopyRememberance < Piston::TestCase
   end
 
   def test_remember_calls_after_remember_with_path_to_piston_yml_file
-    @wc.expects(:after_remember).with(@wcdir + ".piston.yml")
+    @wc.expects(:after_remember).with(Pathname.new(@wcdir + ".piston.yml"))
     @wc.remember({}, "a" => "b")
   end
 

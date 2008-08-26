@@ -39,10 +39,6 @@ module Piston
         wc.validate!
         wc
       end
-
-      def temp_dir_name(working_copy)
-        working_copy.path.parent + ".#{working_copy.path.basename}.tmp"
-      end
     end
   end
 end

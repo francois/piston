@@ -41,7 +41,7 @@ module Piston
       end
 
       def checkout_to(dir)
-        @dir = dir
+        super
         git(:clone, repository.url, @dir)
         Dir.chdir(@dir) do
           logger.debug {"in dir #{@dir}"}

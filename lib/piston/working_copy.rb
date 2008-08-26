@@ -34,7 +34,12 @@ module Piston
     attr_reader :path
 
     def initialize(path)
-      @path = path.kind_of?(Pathname) ? path : Pathname.new(path)
+      if path.kind_of?(Pathname)
+        raise ArgumentError, "#{path} must be absolute" unless path.absolute?
+        @path = path
+      else
+        @path = Pathname.new(File.expand_path(path))
+      end
       logger.debug {"In)itialized on #{@path}"}
     end
 
@@ -92,7 +97,7 @@ module Piston
       end
 
       logger.debug {"Remembering #{values.inspect} as well as #{handler_values.inspect}"}
-      File.open(yaml_path, "wb") do |f|
+      File.open(yaml_path, "w+") do |f|
         f.write(values.merge("handler" => handler_values).to_yaml)
       end
 
@@ -119,12 +124,56 @@ module Piston
       recall
     end
 
+    def import(revision, lock)
+      repository = revision.repository
+      tmpdir = temp_dir_name
+      begin
+        logger.info {"Checking out the repository"}
+        revision.checkout_to(tmpdir)
+
+        logger.debug {"Creating the local working copy"}
+        create
+
+        logger.info {"Copying from #{revision}"}
+        copy_from(revision)
+
+        logger.debug {"Remembering values"}
+        remember(
+          {:repository_url => repository.url, :lock => lock, :repository_class => repository.class.name},
+          revision.remember_values
+        )
+
+        logger.debug {"Finalizing working copy"}
+        finalize
+
+        logger.info {"Checked out #{repository_url.inspect} #{revision.name} to #{wcdir.inspect}"}
+      ensure
+        logger.debug {"Removing temporary directory: #{tmpdir}"}
+        tmpdir.rmtree rescue nil
+      end
+    end
+
     # Update this working copy from +from+ to +to+, which means merging local changes back in
-    def update(from, to, todir)
-      logger.debug {"Updating"}
+    def update(to, lock)
+      tmpdir = temp_dir_name
+      begin
+        to.checkout_to(tmpdir)
+        do_update(to, lock)
+      ensure
+        logger.debug {"Removing temporary directory: #{tmpdir}"}
+        tmpdir.rmtree rescue nil
+      end
+    end
+
+    def temp_dir_name
+      path.parent + ".#{path.basename}.tmp"
     end
 
     protected
+    def do_update(to, lock)
+      raise NotImplementedError
+    end
+
     # The path to the piston YAML file.
     def yaml_path
       path + ".piston.yml"

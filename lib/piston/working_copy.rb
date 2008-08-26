@@ -149,8 +149,15 @@ module Piston
     end
 
     # Update this working copy from +from+ to +to+, which means merging local changes back in
-    def update(from, to, todir)
-      logger.debug {"Updating"}
+    def update(to, lock)
+      tmpdir = temp_dir_name
+      begin
+        to.checkout_to(tmpdir)
+        do_update(to, lock)
+      ensure
+        logger.debug {"Removing temporary directory: #{tmpdir}"}
+        tmpdir.rmtree rescue nil
+      end
     end
 
     def temp_dir_name
@@ -158,6 +165,10 @@ module Piston
     end
 
     protected
+    def do_update(to, lock)
+      raise NotImplementedError
+    end
+
     # The path to the piston YAML file.
     def yaml_path
       path + ".piston.yml"

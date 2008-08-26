@@ -20,9 +20,9 @@ module Piston
         "r#{revision}"
       end
 
-      def checkout_to(path)
-        @wcpath = path.kind_of?(Pathname) ? path : Pathname.new(path)
-        answer = svn(:checkout, "--revision", revision, repository.url, path)
+      def checkout_to(dir)
+        super
+        answer = svn(:checkout, "--revision", revision, repository.url, dir)
         if answer =~ /Checked out revision (\d+)[.]/ then
           if revision == "HEAD" then
             @revision = $1.to_i
@@ -30,7 +30,7 @@ module Piston
             raise Failed, "Did not get the revision I wanted to checkout.  Subversion checked out #{$1}, I wanted #{revision}"
           end
         else
-          raise Failed, "Could not checkout revision #{revision} from #{repository.url} to #{path}\n#{answer}"
+          raise Failed, "Could not checkout revision #{revision} from #{repository.url} to #{dir}\n#{answer}"
         end
       end
 
@@ -43,19 +43,19 @@ module Piston
       end
 
       def each
-        raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @wcpath
+        raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @dir
 
-        svn(:ls, "--recursive", @wcpath).each do |relpath|
+        svn(:ls, "--recursive", @dir).each do |relpath|
           next if relpath =~ %r{/$}
           yield relpath.chomp
         end
       end
 
       def copy_to(relpath, abspath)
-        raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @wcpath
+        raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @dir
 
         Pathname.new(abspath).dirname.mkpath
-        FileUtils.cp(@wcpath + relpath, abspath)
+        FileUtils.cp(@dir + relpath, abspath)
       end
 
       def validate!

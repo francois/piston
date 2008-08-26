@@ -3,7 +3,7 @@ require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 class Piston::Svn::TestSvnWorkingCopyExistence < PistonTestCase
   def setup
     super
-    @wcdir = Pathname.new("tmp/wc")
+    @wcdir = Pathname.new(File.expand_path("tmp/wc"))
     @wc = Piston::Svn::WorkingCopy.new(@wcdir)
   end
 
@@ -12,7 +12,7 @@ class Piston::Svn::TestSvnWorkingCopyExistence < PistonTestCase
   end
 
   def test_exist_false_when_dir_present_but_not_an_svn_wc
-    @wcdir.mkdir
+    @wcdir.mkpath
     deny @wc.exist?
   end
 

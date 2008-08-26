@@ -1,11 +1,11 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
 class TestGitGit < PistonTestCase
-  attr_reader :root_path, :repos_path, :parent_path, :wc_path
+  attr_reader :root_path, :parent_path, :wc_path
 
   def setup
     super
-    @root_path = mkpath("/tmp/import_git_git")
+    @root_path = mkpath("tmp/import_git_git")
 
     @parent_path = root_path + "parent"
     mkpath(parent_path)
@@ -15,17 +15,17 @@ class TestGitGit < PistonTestCase
 
     Dir.chdir(parent_path) do
       git(:init)
-      File.open(parent_path + "README", "wb") {|f| f.write "Readme - first commit"}
-      File.open(parent_path + "file_in_first_commit", "wb") {|f| f.write "file_in_first_commit"}
+      File.open("README", "wb") {|f| f.write "Readme - first commit"}
+      File.open("file_in_first_commit", "wb") {|f| f.write "file_in_first_commit"}
       git(:add, ".")
       git(:commit, "-m", "'first commit'")
     end
 
     Dir.chdir(wc_path) do
       git(:init)
-      File.open(wc_path + "README", "wb") {|f| f.write "Hello World!"}
-      (wc_path + "vendor").mkdir
-      File.open(wc_path + "vendor/.gitignore", "wb") {|f| f.write "*.swp"}
+      File.open("README", "wb") {|f| f.write "Hello World!"}
+      Pathname.new("vendor").mkdir
+      File.open("vendor/.gitignore", "wb") {|f| f.write "*.swp"}
       git(:add, ".")
       git(:commit, "-m", "'first commit'")
     end
@@ -67,9 +67,9 @@ class TestGitGit < PistonTestCase
     end
 
     Dir.chdir(parent_path) do
-      File.open(parent_path + "README", "wb") {|f| f.write "Readme - second commit"}
-      FileUtils.rm(parent_path + "file_in_first_commit")
-      File.open(parent_path + "file_in_second_commit", "wb") {|f| f.write "file_in_second_commit"}
+      File.open("README", "wb") {|f| f.write "Readme - second commit"}
+      FileUtils.rm("file_in_first_commit")
+      File.open("file_in_second_commit", "wb") {|f| f.write "file_in_second_commit"}
       git(:add, ".")
       git(:commit, "-m", "'second commit'")
     end

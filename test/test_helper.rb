@@ -54,9 +54,10 @@ class PistonTestCase < Test::Unit::TestCase
 
   def mkpath(path_or_pathname)
     if path_or_pathname.is_a?(Pathname)
+      raise ArgumentError, "#{path_or_pathname.inspect} must be absolute" unless path_or_pathname.absolute?
       path = path_or_pathname
     else
-      path = Pathname.new(path_or_pathname)
+      path = Pathname.new(File.expand_path(path_or_pathname))
     end
     path.mkpath
     pathnames.push(path)

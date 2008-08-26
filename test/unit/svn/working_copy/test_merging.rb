@@ -3,10 +3,11 @@ require File.expand_path("#{File.dirname(__FILE__)}/../../../test_helper")
 class Piston::Svn::TestMerging < PistonTestCase
   def setup
     super
-    @wcdir = Pathname.new("tmp/wc")
     @repos = mock("repository")
     @repos.stubs(:url).returns("http://a.repos.com/svn/trunk")
-    @wc = Piston::Svn::WorkingCopy.new(@wcdir)
+    @wc = Piston::Svn::WorkingCopy.new("tmp/wc")
+    @wcdir = @wc.path
+    pathnames << @wcdir
 
     @from  = mock("fromrevision")
     @to    = mock("torevision")

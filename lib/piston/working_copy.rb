@@ -34,7 +34,12 @@ module Piston
     attr_reader :path
 
     def initialize(path)
-      @path = path.kind_of?(Pathname) ? path : Pathname.new(path)
+      if path.kind_of?(Pathname)
+        raise ArgumentError, "#{path} must be absolute" unless path.absolute?
+        @path = path
+      else
+        @path = Pathname.new(File.expand_path(path))
+      end
       logger.debug {"In)itialized on #{@path}"}
     end
 

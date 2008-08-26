@@ -78,15 +78,22 @@ module Piston
         end
       end
 
-      def update(from, to, tmpdir, lock)
-        logger.info "Copying new changes in place"
-        copy_from(to)
-        logger.info "Merging local changes into working copy"
-        merge_changes(from, to, tmpdir)
-        remember(recall.merge(:lock => lock), to.remember_values)
+      def update(to, lock)
+        tmpdir = temp_dir_name
+        begin
+          to.checkout_to(tmpdir)
+          logger.info "Copying new changes in place"
+          copy_from(to)
+          logger.info "Merging local changes into working copy"
+          merge_changes(to)
+          remember(recall.merge(:lock => lock), to.remember_values)
+        ensure
+          logger.debug {"Removing temporary directory: #{tmpdir}"}
+          tmpdir.rmtree rescue nil
+        end
       end
 
-      def merge_changes(from, to, tmpdir)
+      def merge_changes(to)
         data = svn(:info, yaml_path)
         info = YAML.load(data)
         initial_revision = info["Last Changed Rev"].to_i

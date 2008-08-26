@@ -30,35 +30,12 @@ module Piston
         logger.debug {"repository_url: #{repository_url.inspect}, target_revision: #{target_revision.inspect}, wcdir: #{wcdir.inspect}"}
         working_copy = guess_wc(wcdir)
 
-        tmpdir = temp_dir_name(working_copy)
-
         if working_copy.exist? && !force then
           logger.fatal "Path #{working_copy} already exists and --force not given.  Aborting..."
           abort
         end
-
-        begin
-          logger.info {"Checking out the repository"}
-          revision.checkout_to(tmpdir)
-
-          logger.debug {"Creating the local working copy"}
-          working_copy.create
-
-          logger.info {"Copying from #{revision}"}
-          working_copy.copy_from(revision)
-
-          logger.debug {"Remembering values"}
-          working_copy.remember({:repository_url => repository.url, :lock => options[:lock], :repository_class => repository.class.name},
-          revision.remember_values)
-
-          logger.debug {"Finalizing working copy"}
-          working_copy.finalize
-
-          logger.info {"Checked out #{repository_url.inspect} #{revision.name} to #{wcdir.inspect}"}
-        ensure
-          logger.debug {"Removing temporary directory: #{tmpdir}"}
-          tmpdir.rmtree rescue nil
-        end
+        
+        working_copy.import(revision, options[:lock])
       end
     end
   end

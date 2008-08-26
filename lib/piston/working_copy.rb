@@ -119,9 +119,42 @@ module Piston
       recall
     end
 
+    def import(revision, lock)
+      repository = revision.repository
+      tmpdir = temp_dir_name
+      begin
+        logger.info {"Checking out the repository"}
+        revision.checkout_to(tmpdir)
+
+        logger.debug {"Creating the local working copy"}
+        create
+
+        logger.info {"Copying from #{revision}"}
+        copy_from(revision)
+
+        logger.debug {"Remembering values"}
+        remember(
+          {:repository_url => repository.url, :lock => lock, :repository_class => repository.class.name},
+          revision.remember_values
+        )
+
+        logger.debug {"Finalizing working copy"}
+        finalize
+
+        logger.info {"Checked out #{repository_url.inspect} #{revision.name} to #{wcdir.inspect}"}
+      ensure
+        logger.debug {"Removing temporary directory: #{tmpdir}"}
+        tmpdir.rmtree rescue nil
+      end
+    end
+
     # Update this working copy from +from+ to +to+, which means merging local changes back in
     def update(from, to, todir)
       logger.debug {"Updating"}
+    end
+
+    def temp_dir_name
+      path.parent + ".#{path.basename}.tmp"
     end
 
     protected

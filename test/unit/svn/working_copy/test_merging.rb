@@ -18,14 +18,14 @@ class Piston::Svn::TestMerging < PistonTestCase
     @wc.stubs(:svn).returns()
     @wc.expects(:svn).with(:info, @wcdir + ".piston.yml").returns(PISTON_YML_INFO)
 
-    @wc.merge_changes(@from, @to, @todir)
+    @wc.merge_changes(@to)
   end
 
   def test_merging_asks_svn_to_merge_all_changes_since_last_change_plus_one_on_dot_piston_yml_file
     @to.stubs(:revision).returns(9999)
     @wc.stubs(:svn).with(:info, anything).returns(PISTON_YML_INFO)
     @wc.expects(:svn).with(:merge, "--revision", "9223:#{@to.revision}", @wcdir, @wcdir).returns()
-    @wc.merge_changes(@from, @to, @todir)
+    @wc.merge_changes(@to)
   end
 
   PISTON_YML_INFO = <<-EOF

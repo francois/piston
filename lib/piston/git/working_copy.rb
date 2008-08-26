@@ -58,23 +58,33 @@ module Piston
         Dir.chdir(path) { git(:add, ".") }
       end
 
-      def update(from, to, tmpdir, lock)
-        puts "tmpdir: #{tmpdir}"
-        puts "exist? #{tmpdir.exist?}"
-        puts "file? #{tmpdir.file?}"
-        puts "directory? #{tmpdir.directory?}"
-        path.children.reject {|item| ['.git', '.piston.yml'].include?(item.basename.to_s)}.each do |item|
-          puts "rm -rf #{item}"
-          FileUtils.rm_rf(item)
-        end
-        tmpdir.children.reject {|item| item.basename.to_s == '.git'}.each do |item|
-          puts "cp -r #{item} #{path}"
-          FileUtils.cp_r(item, path)
-        end
-        FileUtils.rm_rf(tmpdir)
-        Dir.chdir(path) do
-          remember(recall.merge(:lock => lock), to.remember_values)
-          git(:add, ".")
+      def update(to, lock)
+        tmpdir = temp_dir_name
+        begin
+          to.checkout_to(tmpdir)
+          puts "tmpdir: #{tmpdir}"
+          puts "exist? #{tmpdir.exist?}"
+          puts "file? #{tmpdir.file?}"
+          puts "directory? #{tmpdir.directory?}"
+          path.children.reject {|item| ['.git', '.piston.yml'].include?(item.basename.to_s)}.each do |item|
+            puts "rm -rf #{item}"
+            FileUtils.rm_rf(item)
+          end
+          tmpdir.children.reject {|item| item.basename.to_s == '.git'}.each do |item|
+            puts "cp -r #{item} #{path}"
+            FileUtils.cp_r(item, path)
+          end
+          Dir.chdir(path) do
+            repository = to.repository
+            remember(
+              {:repository_url => repository.url, :lock => lock, :repository_class => repository.class.name},
+              to.remember_values
+            )
+            git(:add, ".")
+          end
+        ensure
+          logger.debug {"Removing temporary directory: #{tmpdir}"}
+          tmpdir.rmtree rescue nil
         end
       end
     end

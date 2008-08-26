@@ -92,7 +92,7 @@ module Piston
       end
 
       logger.debug {"Remembering #{values.inspect} as well as #{handler_values.inspect}"}
-      File.open(yaml_path, "wb") do |f|
+      File.open(yaml_path, "w+") do |f|
         f.write(values.merge("handler" => handler_values).to_yaml)
       end
 

@@ -40,7 +40,7 @@ module Piston
       else
         @path = Pathname.new(File.expand_path(path))
       end
-      logger.debug {"In)itialized on #{@path}"}
+      logger.debug {"Initialized on #{@path}"}
     end
 
     def logger

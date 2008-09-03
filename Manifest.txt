@@ -75,7 +75,6 @@ test/unit/svn/working_copy/test_existence.rb
 test/unit/svn/working_copy/test_finalization.rb
 test/unit/svn/working_copy/test_guessing.rb
 test/unit/svn/working_copy/test_rememberance.rb
-test/unit/test_import.rb
 test/unit/working_copy/test_guessing.rb
 test/unit/working_copy/test_rememberance.rb
 tmp/.gitignore

@@ -10,10 +10,11 @@ module Piston
 
       def guess(path)
         path = path.kind_of?(Pathname) ? path : Pathname.new(path.to_s)
-        logger.info {"Guessing the working copy type of #{path.inspect}"}
+        try_path = path.exist? ? path : path.parent
+        logger.info {"Guessing the working copy type of #{try_path.inspect}"}
         handler = handlers.detect do |handler|
-          logger.debug {"Asking #{handler.name} if it understands #{path}"}
-          handler.understands_dir?(path)
+          logger.debug {"Asking #{handler.name} if it understands #{try_path}"}
+          handler.understands_dir?(try_path)
         end
 
         raise UnhandledWorkingCopy, "Don't know what working copy type #{path} is." if handler.nil?
@@ -146,7 +147,7 @@ module Piston
         logger.debug {"Finalizing working copy"}
         finalize
 
-        logger.info {"Checked out #{repository_url.inspect} #{revision.name} to #{wcdir.inspect}"}
+        logger.info {"Checked out #{repository.url.inspect} #{revision.name} to #{path.to_s}"}
       ensure
         logger.debug {"Removing temporary directory: #{tmpdir}"}
         tmpdir.rmtree rescue nil

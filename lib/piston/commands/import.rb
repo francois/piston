@@ -25,7 +25,7 @@ module Piston
         repository = select_repository(repository_url)
         revision = repository.at(target_revision)
 
-        wcdir = wcdir.nil? ? repository.basename : wcdir
+        wcdir = File.expand_path(wcdir.nil? ? repository.basename : wcdir)
         logger.info {"Guessing the working copy type"}
         logger.debug {"repository_url: #{repository_url.inspect}, target_revision: #{target_revision.inspect}, wcdir: #{wcdir.inspect}"}
         working_copy = guess_wc(wcdir)

@@ -91,7 +91,7 @@ Main {
                                          :repository_type => params["repository-type"].value)
 
       begin
-        cmd.run(params[:repository].value, self.target_revision, File.expand_path(params[:directory].value))
+        cmd.run(params[:repository].value, self.target_revision, params[:directory].value)
       rescue Piston::Repository::UnhandledUrl => e
         supported_types = Piston::Repository.handlers.collect do |handler|
           handler.repository_type

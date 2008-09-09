@@ -38,9 +38,13 @@ module Piston
       end
 
       def after_remember(path)
-        info = svn(:info, path)
-        return unless info =~ /\(not a versioned resource\)/i || info.empty?
-        svn(:add, path)
+        begin
+          info = svn(:info, path)
+        rescue Piston::Svn::Client::CommandError
+        ensure
+          return unless info =~ /\(not a versioned resource\)/i || info =~ /\(is not under version control\)/i || info.blank?
+          svn(:add, path)
+        end
       end
 
       def finalize

@@ -16,7 +16,9 @@ class TestImportSvnSvn < Piston::TestCase
   end
 
   def test_import
-    piston :import, "http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement/", wc_path + "trunk/vendor/ssl_requirement"
+    Dir.chdir(wc_path + "trunk/vendor") do # make a test guessing the path where import
+      piston :import, "http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement/"
+    end
 
     assert_equal "A      vendor/ssl_requirement
 A      vendor/ssl_requirement/test

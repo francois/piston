@@ -4,3 +4,4 @@
 * Handles deletes
 * Handles copies
 * Maybe handle renames
+* Force addition of Git repositories, because the files might be ignored in .gitignore

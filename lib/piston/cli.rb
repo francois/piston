@@ -25,13 +25,11 @@ Main {
   mixin :revision_or_commit do
     option "revision", "r" do
       argument_required
-      default "HEAD"
       description "The revision you wish to operate on"
     end
 
     option "commit" do
       argument_required
-      default "HEAD"
       description "The commit you wish to operate on"
     end
 

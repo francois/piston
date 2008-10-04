@@ -82,26 +82,8 @@ module Piston
         end
       end
 
-      def merge_changes(to)
-        data = svn(:info, yaml_path)
-        info = YAML.load(data)
-        initial_revision = info["Last Changed Rev"].to_i
-        logger.debug {"Going to merge #{initial_revision} to #{to.revision}"}
-        svn(:merge, "--revision", "#{initial_revision}:#{to.revision}", path, path)
-        logger.debug {"after merge"}
-      end
-
       def remove_external_references(*targets)
         svn(:propdel, "svn:externals", *targets)
-      end
-      
-      protected
-      def do_update(to, lock)
-        logger.info "Copying new changes in place"
-        copy_from(to)
-        logger.info "Merging local changes into working copy"
-        merge_changes(to)
-        remember(recall.merge(:lock => lock), to.remember_values)
       end
     end
   end

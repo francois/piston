@@ -11,6 +11,11 @@ module Piston
       alias_method :commit, :revision
       attr_reader :sha1
 
+      def initialize(repository, revision, recalled_values={})
+        super
+        @revision = 'master' if @revision.upcase == 'HEAD'
+      end
+
       def client
         @client ||= Piston::Git::Client.instance
       end
@@ -49,24 +54,29 @@ module Piston
           response = git(:log, "-n", "1")
           @sha1 = $1 if response =~ /commit\s+([a-f\d]{40})/i
         end
+      end
 
-        def remember_values
-          { Piston::Git::COMMIT => @sha1, Piston::Git::BRANCH => commit }
+      def update_to(commit)
+        raise ArgumentError, "Commit #{self.commit} of #{repository.url} was never checked out -- can't update" unless @dir
+        
+        Dir.chdir(@dir) do
+          logger.debug {"in dir #{@dir}"}
+          git(:commit, '-a', '-m', 'local changes') unless git(:status) =~ /nothing to commit/
+          git(:merge, commit)
         end
+      end
 
-        def each
-          raise ArgumentError, "Never cloned + checked out" if @dir.nil?
-          @dir.find do |path|
-            Find.prune if path.to_s =~ %r{/[.]git}
-            next if @dir == path
-            next if File.directory?(path)
-            yield path.relative_path_from(@dir)
-          end
-        end
+      def remember_values
+        { Piston::Git::COMMIT => @sha1, Piston::Git::BRANCH => commit }
+      end
 
-        def copy_to(relpath, abspath)
-          Pathname.new(abspath).dirname.mkpath
-          FileUtils.cp(@dir + relpath, abspath)
+      def each
+        raise ArgumentError, "Never cloned + checked out" if @dir.nil?
+        @dir.find do |path|
+          Find.prune if path.to_s =~ %r{/[.]git}
+          next if @dir == path
+          next if File.directory?(path)
+          yield path.relative_path_from(@dir)
         end
       end
     end

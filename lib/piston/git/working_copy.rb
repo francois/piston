@@ -57,29 +57,18 @@ module Piston
       def finalize
         Dir.chdir(path) { git(:add, ".") }
       end
-
-      protected
-      def do_update(to, lock)
-        puts "tmpdir: #{to.dir}"
-        puts "exist? #{to.dir.exist?}"
-        puts "file? #{to.dir.file?}"
-        puts "directory? #{to.dir.directory?}"
-        path.children.reject {|item| ['.git', '.piston.yml'].include?(item.basename.to_s)}.each do |item|
-          puts "rm -rf #{item}"
-          FileUtils.rm_rf(item)
+      
+      def update(revision, to, lock)
+        tmpdir = temp_dir_name
+        begin
+          logger.info {"Checking out the repository at #{to.revision}"}
+          to.checkout_to(tmpdir)
+        ensure
+          logger.debug {"Removing temporary directory: #{tmpdir}"}
+          tmpdir.rmtree rescue nil
         end
-        to.dir.children.reject {|item| item.basename.to_s == '.git'}.each do |item|
-          puts "cp -r #{item} #{path}"
-          FileUtils.cp_r(item, path)
-        end
-        Dir.chdir(path) do
-          repository = to.repository
-          remember(
-            {:repository_url => repository.url, :lock => lock, :repository_class => repository.class.name},
-            to.remember_values
-          )
-          git(:add, ".")
-        end
+        super
+        git(:add, '.')
       end
     end
   end

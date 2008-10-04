@@ -36,6 +36,10 @@ module Piston
       @dir = dir.kind_of?(Pathname) ? dir : Pathname.new(dir)
     end
 
+    # Update a copy of this repository to revision +to+.
+    def update_to(to, lock)
+    end
+
     # What values does this revision want to remember for the future ?
     def remember_values
       logger.debug {"Generating remember values"}
@@ -48,6 +52,19 @@ module Piston
 
     # Copies +relpath+ (relative to ourselves) to +abspath+ (an absolute path).
     def copy_to(relpath, abspath)
+      raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @dir
+
+      Pathname.new(abspath).dirname.mkpath
+      FileUtils.cp(@dir + relpath, abspath)
+    end
+
+    # Copies +abspath+ (an absolute path) to +relpath+ (relative to ourselves).
+    def copy_from(abspath, relpath)
+      raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @dir
+
+      target = @dir + relpath
+      Pathname.new(target).dirname.mkpath
+      FileUtils.cp(abspath, target)
     end
   end
 end

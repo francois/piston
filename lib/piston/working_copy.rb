@@ -88,6 +88,23 @@ module Piston
       end
     end
 
+    # Copy files to +revision+ to keep local changes.  +revision+ must
+    # #respond_to?(:each), and return each file that is to be copied.
+    # Only files must be returned.
+    #
+    # Each item yielded by Revision#each must be a relative path.
+    #
+    # WorkingCopy will call Revision#copy_from with the full path from where the
+    # file needs to be copied.
+    def copy_to(revision)
+      revision.each do |relpath|
+        source = path + relpath
+
+        logger.debug {"Copying #{source} to #{relpath}"}
+        revision.copy_from(source, relpath)
+      end
+    end
+
     # Stores a Hash of values that can be retrieved later.
     def remember(values, handler_values)
       values["format"] = 1
@@ -155,11 +172,22 @@ module Piston
     end
 
     # Update this working copy from +from+ to +to+, which means merging local changes back in
-    def update(to, lock)
+    def update(revision, to, lock)
       tmpdir = temp_dir_name
       begin
-        to.checkout_to(tmpdir)
-        do_update(to, lock)
+        logger.info {"Checking out the repository at #{revision.revision}"}
+        revision.checkout_to(tmpdir)
+
+        logger.info {"Copying local changes to temporary directory"}
+        copy_to(revision)
+
+        logger.info {"Updating to #{to.revision}"}
+        revision.update_to(to.revision)
+
+        logger.debug {"Copying files from temporary directory"}
+        copy_from(revision)
+        
+        remember(recall.merge(:lock => lock), to.remember_values)
       ensure
         logger.debug {"Removing temporary directory: #{tmpdir}"}
         tmpdir.rmtree rescue nil
@@ -171,10 +199,6 @@ module Piston
     end
 
     protected
-    def do_update(to, lock)
-      raise NotImplementedError
-    end
-
     # The path to the piston YAML file.
     def yaml_path
       path + ".piston.yml"

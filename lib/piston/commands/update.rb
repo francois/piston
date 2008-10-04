@@ -22,7 +22,7 @@ module Piston
 
         logger.info {"Updating from #{from_revision} to #{to_revision}"}
 
-        working_copy.update(to_revision, options[:lock])
+        working_copy.update(from_revision, to_revision, options[:lock])
       end
     end
   end

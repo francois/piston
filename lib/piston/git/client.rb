@@ -68,7 +68,7 @@ module Piston
         def run_real(cmd)
           out = `#{cmd}`
           raise BadCommand, cmd.inspect if $?.exitstatus == 127
-          raise Failed, "#{cmd.inspect} exited with status: #{$?.exitstatus}" unless $?.success?
+          raise Failed, "#{cmd.inspect} exited with status: #{$?.exitstatus}" unless $?.success? || (cmd =~ /status/ && $?.exitstatus == 1)
           out
         end
       end

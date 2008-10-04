@@ -15,7 +15,7 @@ class TestGitGit < Piston::TestCase
 
     Dir.chdir(parent_path) do
       git(:init)
-      File.open("README", "wb") {|f| f.write "Readme - first commit"}
+      File.open("README", "wb") {|f| f.write "Readme - first commit\n"}
       File.open("file_in_first_commit", "wb") {|f| f.write "file_in_first_commit"}
       git(:add, ".")
       git(:commit, "-m", "'first commit'")
@@ -64,6 +64,10 @@ class TestGitGit < Piston::TestCase
     Dir.chdir(wc_path) do
       piston(:import, parent_path, "vendor/parent")
     end
+    # change mode to "ab" to get a conflict when it's implemented
+    File.open(wc_path + "vendor/parent/README", "wb") do |f|
+      f.write "Readme - modified after imported\nReadme - first commit\n"
+    end
 
     Dir.chdir(wc_path) do
       git(:add, ".")
@@ -71,7 +75,7 @@ class TestGitGit < Piston::TestCase
     end
 
     Dir.chdir(parent_path) do
-      File.open("README", "wb") {|f| f.write "Readme - second commit"}
+      File.open("README", "ab") {|f| f.write "Readme - second commit\n"}
       FileUtils.rm("file_in_first_commit")
       File.open("file_in_second_commit", "wb") {|f| f.write "file_in_second_commit"}
       git(:add, ".")
@@ -85,6 +89,7 @@ class TestGitGit < Piston::TestCase
     Dir.chdir(wc_path) do
       assert_equal CHANGE_STATUS.split("\n"), git(:status).split("\n")
     end
+    assert_equal README, File.readlines(wc_path + "vendor/parent/README").join
   end
 
   CHANGE_STATUS = %Q(# On branch master
@@ -95,5 +100,9 @@ class TestGitGit < Piston::TestCase
 #\tmodified:   vendor/parent/README
 #\tnew file:   vendor/parent/file_in_second_commit
 #
+)
+  README = %Q(Readme - modified after imported
+Readme - first commit
+Readme - second commit
 )
 end

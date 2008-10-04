@@ -17,7 +17,7 @@ class TestGitSvn < Piston::TestCase
 
     Dir.chdir(parent_path) do
       git(:init)
-      File.open(parent_path + "README", "wb") {|f| f.write "Readme - first commit"}
+      File.open(parent_path + "README", "wb") {|f| f.write "Readme - first commit\n"}
       File.open(parent_path + "file_in_first_commit", "wb") {|f| f.write "file_in_first_commit"}
       git(:add, ".")
       git(:commit, "-m", "'first commit'")
@@ -96,26 +96,35 @@ A      vendor/parent/file_in_first_commit
 
   def test_update
     piston(:import, parent_path, wc_path + "trunk/vendor/parent")
+    # change mode to "ab" to get a conflict when it's implemented
+    File.open(wc_path + "trunk/vendor/parent/README", "wb") do |f|
+      f.write "Readme - modified after imported\nReadme - first commit\n"
+    end
 
     Dir.chdir(wc_path) do
       svn(:commit, "-m", "'next commit'")
     end
 
     Dir.chdir(parent_path) do
-      File.open(parent_path + "README", "wb") {|f| f.write "Readme - second commit"}
+      File.open(parent_path + "README", "ab") {|f| f.write "Readme - second commit\n"}
       FileUtils.rm(parent_path + "file_in_first_commit")
       File.open(parent_path + "file_in_second_commit", "wb") {|f| f.write "file_in_second_commit"}
       git(:add, ".")
       git(:commit, "-m", "'second commit'")
     end
 
-    piston(:update, wc_path + "trunk/vendor/parent")
-
+    piston(:update, wc_path + "trunk/vendor/parent", '-v', '2')
+    
     assert_equal CHANGE_STATUS.split("\n").sort, svn(:status, wc_path + "trunk/vendor").gsub((wc_path + "trunk/").to_s, "").split("\n").sort
+    assert_equal README, File.readlines(wc_path + "trunk/vendor/parent/README").join
   end
 
   CHANGE_STATUS = %Q(M      vendor/parent/.piston.yml
 M      vendor/parent/README
 ?      vendor/parent/file_in_second_commit
+)
+  README = %Q(Readme - modified after imported
+Readme - first commit
+Readme - second commit
 )
 end

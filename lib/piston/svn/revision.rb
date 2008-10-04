@@ -34,6 +34,21 @@ module Piston
         end
       end
 
+      def update_to(revision)
+        raise ArgumentError, "Revision #{self.revision} of #{repository.url} was never checked out -- can't update" unless @dir
+        
+        answer = svn(:update, "--revision", revision, @dir)
+        if answer =~ /(Updated to|At) revision (\d+)[.]/ then
+          if revision == "HEAD" then
+            @revision = $1.to_i
+          elsif revision != $1.to_i then
+            raise Failed, "Did not get the revision I wanted to update.  Subversion update to #{$1}, I wanted #{revision}"
+          end
+        else
+          raise Failed, "Could not update #{@dir} to revision #{revision} from #{repository.url}\n#{answer}"
+        end
+      end
+
       def remember_values
         str = svn(:info, "--revision", revision, repository.url)
         raise Failed, "Could not get 'svn info' from #{repository.url} at revision #{revision}" if str.nil? || str.chomp.strip.empty?
@@ -49,13 +64,6 @@ module Piston
           next if relpath =~ %r{/$}
           yield relpath.chomp
         end
-      end
-
-      def copy_to(relpath, abspath)
-        raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @dir
-
-        Pathname.new(abspath).dirname.mkpath
-        FileUtils.cp(@dir + relpath, abspath)
       end
 
       def validate!

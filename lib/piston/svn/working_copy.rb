@@ -19,6 +19,19 @@ module Piston
         def svn(*args)
           client.svn(*args)
         end
+
+        def old_repositories(*directories)
+          repositories = []
+          unless directories.empty?
+            folders = svn(:propget, '--recursive', Piston::Svn::ROOT, *directories)
+            folders.each_line do |line|
+              next unless line =~ /^(.+) - \S+/
+              logger.debug {"Found repository #{$1}"}
+              repositories << $1
+            end
+          end
+          repositories
+        end
       end
 
       def svn(*args)
@@ -106,6 +119,17 @@ module Piston
         # get latest revisions for this working copy since last update
         log = svn(:log, '--revision', "#{initial_revision}:HEAD", '--quiet', '--limit', '2', path)
         log.count("\n") > 3
+      end
+
+      def upgrade
+        props = Hash.new
+        svn(:proplist, '--verbose', path).each_line do |line|
+          if line =~ /(piston:[-\w]+)\s*:\s*(.*)$/
+            props[$1] = $2
+            svn(:propdel, $1, path)
+          end
+        end
+        remember({:repository_url => props[Piston::Svn::ROOT], :lock => props[Piston::Svn::LOCKED], :repository_class => Piston::Svn::Repository.name}, {Piston::Svn::REMOTE_REV => props[Piston::Svn::REMOTE_REV], Piston::Svn::UUID => props[Piston::Svn::UUID]})
       end
     end
   end

@@ -4,6 +4,7 @@ class Piston::Git::TestGitWorkingCopyRememberance < Piston::TestCase
   def setup
     super
     @wcdir = mkpath("tmp/wc")
+    Dir.chdir(@wcdir) { git(:init) }
     @wc = Piston::Git::WorkingCopy.new(@wcdir)
   end
 

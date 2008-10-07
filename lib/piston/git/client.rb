@@ -23,7 +23,7 @@ module Piston
 
       private
       def run_cmd(executable, *args)
-        args.collect! {|arg| arg =~ /\s|\*|\?|"|\n|\r/ ? %Q('#{arg}') : arg}
+        args.collect! {|arg| arg.to_s =~ /\s|\*|\?|"|\n|\r/ ? %Q('#{arg}') : arg}
         args.collect! {|arg| arg ? arg : '""'}
         cmd = %Q|#{executable} #{args.join(' ')}|
         logger.debug {"> " + cmd}

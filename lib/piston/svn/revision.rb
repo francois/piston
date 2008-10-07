@@ -47,6 +47,7 @@ module Piston
         else
           raise Failed, "Could not update #{@dir} to revision #{revision} from #{repository.url}\n#{answer}"
         end
+        added_and_deleted(answer)
       end
 
       def remember_values
@@ -76,6 +77,13 @@ module Piston
 
       def recalled_uuid
         recalled_values[Piston::Svn::UUID]
+      end
+
+      private
+      def added_and_deleted(output)
+        added = output.scan(/^A\s+(.*)$/).flatten
+        deleted = output.scan(/^D\s+(.*)$/).flatten
+        [added, deleted]
       end
     end
   end

@@ -106,9 +106,9 @@ A      vendor/parent/file_in_first_commit
     end
 
     Dir.chdir(parent_path) do
-      File.open(parent_path + "README", "ab") {|f| f.write "Readme - second commit\n"}
-      FileUtils.rm(parent_path + "file_in_first_commit")
-      File.open(parent_path + "file_in_second_commit", "wb") {|f| f.write "file_in_second_commit"}
+      File.open("README", "ab") {|f| f.write "Readme - second commit\n"}
+      git(:rm, "file_in_first_commit")
+      File.open("file_in_second_commit", "wb") {|f| f.write "file_in_second_commit"}
       git(:add, ".")
       git(:commit, "-m", "'second commit'")
     end
@@ -121,7 +121,8 @@ A      vendor/parent/file_in_first_commit
 
   CHANGE_STATUS = %Q(M      vendor/parent/.piston.yml
 M      vendor/parent/README
-?      vendor/parent/file_in_second_commit
+A      vendor/parent/file_in_second_commit
+D      vendor/parent/file_in_first_commit
 )
   README = %Q(Readme - modified after imported
 Readme - first commit

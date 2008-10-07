@@ -105,6 +105,14 @@ module Piston
       end
     end
 
+    # add some files to working copy
+    def add(added)
+    end
+
+    # delete some files from working copy
+    def delete(added)
+    end
+
     # Stores a Hash of values that can be retrieved later.
     def remember(values, handler_values)
       values["format"] = 1
@@ -182,10 +190,12 @@ module Piston
         copy_to(revision)
 
         logger.info {"Updating to #{to.revision}"}
-        revision.update_to(to.revision)
+        added, deleted = revision.update_to(to.revision)
 
         logger.debug {"Copying files from temporary directory"}
         copy_from(revision)
+        add(added)
+        delete(deleted)
         
         remember(recall.merge(:lock => lock), to.remember_values)
       ensure

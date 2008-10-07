@@ -54,8 +54,29 @@ module Piston
         path.directory?
       end
 
+      def after_remember(path)
+        Dir.chdir(self.path) { git(:add, path.relative_path_from(self.path)) }
+      end
+
       def finalize
         Dir.chdir(path) { git(:add, ".") }
+      end
+
+      def copy_from(revision)
+        super
+        Dir.chdir(path) { git(:add, "-u") }
+      end
+
+      def add(added)
+        Dir.chdir(path) do
+          added.each { |item| git(:add, item) }
+        end
+      end
+
+      def delete(deleted)
+        Dir.chdir(path) do
+          deleted.each { |item| git(:rm, item) }
+        end
       end
       
       def update(revision, to, lock)
@@ -68,7 +89,6 @@ module Piston
           tmpdir.rmtree rescue nil
         end
         super
-        git(:add, '.')
       end
     end
   end

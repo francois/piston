@@ -76,7 +76,7 @@ class TestGitGit < Piston::TestCase
 
     Dir.chdir(parent_path) do
       File.open("README", "ab") {|f| f.write "Readme - second commit\n"}
-      FileUtils.rm("file_in_first_commit")
+      git(:rm, "file_in_first_commit")
       File.open("file_in_second_commit", "wb") {|f| f.write "file_in_second_commit"}
       git(:add, ".")
       git(:commit, "-m", "'second commit'")
@@ -98,6 +98,7 @@ class TestGitGit < Piston::TestCase
 #
 #\tmodified:   vendor/parent/.piston.yml
 #\tmodified:   vendor/parent/README
+#\tdeleted:    vendor/parent/file_in_first_commit
 #\tnew file:   vendor/parent/file_in_second_commit
 #
 )

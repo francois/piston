@@ -54,6 +54,18 @@ module Piston
         end
       end
 
+      def add(added)
+        added.each do |item|
+          svn(:add, path + item)
+        end
+      end
+
+      def delete(deleted)
+        deleted.each do |item|
+          svn(:rm, path + item)
+        end
+      end
+
       # Returns all defined externals (recursively) of this WC.
       # Returns a Hash:
       #   {"vendor/rails" => {:revision => :head, :url => "http://dev.rubyonrails.org/svn/rails/trunk"},

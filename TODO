@@ -1,7 +1,5 @@
 = Integration tests to verify
 
-* Handles adds
-* Handles deletes
 * Handles copies
 * Handles conflicts (when there is a conflict doesn't update from git repositories, update from svn repositories but ignores the conflict)
 * Maybe handle renames

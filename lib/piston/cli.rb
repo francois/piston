@@ -194,11 +194,11 @@ Main {
       description "Query the remote repository for out of dateness information"
     end
 
-    argument "directory" do
+    argument "directories" do
       optional
       default '.'
       arity -1
-      description "Which directories to get status"
+      description "Which directory/directories to get status. Not specifying this argument recursively gets status from the whole directory tree starting from the current dir."
     end
 
     logger_level Logger::DEBUG
@@ -209,11 +209,11 @@ Main {
                                          :verbose => params["verbose"].value,
                                          :quiet => params["quiet"].value,
                                          :force => params["force"].value)
-      params["directory"].values.each do |path|
+      params["directories"].values.each do |path|
         begin
-          cmd.run(File.expand_path(path))
+          cmd.run(Pathname.new(path).expand_path)
         rescue Piston::WorkingCopy::NotWorkingCopy
-          puts "#{params["directory"].value} is not Pistonized"
+          puts "#{path} is not a working copy"
         end
       end
     end

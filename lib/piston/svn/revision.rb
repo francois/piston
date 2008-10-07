@@ -81,8 +81,8 @@ module Piston
 
       private
       def added_and_deleted(output)
-        added = output.scan(/^A\s+(.*)$/).flatten
-        deleted = output.scan(/^D\s+(.*)$/).flatten
+        added = output.scan(/^A\s+(.*)$/).flatten.map { |item| Pathname.new(item).relative_path_from(@dir) }
+        deleted = output.scan(/^D\s+(.*)$/).flatten.map { |item| Pathname.new(item).relative_path_from(@dir) }
         [added, deleted]
       end
     end

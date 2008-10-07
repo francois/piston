@@ -19,7 +19,7 @@ class Piston::Git::TestGitCommitCheckout < Piston::TestCase
   end
 
   def test_cloning_head_finds_head_commit
-    @sha1 = "HEAD"
+    @sha1 = "master"
     @commit = Piston::Git::Commit.new(@repos, @sha1)
     @commit.expects(:git).with(:clone, @repos.url, @reposdir)
     @commit.expects(:git).with(:checkout, "-b", "my-#{@sha1}", @sha1)

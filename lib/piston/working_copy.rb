@@ -65,6 +65,13 @@ module Piston
       self
     end
 
+    def repository
+      values = self.recall
+      repository_class = values["repository_class"]
+      repository_url = values["repository_url"]
+      repository_class.constantize.new(repository_url)
+    end
+
     # Creates the initial working copy for pistonizing a new repository.
     def create
       logger.debug {"Creating working copy at #{path}"}
@@ -206,6 +213,14 @@ module Piston
 
     def temp_dir_name
       path.parent + ".#{path.basename}.tmp"
+    end
+
+    def locally_modified
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
+    end
+
+    def remotely_modified
+      repository.at(recall["handler"]).remotely_modified
     end
 
     protected

@@ -79,6 +79,13 @@ module Piston
         recalled_values[Piston::Svn::UUID]
       end
 
+      def remotely_modified
+        data = svn(:info, repository.url)
+        info = YAML.load(data)
+        latest_revision = info["Last Changed Rev"].to_i
+        revision < latest_revision
+      end
+
       private
       def added_and_deleted(output)
         added = output.scan(/^A\s+(.*)$/).flatten.map { |item| Pathname.new(item).relative_path_from(@dir) }

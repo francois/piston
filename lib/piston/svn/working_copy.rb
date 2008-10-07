@@ -97,6 +97,16 @@ module Piston
       def remove_external_references(*targets)
         svn(:propdel, "svn:externals", *targets)
       end
+
+      def locally_modified
+        # get latest revision for .piston.yml
+        data = svn(:info, yaml_path)
+        info = YAML.load(data)
+        initial_revision = info["Last Changed Rev"].to_i
+        # get latest revisions for this working copy since last update
+        log = svn(:log, '--revision', "#{initial_revision}:HEAD", '--quiet', '--limit', '2', path)
+        log.count("\n") > 3
+      end
     end
   end
 end

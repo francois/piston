@@ -186,6 +186,38 @@ Main {
     end
   end
   
+  mode "status" do
+    mixin :standard_options
+
+    option "show-updates", "s" do
+      default false
+      description "Query the remote repository for out of dateness information"
+    end
+
+    argument "directory" do
+      optional
+      default '.'
+      arity -1
+      description "Which directories to get status"
+    end
+
+    logger_level Logger::DEBUG
+    def run
+      configure_logging!
+
+      cmd = Piston::Commands::Status.new(:show_updates => params["show-updates"].value,
+                                         :verbose => params["verbose"].value,
+                                         :quiet => params["quiet"].value,
+                                         :force => params["force"].value)
+      params["directory"].values.each do |path|
+        begin
+          cmd.run(File.expand_path(path))
+        rescue Piston::WorkingCopy::NotWorkingCopy
+          puts "#{params["directory"].value} is not Pistonized"
+        end
+      end
+    end
+  end
   
   mode "info" do
     mixin :standard_options

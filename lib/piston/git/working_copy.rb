@@ -90,6 +90,17 @@ module Piston
         end
         super
       end
+
+      def locally_modified
+        Dir.chdir(path) do
+          # get latest commit for .piston.yml
+          data = git(:log, '-n', '1', yaml_path.relative_path_from(path))
+          initial_revision = data.match(/commit\s+(.*)$/)[1]
+          # get latest revisions for this working copy since last update
+          log = git(:log, '-n', '1', "#{initial_revision}..")
+          not log.empty?
+        end
+      end
     end
   end
 end

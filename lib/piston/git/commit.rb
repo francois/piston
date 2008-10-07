@@ -81,6 +81,11 @@ module Piston
         end
       end
 
+      def remotely_modified
+        commit = git('ls-remote', repository.url, recalled_values[Piston::Git::BRANCH]).match(/\w+/)[0]
+        commit != self.commit
+      end
+
       private
       def added_and_deleted
         output = git(:status)

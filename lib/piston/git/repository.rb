@@ -47,7 +47,7 @@ module Piston
       def at(commit)
         case commit
         when Hash
-          Piston::Git::Commit.new(self, commit[Piston::Git::COMMIT])
+          Piston::Git::Commit.new(self, commit[Piston::Git::COMMIT], commit)
         when :head
           Piston::Git::Commit.new(self, "HEAD")
         else

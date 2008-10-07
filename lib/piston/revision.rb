@@ -66,5 +66,9 @@ module Piston
       Pathname.new(target).dirname.mkpath
       FileUtils.cp(abspath, target)
     end
+
+    def remotely_modified
+      raise SubclassResponsibilityError, "Piston::Revision#remotely_modified should be implemented by a subclass."
+    end
   end
 end

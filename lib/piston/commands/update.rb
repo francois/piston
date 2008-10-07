@@ -11,9 +11,7 @@ module Piston
         logger.debug {"Recalling previously saved values"}
         values = working_copy.recall
 
-        repository_class = values["repository_class"]
-        repository_url = values["repository_url"]
-        repository = repository_class.constantize.new(repository_url)
+        repository = working_copy.repository
         from_revision = repository.at(values["handler"])
         to_revision = repository.at(to)
 

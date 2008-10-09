@@ -36,12 +36,12 @@ class TestLockUnlock < Piston::TestCase
   private
   def run_and_verify(lock=true)
     yield
-    lock_unlock_command.run(@wcdir, lock)
+    lock_unlock_command.run(lock)
   end
 
   def lock_unlock_command
-    Piston::WorkingCopy.expects(:guess).with(@wcdir).returns(@wc)
-    Piston::Commands::LockUnlock.new(:verbose => "verbose",
+    Piston::WorkingCopy.expects(:guess).with(File.expand_path(@wcdir)).returns(@wc)
+    Piston::Commands::LockUnlock.new(:verbose => "verbose", :wcdir => @wcdir,
                                      :quiet => "quiet", :force => "force")
   end
 end

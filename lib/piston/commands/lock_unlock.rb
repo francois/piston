@@ -5,8 +5,8 @@ module Piston
     class LockUnlock < Piston::Commands::Base
       attr_reader :options
 
-      def run(wcdir, lock)
-        working_copy = working_copy!(wcdir)
+      def run(lock)
+        working_copy = working_copy!(File.expand_path(options[:wcdir]))
 
         values = working_copy.recall
         values["lock"] = lock

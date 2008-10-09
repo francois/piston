@@ -16,6 +16,8 @@ class TestSvnSvn < Piston::TestCase
       svn :mkdir, "--parents", "parent", "wc/tags", "wc/branches", "wc/trunk/vendor"
       File.open("parent/README", "wb") {|f| f.write "Readme - first commit\n"}
       File.open("parent/file_in_first_commit", "wb") {|f| f.write "file_in_first_commit"}
+      File.open("parent/file_to_rename", "wb") {|f| f.write "file_to_rename"}
+      File.open("parent/file_to_copy", "wb") {|f| f.write "file_to_copy"}
       svn :add, "parent/*"
     end
     svn :commit, wc_path, "--message", "'first commit'"
@@ -62,6 +64,8 @@ A      vendor/ssl_requirement/README
       svn(:rm, "file_in_first_commit")
       File.open("file_in_second_commit", "wb") {|f| f.write "file_in_second_commit"}
       svn(:add, "file_in_second_commit")
+      svn(:copy, "file_to_copy", "copied_file")
+      svn(:mv, "file_to_rename", "renamed_file")
       svn(:commit, "-m", "'second commit'")
     end
 
@@ -79,6 +83,9 @@ A      vendor/ssl_requirement/README
 M      vendor/parent/README
 D      vendor/parent/file_in_first_commit
 A      vendor/parent/file_in_second_commit
+A      vendor/parent/copied_file
+D      vendor/parent/file_to_rename
+A      vendor/parent/renamed_file
 )
   README = %Q(Readme - modified after imported
 Readme - first commit

@@ -47,7 +47,10 @@ module Piston
         else
           raise Failed, "Could not update #{@dir} to revision #{revision} from #{repository.url}\n#{answer}"
         end
-        added_and_deleted(answer)
+        added = relative_paths(answer.scan(/^A\s+(.*)$/).flatten)
+        deleted = relative_paths(answer.scan(/^D\s+(.*)$/).flatten)
+        renamed = []
+        [added, deleted, renamed]
       end
 
       def remember_values
@@ -87,10 +90,8 @@ module Piston
       end
 
       private
-      def added_and_deleted(output)
-        added = output.scan(/^A\s+(.*)$/).flatten.map { |item| Pathname.new(item).relative_path_from(@dir) }
-        deleted = output.scan(/^D\s+(.*)$/).flatten.map { |item| Pathname.new(item).relative_path_from(@dir) }
-        [added, deleted]
+      def relative_paths(paths)
+        paths.map { |item| Pathname.new(item).relative_path_from(@dir) }
       end
     end
   end

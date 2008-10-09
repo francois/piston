@@ -78,6 +78,12 @@ module Piston
           deleted.each { |item| git(:rm, item) }
         end
       end
+
+      def rename(renamed)
+        Dir.chdir(path) do
+          renamed.each { |from, to| git(:mv, from, to) }
+        end
+      end
       
       def update(revision, to, lock)
         tmpdir = temp_dir_name

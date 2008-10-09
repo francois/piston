@@ -117,7 +117,11 @@ module Piston
     end
 
     # delete some files from working copy
-    def delete(added)
+    def delete(deleted)
+    end
+
+    # rename some files in working copy
+    def rename(renamed)
     end
 
     # Stores a Hash of values that can be retrieved later.
@@ -197,9 +201,10 @@ module Piston
         copy_to(revision)
 
         logger.info {"Updating to #{to.revision}"}
-        added, deleted = revision.update_to(to.revision)
+        added, deleted, renamed = revision.update_to(to.revision)
 
         logger.debug {"Copying files from temporary directory"}
+        rename(renamed) # rename before copy because copy_from will copy these files
         copy_from(revision)
         add(added)
         delete(deleted)

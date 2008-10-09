@@ -19,6 +19,8 @@ class TestGitSvn < Piston::TestCase
       git(:init)
       File.open(parent_path + "README", "wb") {|f| f.write "Readme - first commit\n"}
       File.open(parent_path + "file_in_first_commit", "wb") {|f| f.write "file_in_first_commit"}
+      File.open("file_to_rename", "wb") {|f| f.write "file_to_rename"}
+      File.open("file_to_copy", "wb") {|f| f.write "file_to_copy"}
       git(:add, ".")
       git(:commit, "-m", "'first commit'")
     end
@@ -92,6 +94,8 @@ class TestGitSvn < Piston::TestCase
 A      vendor/parent/.piston.yml
 A      vendor/parent/README
 A      vendor/parent/file_in_first_commit
+A      vendor/parent/file_to_rename
+A      vendor/parent/file_to_copy
 )
 
   def test_update
@@ -109,6 +113,8 @@ A      vendor/parent/file_in_first_commit
       File.open("README", "ab") {|f| f.write "Readme - second commit\n"}
       git(:rm, "file_in_first_commit")
       File.open("file_in_second_commit", "wb") {|f| f.write "file_in_second_commit"}
+      FileUtils.cp("file_to_copy", "copied_file")
+      git(:mv, "file_to_rename", "renamed_file")
       git(:add, ".")
       git(:commit, "-m", "'second commit'")
     end
@@ -123,6 +129,9 @@ A      vendor/parent/file_in_first_commit
 M      vendor/parent/README
 A      vendor/parent/file_in_second_commit
 D      vendor/parent/file_in_first_commit
+A      vendor/parent/copied_file
+D      vendor/parent/file_to_rename
+A  +   vendor/parent/renamed_file
 )
   README = %Q(Readme - modified after imported
 Readme - first commit

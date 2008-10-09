@@ -17,6 +17,8 @@ class TestGitGit < Piston::TestCase
       git(:init)
       File.open("README", "wb") {|f| f.write "Readme - first commit\n"}
       File.open("file_in_first_commit", "wb") {|f| f.write "file_in_first_commit"}
+      File.open("file_to_rename", "wb") {|f| f.write "file_to_rename"}
+      File.open("file_to_copy", "wb") {|f| f.write "file_to_copy"}
       git(:add, ".")
       git(:commit, "-m", "'first commit'")
     end
@@ -57,6 +59,8 @@ class TestGitGit < Piston::TestCase
 #\tnew file:   vendor/parent/.piston.yml
 #\tnew file:   vendor/parent/README
 #\tnew file:   vendor/parent/file_in_first_commit
+#\tnew file:   vendor/parent/file_to_rename
+#\tnew file:   vendor/parent/file_to_copy
 #
 )
 
@@ -78,6 +82,8 @@ class TestGitGit < Piston::TestCase
       File.open("README", "ab") {|f| f.write "Readme - second commit\n"}
       git(:rm, "file_in_first_commit")
       File.open("file_in_second_commit", "wb") {|f| f.write "file_in_second_commit"}
+      FileUtils.cp("file_to_copy", "copied_file")
+      git(:mv, "file_to_rename", "renamed_file")
       git(:add, ".")
       git(:commit, "-m", "'second commit'")
     end
@@ -87,7 +93,7 @@ class TestGitGit < Piston::TestCase
     end
 
     Dir.chdir(wc_path) do
-      assert_equal CHANGE_STATUS.split("\n"), git(:status).split("\n")
+      assert_equal CHANGE_STATUS.split("\n").sort, git(:status).split("\n").sort
     end
     assert_equal README, File.readlines(wc_path + "vendor/parent/README").join
   end
@@ -100,6 +106,8 @@ class TestGitGit < Piston::TestCase
 #\tmodified:   vendor/parent/README
 #\tdeleted:    vendor/parent/file_in_first_commit
 #\tnew file:   vendor/parent/file_in_second_commit
+#\tnew file:   vendor/parent/copied_file
+#\trenamed:    vendor/parent/file_to_rename -> vendor/parent/renamed_file
 #
 )
   README = %Q(Readme - modified after imported

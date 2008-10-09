@@ -62,8 +62,13 @@ module Piston
         Dir.chdir(@dir) do
           logger.debug {"in dir #{@dir}"}
           git(:commit, '-a', '-m', 'local changes') unless git(:status) =~ /nothing to commit/
-          git(:merge, '--no-commit', commit)
-          added_and_deleted
+          git(:merge, '--squash', commit)
+
+          output = git(:status)
+          added = output.scan(/new file:\s+(.*)$/).flatten
+          deleted = output.scan(/deleted:\s+(.*)$/).flatten
+          renamed = output.scan(/renamed:\s+(.+) -> (.+)$/)
+          [added, deleted, renamed]
         end
       end
 
@@ -84,14 +89,6 @@ module Piston
       def remotely_modified
         commit = git('ls-remote', repository.url, recalled_values[Piston::Git::BRANCH]).match(/\w+/)[0]
         commit != self.commit
-      end
-
-      private
-      def added_and_deleted
-        output = git(:status)
-        added = output.scan(/new file:\s+(.*)$/).flatten
-        deleted = output.scan(/deleted:\s+(.*)$/).flatten
-        [added, deleted]
       end
     end
   end

@@ -79,6 +79,12 @@ module Piston
         end
       end
 
+      def rename(renamed)
+        renamed.each do |from, to|
+          svn(:mv, path + from, path + to)
+        end
+      end
+
       # Returns all defined externals (recursively) of this WC.
       # Returns a Hash:
       #   {"vendor/rails" => {:revision => :head, :url => "http://dev.rubyonrails.org/svn/rails/trunk"},

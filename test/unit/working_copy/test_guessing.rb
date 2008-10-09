@@ -27,7 +27,7 @@ class TestWorkingCopyGuessing < Piston::TestCase
     handler.stubs(:name).returns("aname")
     handler.expects(:understands_dir?).with(@dir).returns(true)
     handler_instance = mock("handler_instance")
-    handler.expects(:new).with(@dir).returns(handler_instance)
+    handler.expects(:new).with(File.expand_path(@dir)).returns(handler_instance)
 
     Piston::WorkingCopy.add_handler handler
     assert_equal handler_instance, Piston::WorkingCopy.guess(@dir)

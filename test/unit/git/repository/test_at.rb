@@ -17,7 +17,7 @@ class Piston::Git::TestGitRepositoryAt < Piston::TestCase
   end
 
   def test_returns_a_git_commit_using_recalled_values
-    Piston::Git::Commit.expects(:new).with(@repos, "a"*40).returns(commit = mock("commit"))
+    Piston::Git::Commit.expects(:new).with(@repos, "a"*40, Piston::Git::COMMIT => "a"*40).returns(commit = mock("commit"))
     assert_equal commit, @repos.at(Piston::Git::COMMIT => "a"*40)
   end
 end

@@ -18,7 +18,7 @@ module Piston
         end
 
         raise UnhandledWorkingCopy, "Don't know what working copy type #{path} is." if handler.nil?
-        handler.new(path)
+        handler.new(File.expand_path(path))
       end
 
       @@handlers = Array.new
@@ -55,7 +55,7 @@ module Piston
     def exist?
       @path.exist? && @path.directory?
     end
-    
+
     def pistonized?
       yaml_path.exist? && yaml_path.file?
     end
@@ -119,7 +119,7 @@ module Piston
     def finalize
       logger.debug {"Finalizing #{path}"}
     end
-    
+
     # Returns basic information about this working copy.
     def info
       recall

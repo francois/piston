@@ -114,27 +114,27 @@ module Piston
 
     # add some files to working copy
     def add(added)
-      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#add should be implemented by a subclass."
     end
 
     # delete some files from working copy
     def delete(deleted)
-      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#delete should be implemented by a subclass."
     end
 
     # rename some files in working copy
     def rename(renamed)
-      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#rename should be implemented by a subclass."
     end
 
     # Downgrade this working copy to +revision+.
     def downgrade_to(revision)
-      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#downgrade_to should be implemented by a subclass."
     end
 
     # Merge remote changes with local changes in +revision+.
     def merge_local_changes(revision)
-      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#merge_local_changes should be implemented by a subclass."
     end
 
     # Stores a Hash of values that can be retrieved later.
@@ -262,12 +262,12 @@ module Piston
 
     # The current revision of this working copy.
     def current_revision
-      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#current_revision should be implemented by a subclass."
     end
 
     # The last revision which +path+ was changed in
     def last_changed_revision(path)
-      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#last_changed_revision should be implemented by a subclass."
     end
   end
 end

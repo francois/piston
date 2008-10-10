@@ -86,7 +86,9 @@ module Piston
       end
 
       def remotely_modified
-        commit = git('ls-remote', repository.url, recalled_values[Piston::Git::BRANCH]).match(/\w+/)[0]
+        branch = recalled_values[Piston::Git::BRANCH]
+        logger.debug {"Get last commit in #{branch} of #{repository.url}"}
+        commit = git('ls-remote', repository.url, branch).match(/\w+/)[0]
         commit != self.commit
       end
     end

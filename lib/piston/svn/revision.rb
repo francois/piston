@@ -83,6 +83,7 @@ module Piston
       end
 
       def remotely_modified
+        logger.debug {"Get last revision in #{repository.url}"}
         data = svn(:info, repository.url)
         info = YAML.load(data)
         latest_revision = info["Last Changed Rev"].to_i

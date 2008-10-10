@@ -15,6 +15,7 @@ module Piston
 
         # Then, get their properties
         repos.each_pair do |path, props|
+          logger.debug {"Get info of #{path}"}
           working_copy = handler.new(path)
           working_copy.validate!
           props.update(working_copy.info)

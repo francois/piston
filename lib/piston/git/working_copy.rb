@@ -117,13 +117,12 @@ module Piston
       end
 
       def locally_modified
-        Dir.chdir(path) do
-          # get latest commit for .piston.yml
-          initial_revision = last_changed_revision(yaml_path)
-          # get latest revisions for this working copy since last update
-          log = git(:log, '-n', '1', "#{initial_revision}..")
-          not log.empty?
-        end
+        logger.debug {"Get last changed revision for #{yaml_path}"}
+        # get latest commit for .piston.yml
+        initial_revision = last_changed_revision(yaml_path)
+        logger.debug {"Get last log line for #{path} after #{initial_revision}"}
+        # get latest revisions for this working copy since last update
+        Dir.chdir(path) { not git(:log, '-n', '1', "#{initial_revision}..", '.').empty? }
       end
 
       protected
@@ -134,6 +133,7 @@ module Piston
       def last_changed_revision(path)
         path = Pathname.new(path) unless path.is_a? Pathname
         path = path.relative_path_from(self.path) unless path.relative?
+        logger.debug {"Get last log line for #{path}"}
         Dir.chdir(self.path) { git(:log, '-n', '1', path).match(/commit\s+(.*)$/)[1] }
       end
     end

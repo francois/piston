@@ -128,8 +128,10 @@ module Piston
       end
 
       def locally_modified
+        logger.debug {"Get last changed revision for #{yaml_path}"}
         # get latest revision for .piston.yml
         initial_revision = last_changed_revision(yaml_path)
+        logger.debug {"Get last log line for #{path} after #{initial_revision}"}
         # get latest revisions for this working copy since last update
         log = svn(:log, '--revision', "#{initial_revision}:HEAD", '--quiet', '--limit', '2', path)
         log.count("\n") > 3

@@ -72,6 +72,10 @@ module Piston
       end
 
       def remember_values
+        # find last commit for +commit+ if it wasn't checked out
+        @sha1 = git('ls-remote', repository.url, commit).match(/\w+/)[0] unless @sha1
+        # if ls-remote returns nothing, +commit+ must be a commit, not a branch
+        @sha1 = commit unless @sha1
         { Piston::Git::COMMIT => @sha1, Piston::Git::BRANCH => commit }
       end
 
@@ -88,7 +92,9 @@ module Piston
       def remotely_modified
         branch = recalled_values[Piston::Git::BRANCH]
         logger.debug {"Get last commit in #{branch} of #{repository.url}"}
-        commit = git('ls-remote', repository.url, branch).match(/\w+/)[0]
+        commit = git('ls-remote', repository.url, branch).match(/\w+/)
+        # when we update to a commit, instead latest commit of a branch, +branch+ will be a commit, and ls-remote can return nil
+        commit = commit[0] unless commit.nil?
         commit != self.commit
       end
     end

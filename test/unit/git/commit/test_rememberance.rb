@@ -8,6 +8,7 @@ class Piston::Git::TestGitCommitRememberance < Piston::TestCase
 
     @reposdir = Pathname.new("tmp/repos.git")
     @commit = Piston::Git::Commit.new(@repos, "ab"*20)
+    @commit.stubs(:git).with("ls-remote", @repos.url, @commit.commit).returns("b"*40)
     @values = @commit.remember_values
   end
 

@@ -10,6 +10,7 @@ module Piston
 
         logger.debug {"Recalling previously saved values"}
         values = working_copy.recall
+        return "#{wcdir} is locked: not updating" if values["lock"]
 
         repository = working_copy.repository
         from_revision = repository.at(values["handler"])
@@ -21,6 +22,7 @@ module Piston
         logger.info {"Updating from #{from_revision} to #{to_revision}"}
 
         working_copy.update(from_revision, to_revision, options[:lock])
+        "#{wcdir} updated to revision #{to_revision.revision}"
       end
     end
   end

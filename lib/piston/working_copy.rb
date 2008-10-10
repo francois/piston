@@ -114,14 +114,27 @@ module Piston
 
     # add some files to working copy
     def add(added)
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
     end
 
     # delete some files from working copy
     def delete(deleted)
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
     end
 
     # rename some files in working copy
     def rename(renamed)
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
+    end
+
+    # Downgrade this working copy to +revision+.
+    def downgrade_to(revision)
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
+    end
+
+    # Merge remote changes with local changes in +revision+.
+    def merge_local_changes(revision)
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
     end
 
     # Stores a Hash of values that can be retrieved later.
@@ -197,18 +210,31 @@ module Piston
         logger.info {"Checking out the repository at #{revision.revision}"}
         revision.checkout_to(tmpdir)
 
-        logger.info {"Copying local changes to temporary directory"}
+        revision_to_return = current_revision
+        revision_to_downgrade = last_changed_revision(yaml_path)
+        logger.debug {"Downgrading to #{revision_to_downgrade}"}
+        downgrade_to(revision_to_downgrade)
+
+        logger.debug {"Copying old changes to temporary directory in order to keep them"}
         copy_to(revision)
 
-        logger.info {"Updating to #{to.revision}"}
+        logger.info {"Looking changes from #{revision.revision} to #{to.revision}"}
         added, deleted, renamed = revision.update_to(to.revision)
 
+        logger.info {"Updating working copy"}
+        logger.debug {"Renaming files"}
+        # rename before copy because copy_from will copy these files
+        rename(renamed)
         logger.debug {"Copying files from temporary directory"}
-        rename(renamed) # rename before copy because copy_from will copy these files
         copy_from(revision)
+        logger.debug {"Adding new files to version control"}
         add(added)
+        logger.debug {"Deleting files from version control"}
         delete(deleted)
-        
+        logger.debug {"Merging local changes"}
+        # merge local changes updating to revision before downgrade was made
+        merge_local_changes(revision_to_return)
+
         remember(recall.merge(:lock => lock), to.remember_values)
       ensure
         logger.debug {"Removing temporary directory: #{tmpdir}"}
@@ -232,6 +258,16 @@ module Piston
     # The path to the piston YAML file.
     def yaml_path
       path + ".piston.yml"
+    end
+
+    # The current revision of this working copy.
+    def current_revision
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
+    end
+
+    # The last revision which +path+ was changed in
+    def last_changed_revision(path)
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#locally_modified should be implemented by a subclass."
     end
   end
 end

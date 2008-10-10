@@ -85,6 +85,16 @@ module Piston
         end
       end
 
+      def downgrade_to(revision)
+        logger.debug {"Downgrading to revision when last update was made"}
+        svn(:update, '--revision', revision, path)
+      end
+
+      def merge_local_changes(revision)
+        logger.debug {"Update to #{revision} in order to merge local changes"}
+        svn(:update, "--non-interactive", path)
+      end
+
       # Returns all defined externals (recursively) of this WC.
       # Returns a Hash:
       #   {"vendor/rails" => {:revision => :head, :url => "http://dev.rubyonrails.org/svn/rails/trunk"},
@@ -119,9 +129,7 @@ module Piston
 
       def locally_modified
         # get latest revision for .piston.yml
-        data = svn(:info, yaml_path)
-        info = YAML.load(data)
-        initial_revision = info["Last Changed Rev"].to_i
+        initial_revision = last_changed_revision(yaml_path)
         # get latest revisions for this working copy since last update
         log = svn(:log, '--revision', "#{initial_revision}:HEAD", '--quiet', '--limit', '2', path)
         log.count("\n") > 3
@@ -136,6 +144,17 @@ module Piston
           end
         end
         remember({:repository_url => props[Piston::Svn::ROOT], :lock => props[Piston::Svn::LOCKED], :repository_class => Piston::Svn::Repository.name}, {Piston::Svn::REMOTE_REV => props[Piston::Svn::REMOTE_REV], Piston::Svn::UUID => props[Piston::Svn::UUID]})
+      end
+
+      protected
+      def current_revision
+        data = svn(:info, path)
+        YAML.load(data)["Revision"].to_i
+      end
+
+      def last_changed_revision(path)
+        data = svn(:info, yaml_path)
+        YAML.load(data)["Last Changed Rev"].to_i
       end
     end
   end

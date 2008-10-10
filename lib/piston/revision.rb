@@ -38,6 +38,7 @@ module Piston
 
     # Update a copy of this repository to revision +to+.
     def update_to(to, lock)
+      raise SubclassResponsibilityError, "Piston::Revision#update_to should be implemented by a subclass."
     end
 
     # What values does this revision want to remember for the future ?

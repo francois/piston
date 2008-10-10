@@ -27,10 +27,10 @@ module Piston
           if revision == "HEAD" then
             @revision = $1.to_i
           elsif revision != $1.to_i then
-            raise Failed, "Did not get the revision I wanted to checkout.  Subversion checked out #{$1}, I wanted #{revision}"
+            raise InvalidRevision, "Did not get the revision I wanted to checkout.  Subversion checked out #{$1}, I wanted #{revision}"
           end
         else
-          raise Failed, "Could not checkout revision #{revision} from #{repository.url} to #{dir}\n#{answer}"
+          raise InvalidRevision, "Could not checkout revision #{revision} from #{repository.url} to #{dir}\n#{answer}"
         end
       end
 
@@ -40,12 +40,12 @@ module Piston
         answer = svn(:update, "--non-interactive", "--revision", revision, @dir)
         if answer =~ /(Updated to|At) revision (\d+)[.]/ then
           if revision == "HEAD" then
-            @revision = $1.to_i
-          elsif revision != $1.to_i then
-            raise Failed, "Did not get the revision I wanted to update.  Subversion update to #{$1}, I wanted #{revision}"
+            @revision = $2.to_i
+          elsif revision != $2.to_i then
+            raise InvalidRevision, "Did not get the revision I wanted to update.  Subversion update to #{$1}, I wanted #{revision}"
           end
         else
-          raise Failed, "Could not update #{@dir} to revision #{revision} from #{repository.url}\n#{answer}"
+          raise InvalidRevision, "Could not update #{@dir} to revision #{revision} from #{repository.url}\n#{answer}"
         end
         added = relative_paths(answer.scan(/^A\s+(.*)$/).flatten)
         deleted = relative_paths(answer.scan(/^D\s+(.*)$/).flatten)

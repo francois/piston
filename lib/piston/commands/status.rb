@@ -25,8 +25,8 @@ module Piston
 
         # Display the results
         repos.each_pair do |path, props|
-          printf "%1s%1s    %5s %s (%s)\n", props[:locally_modified],
-              props[:remotely_modified], props["lock"], path, props["repository_url"]
+          printf "%1s%1s %6s %s (%s)\n", props[:locally_modified],
+              props[:remotely_modified], props["lock"] ? 'locked' : '', path, props["repository_url"]
         end
 
         puts "No pistonized folders found in #{wcdir}" if repos.empty?

@@ -104,18 +104,6 @@ module Piston
         end
       end
 
-      def update(revision, to, lock)
-        tmpdir = temp_dir_name
-        begin
-          logger.debug {"Checking out the repository at #{to.revision}"}
-          to.checkout_to(tmpdir) # is needed to remember new remote revision
-        ensure
-          logger.debug {"Removing temporary directory: #{tmpdir}"}
-          tmpdir.rmtree rescue nil
-        end
-        super
-      end
-
       def locally_modified
         logger.debug {"Get last changed revision for #{yaml_path}"}
         # get latest commit for .piston.yml

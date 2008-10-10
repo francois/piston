@@ -49,7 +49,6 @@ module Piston
         super
         git(:clone, repository.url, @dir)
         Dir.chdir(@dir) do
-          logger.debug {"in dir #{@dir}"}
           git(:checkout, "-b", branch_name, commit)
           response = git(:log, "-n", "1")
           @sha1 = $1 if response =~ /commit\s+([a-f\d]{40})/i
@@ -60,10 +59,10 @@ module Piston
         raise ArgumentError, "Commit #{self.commit} of #{repository.url} was never checked out -- can't update" unless @dir
         
         Dir.chdir(@dir) do
-          logger.debug {"in dir #{@dir}"}
-          git(:commit, '-a', '-m', 'local changes') unless git(:status) =~ /nothing to commit/
+          logger.debug {"Saving old changes before updating"}
+          git(:commit, '-a', '-m', 'old changes')
+          logger.debug {"Merging old changes with #{commit}"}
           git(:merge, '--squash', commit)
-
           output = git(:status)
           added = output.scan(/new file:\s+(.*)$/).flatten
           deleted = output.scan(/deleted:\s+(.*)$/).flatten

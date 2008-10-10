@@ -62,11 +62,6 @@ module Piston
         Dir.chdir(path) { git(:add, ".") }
       end
 
-      def copy_from(revision)
-        super
-        Dir.chdir(path) { git(:add, "-u") }
-      end
-
       def add(added)
         Dir.chdir(path) do
           added.each { |item| git(:add, item) }
@@ -84,12 +79,36 @@ module Piston
           renamed.each { |from, to| git(:mv, from, to) }
         end
       end
+
+      def downgrade_to(revision)
+        logger.debug {"Creating a branch to copy changes from remote repository"}
+        Dir.chdir(path) { git(:checkout, '-b', "my-#{revision}", revision) }
+      end
       
+      def merge_local_changes(revision)
+        from_revision = current_revision
+        Dir.chdir(path) do
+          begin
+            logger.debug {"Saving changes in temporary branch"}
+            git(:commit, '-a', '-m', 'merging')
+            logger.debug {"Return to previous branch"}
+            git(:checkout, revision)
+            logger.debug {"Merge changes from temporary branch"}
+            git(:merge, '--squash', from_revision)
+          rescue Piston::Git::Client::CommandError
+            git(:checkout, revision)
+          ensure
+            logger.debug {"Deleting temporary branch"}
+            git(:branch, '-D', from_revision)
+          end
+        end
+      end
+
       def update(revision, to, lock)
         tmpdir = temp_dir_name
         begin
-          logger.info {"Checking out the repository at #{to.revision}"}
-          to.checkout_to(tmpdir)
+          logger.debug {"Checking out the repository at #{to.revision}"}
+          to.checkout_to(tmpdir) # is needed to remember new remote revision
         ensure
           logger.debug {"Removing temporary directory: #{tmpdir}"}
           tmpdir.rmtree rescue nil
@@ -100,12 +119,22 @@ module Piston
       def locally_modified
         Dir.chdir(path) do
           # get latest commit for .piston.yml
-          data = git(:log, '-n', '1', yaml_path.relative_path_from(path))
-          initial_revision = data.match(/commit\s+(.*)$/)[1]
+          initial_revision = last_changed_revision(yaml_path)
           # get latest revisions for this working copy since last update
           log = git(:log, '-n', '1', "#{initial_revision}..")
           not log.empty?
         end
+      end
+
+      protected
+      def current_revision
+        Dir.chdir(path) { git(:branch).match(/^\*\s+(.+)$/)[1] }
+      end
+
+      def last_changed_revision(path)
+        path = Pathname.new(path) unless path.is_a? Pathname
+        path = path.relative_path_from(self.path) unless path.relative?
+        Dir.chdir(self.path) { git(:log, '-n', '1', path).match(/commit\s+(.*)$/)[1] }
       end
     end
   end

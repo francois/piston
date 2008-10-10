@@ -17,10 +17,11 @@ class TestGitSvn < Piston::TestCase
 
     Dir.chdir(parent_path) do
       git(:init)
-      File.open(parent_path + "README", "wb") {|f| f.write "Readme - first commit\n"}
-      File.open(parent_path + "file_in_first_commit", "wb") {|f| f.write "file_in_first_commit"}
+      File.open("README", "wb") {|f| f.write "Readme - first commit\n"}
+      File.open("file_in_first_commit", "wb") {|f| f.write "file_in_first_commit"}
       File.open("file_to_rename", "wb") {|f| f.write "file_to_rename"}
       File.open("file_to_copy", "wb") {|f| f.write "file_to_copy"}
+      File.open("conflicting_file", "wb") {|f| f.write "conflicting_file\n"}
       git(:add, ".")
       git(:commit, "-m", "'first commit'")
     end
@@ -96,21 +97,25 @@ A      vendor/parent/README
 A      vendor/parent/file_in_first_commit
 A      vendor/parent/file_to_rename
 A      vendor/parent/file_to_copy
+A      vendor/parent/conflicting_file
 )
 
   def test_update
     piston(:import, parent_path, wc_path + "trunk/vendor/parent")
+    svn(:commit, "-m", "'import'", wc_path)
+
     # change mode to "ab" to get a conflict when it's implemented
     File.open(wc_path + "trunk/vendor/parent/README", "wb") do |f|
       f.write "Readme - modified after imported\nReadme - first commit\n"
     end
-
-    Dir.chdir(wc_path) do
-      svn(:commit, "-m", "'next commit'")
+    File.open(wc_path + "trunk/vendor/parent/conflicting_file", "ab") do |f|
+      f.write "working copy\n"
     end
+    svn(:commit, "-m", "'next commit'", wc_path)
 
     Dir.chdir(parent_path) do
       File.open("README", "ab") {|f| f.write "Readme - second commit\n"}
+      File.open("conflicting_file", "ab") {|f| f.write "parent repository\n"}
       git(:rm, "file_in_first_commit")
       File.open("file_in_second_commit", "wb") {|f| f.write "file_in_second_commit"}
       FileUtils.cp("file_to_copy", "copied_file")
@@ -119,10 +124,11 @@ A      vendor/parent/file_to_copy
       git(:commit, "-m", "'second commit'")
     end
 
-    piston(:update, wc_path + "trunk/vendor/parent", '-v', '2')
+    piston(:update, wc_path + "trunk/vendor/parent")
     
     assert_equal CHANGE_STATUS.split("\n").sort, svn(:status, wc_path + "trunk/vendor").gsub((wc_path + "trunk/").to_s, "").split("\n").sort
-    assert_equal README, File.readlines(wc_path + "trunk/vendor/parent/README").join
+    assert_equal README, File.read(wc_path + "trunk/vendor/parent/README")
+    assert_equal CONFLICT, File.read(wc_path + "trunk/vendor/parent/conflicting_file")
   end
 
   CHANGE_STATUS = %Q(M      vendor/parent/.piston.yml
@@ -132,9 +138,20 @@ D      vendor/parent/file_in_first_commit
 A      vendor/parent/copied_file
 D      vendor/parent/file_to_rename
 A  +   vendor/parent/renamed_file
+C      vendor/parent/conflicting_file
+?      vendor/parent/conflicting_file.mine
+?      vendor/parent/conflicting_file.r2
+?      vendor/parent/conflicting_file.r3
 )
   README = %Q(Readme - modified after imported
 Readme - first commit
 Readme - second commit
+)
+  CONFLICT = %Q(conflicting_file
+<<<<<<< .mine
+parent repository
+=======
+working copy
+>>>>>>> .r3
 )
 end

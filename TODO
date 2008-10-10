@@ -1,4 +1,6 @@
 = Integration tests to verify
 
-* Handles conflicts (currently when there is a conflict doesn't update from git repositories, update from svn repositories but ignores the conflict)
+* Port conflicts in temporary checkout directory to working copy:
+It detects and marks conflicts with changes after last update. But when some changes, which were made before last update, conflict when merging in temporary directory, file is merged correctly but conflicts are not marked
+In Piston 1.x old changes were lost, even without conflicts
 * Force addition of Git repositories, because the files might be ignored in .gitignore

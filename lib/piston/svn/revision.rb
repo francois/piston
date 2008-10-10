@@ -37,7 +37,7 @@ module Piston
       def update_to(revision)
         raise ArgumentError, "Revision #{self.revision} of #{repository.url} was never checked out -- can't update" unless @dir
         
-        answer = svn(:update, "--revision", revision, @dir)
+        answer = svn(:update, "--non-interactive", "--revision", revision, @dir)
         if answer =~ /(Updated to|At) revision (\d+)[.]/ then
           if revision == "HEAD" then
             @revision = $1.to_i

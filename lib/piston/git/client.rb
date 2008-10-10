@@ -54,8 +54,7 @@ module Piston
           begin
             pid, stdin, stdout, stderr = Open4::popen4(cmd)
             _, cmdstatus = Process.waitpid2(pid)
-            return stdout.read if cmd =~ /status/ && cmdstatus.exitstatus == 1
-            raise CommandError, "#{cmd.inspect} exited with status: #{cmdstatus.exitstatus}\n#{stderr.read}" unless cmdstatus.success?
+            raise CommandError, "#{cmd.inspect} exited with status: #{cmdstatus.exitstatus}\n#{stderr.read}" unless cmdstatus.success? || cmdstatus.exitstatus == 1
             return stdout.read
           rescue Errno::ENOENT
             raise BadCommand, cmd.inspect
@@ -68,7 +67,7 @@ module Piston
         def run_real(cmd)
           out = `#{cmd}`
           raise BadCommand, cmd.inspect if $?.exitstatus == 127
-          raise Failed, "#{cmd.inspect} exited with status: #{$?.exitstatus}" unless $?.success? || (cmd =~ /status/ && $?.exitstatus == 1)
+          raise Failed, "#{cmd.inspect} exited with status: #{$?.exitstatus}" unless $?.success? || $?.exitstatus == 1
           out
         end
       end

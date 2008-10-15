@@ -1,12 +1,13 @@
+(in /Users/francois/Documents/work/piston)
 Gem::Specification.new do |s|
   s.name = %q{piston}
   s.version = "1.9.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Francois Beausoleil"]
-  s.date = %q{2008-09-22}
+  s.authors = ["Fran\303\247ois Beausoleil"]
+  s.date = %q{2008-10-15}
   s.default_executable = %q{piston}
-  s.description = %q{description of gem}
+  s.description = %q{Piston is a utility that eases vendor branch management.}
   s.email = ["francois@teksol.info"]
   s.executables = ["piston"]
   s.extra_rdoc_files = ["History.txt", "License.txt", "Manifest.txt", "README.txt", "website/index.txt"]
@@ -17,7 +18,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{piston}
   s.rubygems_version = %q{1.2.0}
-  s.summary = %q{description of gem}
+  s.summary = %q{Piston is a utility that eases vendor branch management.}
   s.test_files = ["test/integration/test_git_git.rb", "test/integration/test_git_svn.rb", "test/integration/test_import_svn_git.rb", "test/integration/test_import_svn_svn.rb", "test/test_helper.rb", "test/unit/git/commit/test_checkout.rb", "test/unit/git/commit/test_each.rb", "test/unit/git/commit/test_rememberance.rb", "test/unit/git/commit/test_validation.rb", "test/unit/git/repository/test_at.rb", "test/unit/git/repository/test_basename.rb", "test/unit/git/repository/test_branchanme.rb", "test/unit/git/repository/test_guessing.rb", "test/unit/git/working_copy/test_copying.rb", "test/unit/git/working_copy/test_creation.rb", "test/unit/git/working_copy/test_existence.rb", "test/unit/git/working_copy/test_finalization.rb", "test/unit/git/working_copy/test_guessing.rb", "test/unit/git/working_copy/test_rememberance.rb", "test/unit/svn/repository/test_at.rb", "test/unit/svn/repository/test_basename.rb", "test/unit/svn/repository/test_guessing.rb", "test/unit/svn/revision/test_checkout.rb", "test/unit/svn/revision/test_each.rb", "test/unit/svn/revision/test_rememberance.rb", "test/unit/svn/revision/test_validation.rb", "test/unit/svn/working_copy/test_copying.rb", "test/unit/svn/working_copy/test_creation.rb", "test/unit/svn/working_copy/test_existence.rb", "test/unit/svn/working_copy/test_externals.rb", "test/unit/svn/working_copy/test_finalization.rb", "test/unit/svn/working_copy/test_guessing.rb", "test/unit/svn/working_copy/test_merging.rb", "test/unit/svn/working_copy/test_rememberance.rb", "test/unit/test_info.rb", "test/unit/test_lock_unlock.rb", "test/unit/test_repository.rb", "test/unit/test_revision.rb", "test/unit/working_copy/test_guessing.rb", "test/unit/working_copy/test_info.rb", "test/unit/working_copy/test_rememberance.rb", "test/unit/working_copy/test_validate.rb"]
 
   if s.respond_to? :specification_version then

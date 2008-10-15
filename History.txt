@@ -1,5 +1,6 @@
 
-* Thanks for Geoffrey Grosenbach (topfunky), piston has a gemspec for use on GitHub.
+* Thanks to scambra for fixing lock/unlock errors.
+* Thanks to Geoffrey Grosenbach (topfunky), piston has a gemspec for use on GitHub.
 * Thanks to Brian Takita (btakita), piston update with a Git repository works!
 * Thanks to mattknox and scambra for manifest updates.
 * Thanks to Marcos Tapajós (tapajos) for many small improvements.

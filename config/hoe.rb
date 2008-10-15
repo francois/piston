@@ -1,8 +1,8 @@
 require "piston/version"
 
-AUTHOR = "Francois Beausoleil"
+AUTHOR = "François Beausoleil"
 EMAIL = "francois@teksol.info"
-DESCRIPTION = "description of gem"
+DESCRIPTION = "Piston is a utility that eases vendor branch management."
 GEM_NAME = "piston"
 
 RUBYFORGE_PROJECT = "piston"

@@ -1,4 +1,3 @@
-(in /Users/francois/Documents/work/piston)
 Gem::Specification.new do |s|
   s.name = %q{piston}
   s.version = "1.9.5"

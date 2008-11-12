@@ -99,31 +99,29 @@ class TestGitGit < Piston::TestCase
     end
 
     Dir.chdir(wc_path) do
-      assert_equal CHANGE_STATUS.split("\n"), git(:status).split("\n")
+      assert_equal CHANGE_STATUS, git(:status).split("\n")
     end
     assert_equal README, File.read(wc_path + "vendor/parent/README")
     assert_match CONFLICT, File.read(wc_path + "vendor/parent/conflicting_file")
   end
 
-  CHANGE_STATUS = %Q(vendor/parent/conflicting_file: needs merge
-# On branch master
-# Changes to be committed:
-#   (use "git reset HEAD <file>..." to unstage)
-#
-#\tmodified:   vendor/parent/.piston.yml
-#\tmodified:   vendor/parent/README
-#\tnew file:   vendor/parent/copied_file
-#\tdeleted:    vendor/parent/file_in_first_commit
-#\tnew file:   vendor/parent/file_in_second_commit
-#\trenamed:    vendor/parent/file_to_rename -> vendor/parent/renamed_file
-#
-# Changed but not updated:
-#   (use "git add <file>..." to update what will be committed)
-#
-#\tunmerged:   vendor/parent/conflicting_file
-#\tmodified:   vendor/parent/conflicting_file
-#
-)
+  CHANGE_STATUS = ["vendor/parent/conflicting_file: needs merge",
+   "# On branch master",
+   "# Changes to be committed:",
+   "#   (use \"git reset HEAD <file>...\" to unstage)",
+   "#",
+   "#\tmodified:   vendor/parent/.piston.yml",
+   "#\tmodified:   vendor/parent/README",
+   "#\tnew file:   vendor/parent/copied_file",
+   "#\tdeleted:    vendor/parent/file_in_first_commit",
+   "#\tnew file:   vendor/parent/file_in_second_commit",
+   "#\trenamed:    vendor/parent/file_to_rename -> vendor/parent/renamed_file",
+   "#",
+   "# Changed but not updated:",
+   "#   (use \"git add <file>...\" to update what will be committed)",
+   "#",
+   "#\tunmerged:   vendor/parent/conflicting_file",
+   "#"]
   README = %Q(Readme - modified after imported
 Readme - first commit
 Readme - second commit

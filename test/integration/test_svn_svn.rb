@@ -13,7 +13,7 @@ class TestSvnSvn < Piston::TestCase
     svnadmin :create, repos_path
     svn :checkout, "file://#{repos_path}", wc_path
     Dir.chdir(wc_path) do
-      svn :mkdir, "--parents", "parent", "wc/tags", "wc/branches", "wc/trunk/vendor"
+      svn :mkdir, "parent", "wc", "wc/tags", "wc/branches", "wc/trunk", "wc/trunk/vendor"
       File.open("parent/README", "wb") {|f| f.write "Readme - first commit\n"}
       File.open("parent/file_in_first_commit", "wb") {|f| f.write "file_in_first_commit"}
       File.open("parent/file_to_rename", "wb") {|f| f.write "file_to_rename"}

@@ -13,7 +13,7 @@ def runcmd(cmd, *args)
   output = `#{cmdline}`
   logger.debug "< #{output}"
   return output if $?.success?
-  raise output
+  raise CommandFailed, "Could not run %s, exit status: <%d>\n===\n%s\n===" % [cmdline.inspect, $?.exitstatus, output]
 end
 
 def svn(*args)
@@ -31,3 +31,5 @@ end
 def piston(*args)
   runcmd(:ruby, "-I", PISTON_ROOT + "lib", PISTON_ROOT + "bin/piston", *args)
 end
+
+class CommandFailed < RuntimeError; end

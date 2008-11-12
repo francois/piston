@@ -46,6 +46,7 @@ script/txt2html
 setup.rb
 tasks/deployment.rake
 tasks/environment.rake
+tasks/manifest.rake
 tasks/samples.rake
 tasks/test.rake
 tasks/website.rake

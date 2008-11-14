@@ -241,6 +241,30 @@ Main {
     end
   end
   
+  mode "diff" do
+    mixin :standard_options
+
+    argument "directory" do
+      argument_required
+      description "Which directory to get differences between local and remote repositories."
+    end
+
+    logger_level Logger::DEBUG
+    def run
+      configure_logging!
+
+      cmd = Piston::Commands::Diff.new(:wcdir => File.expand_path(params["directory"].value),
+                                         :verbose => params["verbose"].value,
+                                         :quiet => params["quiet"].value,
+                                         :force => params["force"].value)
+      begin
+        cmd.run
+      rescue Piston::WorkingCopy::NotWorkingCopy
+        puts "#{params["directory"].value} is not Pistonized"
+      end
+    end
+  end
+  
   mode "info" do
     mixin :standard_options
     

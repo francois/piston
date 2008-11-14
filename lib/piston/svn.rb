@@ -10,5 +10,6 @@ module Piston
     REMOTE_REV  = "piston:remote-revision"
     LOCAL_REV   = "piston:local-revision"
     LOCKED      = "piston:locked"
+    EXCLUDE     = [".svn"]
   end
 end

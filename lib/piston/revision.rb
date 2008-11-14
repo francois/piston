@@ -71,5 +71,9 @@ module Piston
     def remotely_modified
       raise SubclassResponsibilityError, "Piston::Revision#remotely_modified should be implemented by a subclass."
     end
+
+    def exclude_for_diff
+      raise SubclassResponsibilityError, "Piston::Revision#exclude_for_diff should be implemented by a subclass."
+    end
   end
 end

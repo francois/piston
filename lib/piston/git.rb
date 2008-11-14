@@ -8,5 +8,6 @@ module Piston
     URL = "url"
     COMMIT = "commit"
     BRANCH = "branch"
+    EXCLUDE = [".git"]
   end
 end

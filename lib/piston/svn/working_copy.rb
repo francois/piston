@@ -137,6 +137,10 @@ module Piston
         log.count("\n") > 3
       end
 
+      def exclude_for_diff
+        Piston::Svn::EXCLUDE
+      end
+
       def upgrade
         props = Hash.new
         svn(:proplist, '--verbose', path).each_line do |line|

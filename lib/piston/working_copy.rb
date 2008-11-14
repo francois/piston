@@ -242,6 +242,21 @@ module Piston
       end
     end
 
+    def diff
+      tmpdir = temp_dir_name
+      begin
+        logger.info {"Checking out the repository at #{revision.revision}"}
+        revision = repository.at(:head)
+        revision.checkout_to(tmpdir)
+
+        excludes = (['.piston.yml'] + exclude_for_diff + revision.exclude_for_diff).uniq.collect {|pattern| "--exclude=#{pattern}"}.join ' '
+        system("diff -urN #{excludes} '#{tmpdir}' '#{path}'")
+      ensure
+        logger.debug {"Removing temporary directory: #{tmpdir}"}
+        tmpdir.rmtree rescue nil
+      end
+    end
+
     def temp_dir_name
       path.parent + ".#{path.basename}.tmp"
     end
@@ -252,6 +267,10 @@ module Piston
 
     def remotely_modified
       repository.at(recall["handler"]).remotely_modified
+    end
+
+    def exclude_for_diff
+      raise SubclassResponsibilityError, "Piston::WorkingCopy#exclude_for_diff should be implemented by a subclass."
     end
 
     protected

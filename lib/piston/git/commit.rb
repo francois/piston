@@ -97,6 +97,10 @@ module Piston
         commit = commit[0] unless commit.nil?
         commit != self.commit
       end
+
+      def exclude_for_diff
+        Piston::Git::EXCLUDE
+      end
     end
   end
 end

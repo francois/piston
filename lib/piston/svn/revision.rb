@@ -90,6 +90,10 @@ module Piston
         revision < latest_revision
       end
 
+      def exclude_for_diff
+        Piston::Svn::EXCLUDE
+      end
+
       private
       def relative_paths(paths)
         paths.map { |item| Pathname.new(item).relative_path_from(@dir) }

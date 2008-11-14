@@ -113,6 +113,10 @@ module Piston
         Dir.chdir(path) { not git(:log, '-n', '1', "#{initial_revision}..", '.').empty? }
       end
 
+      def exclude_for_diff
+        Piston::Git::EXCLUDE
+      end
+
       protected
       def current_revision
         Dir.chdir(path) { git(:branch).match(/^\*\s+(.+)$/)[1] }

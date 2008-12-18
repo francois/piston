@@ -2,7 +2,7 @@ require "fileutils"
 include FileUtils
 
 require "rubygems"
-%w[rake hoe newgem rubigen mocha activesupport].each do |req_gem|
+%w[rake hoe newgem rubigen mocha activesupport log4r].each do |req_gem|
   begin
     require req_gem
   rescue LoadError

@@ -1,4 +1,4 @@
-Feature: Import remote repository
+Feature: Import remote repository into a Subversion repository
   In order to speed up deployments and to only deploy code that's been tested tested
   A developer
   Wants to import remote repositories

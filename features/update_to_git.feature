@@ -74,7 +74,7 @@ Feature: Updating from a remote Subversion repository
     And I committed
     And a file named libcomplex.rb with content "b" in remote libcalc project
     When I update libcalc
-    Then I should see "Updated .*/libcalc to revision \d+"
+    Then I should see "Updated .*/libcalc to commit [a-fA-F0-9]+"
     And I should find a libcalc/libcomplex.rb file
 
   Scenario: Updating from a Git repository when a file was removed
@@ -85,7 +85,7 @@ Feature: Updating from a remote Subversion repository
     And I committed
     And a file named libcalc.rb was deleted in remote libcalc project
     When I update libcalc
-    Then I should see "Updated .*/libcalc to revision \d+"
+    Then I should see "Updated .*/libcalc to commit [a-fA-F0-9]+"
     And I should not find a libcalc/libcalc.rb file
 
   Scenario: Updating from a Git repository when a file was updated
@@ -96,7 +96,7 @@ Feature: Updating from a remote Subversion repository
     And I committed
     And a file named libcalc.rb was updated with "a\nb\nc" in remote libcalc project
     When I update libcalc
-    Then I should see "Updated .*/libcalc to revision \d+"
+    Then I should see "Updated .*/libcalc to commit [a-fA-F0-9]+"
     And I should find a libcalc/libcalc.rb file
     And I should find "a\nb\nc" in libcalc/libcalc.rb
 
@@ -108,6 +108,6 @@ Feature: Updating from a remote Subversion repository
     And I committed
     And a file named libcalc.rb was renamed to libcomplex.rb in remote libcalc project
     When I update libcalc
-    Then I should see "Updated .*/libcalc to revision \d+"
+    Then I should see "Updated .*/libcalc to commit [a-fA-F0-9]+"
     And I should not find a libcalc/libcalc.rb file
     And I should find a libcalc/libcomplex.rb file

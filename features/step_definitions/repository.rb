@@ -6,6 +6,17 @@ Given /^a newly created Subversion project$/ do
   svn :checkout, "file:///#{@reposdir}", @wcdir
 end
 
+Given /^a remote Git project named (\w+)$/ do |name|
+  @remotewcdir = @remotereposdir = Tmpdir.where("remote/#{name}.git")
+  @remotereposdir.mkpath
+  Dir.chdir(@remotereposdir) do
+    git :init
+    touch :README
+    git :add, "."
+    git :commit, "--message", "initial commit"
+  end
+end
+
 Given /^a remote Subversion project named (\w+)( using the classic layout)?$/ do |name, classic|
   @remotereposdir = Tmpdir.where("remote/repos/#{name}")
   @remotereposdir.mkpath
@@ -23,8 +34,15 @@ end
 Given /^a file named ([^\s]+) with content "([^"]+)" in remote (\w+) project$/ do |filename, content, project|
   content.gsub!("\\n", "\n")
   File.open(@remotewcdir + filename, "w+") {|io| io.puts(content)}
-  svn :add, @remotewcdir + filename
-  svn :commit, "--message", "adding #{filename}", @remotewcdir
+  Dir.chdir(@remotewcdir) do
+    if (@remotewcdir + ".git").directory? then
+      git :add, "."
+      git :commit, "--message", "adding #{filename}"
+    else
+      svn :add, filename
+      svn :commit, "--message", "adding #{filename}"
+    end
+  end
 end
 
 When /^I import ([\w\/]+)(?: into ([\w\/]+))?$/ do |project, into|

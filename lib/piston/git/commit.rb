@@ -101,6 +101,10 @@ module Piston
       def exclude_for_diff
         Piston::Git::EXCLUDE
       end
+
+      def to_s
+        "commit #{sha1}"
+      end
     end
   end
 end

@@ -66,10 +66,24 @@ Given /^a file named ([^\s]+) with content "([^"]+)" in remote (\w+) project$/ d
     if (@remotewcdir + ".git").directory? then
       git :add, "."
       stdout = git :commit, "--message", "adding #{filename}"
-      stdout.should =~ /Created commit [a-fA-F0-9]}/
+      stdout.should =~ /Created commit [a-fA-F0-9]/
     else
       svn :add, filename
       stdout = svn :commit, "--message", "adding #{filename}"
+      stdout.should =~ /Committed revision \d+/
+    end
+  end
+end
+
+Given /^a file named ([^\s]+) was renamed to ([^\s]+) in remote (\w+) project$/ do |from, to, project|
+  Dir.chdir(@remotewcdir) do
+    if (@remotewcdir + ".git").directory? then
+      git :mv, from, to
+      stdout = git :commit, "--message", "moved #{from} to #{to}"
+      stdout.should =~ /Created commit [a-fA-F0-9]/
+    else
+      svn :mv, from, to
+      stdout = svn :commit, "--message", "moved #{from} to #{to}"
       stdout.should =~ /Committed revision \d+/
     end
   end
@@ -82,7 +96,7 @@ Given /^a file named ([^\s]+) was updated with "([^"]+)" in remote (\w+) project
     if (@remotewcdir + ".git").directory? then
       git :add, "."
       stdout = git :commit, "--message", "updating #{filename}"
-      stdout.should =~ /Created commit [a-fA-F0-9]}/
+      stdout.should =~ /Created commit [a-fA-F0-9]/
     else
       stdout = svn :commit, "--message", "updating #{filename}"
       stdout.should =~ /Committed revision \d+/

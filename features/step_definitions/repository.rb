@@ -1,8 +1,7 @@
 Given /^a newly created Subversion project$/ do
-  @tmpdir = Pathname.new(ENV["TMPDIR"] || ENV["TMP"] || "tmp") + "repos"
-  @tmpdir.mkpath
-  svnadmin(:create, @tmpdir)
-  svn(:checkout, "file:///#{@tmpdir.realpath}")
+  @reposdir = Tmpdir.where(:repos)
+  svnadmin(:create, @reposdir)
+  svn(:checkout, "file:///#{@reposdir.realpath}")
 end
 
 #Given /^a remote Subversion project named (\w+)$/ do |name|

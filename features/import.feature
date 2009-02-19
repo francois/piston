@@ -7,6 +7,9 @@ Feature: Import remote repository
   Scenario: Importing from a Subversion repository
     Given a newly created Subversion project
     And a remote Subversion project named libcalc
+    And a file named libcalc.rb with content "a\nb\nc" in remote libcalc project
     When I run "piston import libcalc"
     Then I should see "Piston imported revision \d+ from .*/libcalc/trunk"
-    Then I should find a trunk folder
+    Then I should find a libcalc folder
+    Then I should find a libcalc/README file
+    Then I should find a libcalc/.piston.yml file

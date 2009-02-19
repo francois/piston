@@ -27,9 +27,10 @@ Given /^a file named ([^\s]+) with content "([^"]+)" in remote (\w+) project$/ d
   svn :commit, "--message", "adding #{filename}", @remotewcdir
 end
 
-When /^I import ([\w\/]+)$/ do |project|
+When /^I import ([\w\/]+)(?: into ([\w\/]+))?$/ do |project, into|
   Dir.chdir(@wcdir) do
-    cmd = "#{Tmpdir.piston} import file://#{@remotereposdir} 2>&1"
+    cmd = "#{Tmpdir.piston} import --verbose 5 file://#{@remotereposdir} 2>&1"
+    cmd << " #{into}" if into
     STDERR.puts cmd.inspect if $DEBUG
     @stdout = `#{cmd}`
     STDERR.puts @stdout if $DEBUG
@@ -42,9 +43,14 @@ Then /^I should see "([^"]+)"(\s+debug)?$/ do |regexp, debug|
   @stdout.should =~ re
 end
 
-Then /^I should find a ([\w+\/]+) folder$/ do |name|
-  File.exist?(@wcdir + name).should be_true
-  File.directory?(@wcdir + name).should be_true
+Then /^I should( not)? find a ([\w+\/]+) folder$/ do |not_find, name|
+  if not_find then
+    File.exist?(@wcdir + name).should_not be_true
+    File.directory?(@wcdir + name).should_not be_true
+  else
+    File.exist?(@wcdir + name).should be_true
+    File.directory?(@wcdir + name).should be_true
+  end
 end
 
 Then /^I should find a ([.\w+\/]+) file$/ do |name|

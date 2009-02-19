@@ -23,3 +23,11 @@ Feature: Import remote repository
     Then I should find a libcalc folder
     Then I should find a libcalc/libcalc.rb file
     Then I should find a libcalc/.piston.yml file
+
+  Scenario: Importing into a specific folder bails if the parent folders doesn't exist
+    Given a newly created Subversion project
+    And a remote Subversion project named libcalc using the classic layout
+    And a file named libcalc.rb with content "a\nb\nc" in remote libcalc project
+    When I import libcalc/trunk into vendor/libcalc
+    Then I should see "Folder .*/vendor/libcalc could not be created.  Is .*/vendor a working copy\? \(Tip: svn mkdir it\)"
+    Then I should not find a vendor/libcalc folder

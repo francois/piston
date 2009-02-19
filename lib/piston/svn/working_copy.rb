@@ -47,7 +47,15 @@ module Piston
       end
 
       def create
-        svn(:mkdir, path)
+        logger.debug {"Creating #{path}"}
+        begin
+          svn(:mkdir, path)
+        rescue Piston::Svn::Client::CommandError
+          logger.error do
+            "Folder #{path} could not be created.  Is #{path.parent} a working copy? (Tip: svn mkdir it)"
+          end
+          raise
+        end
       end
 
       def after_remember(path)

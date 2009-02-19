@@ -26,7 +26,7 @@ When /^I import ([\w]+)$/ do |project|
     cmd = "#{Tmpdir.piston} import file:///#{@reposdir} 2>&1"
     STDERR.puts cmd.inspect if $DEBUG
     @stdout = `#{cmd}`
-    STDERR.puts @stdout #if $DEBUG
+    STDERR.puts @stdout if $DEBUG
   end
 end
 

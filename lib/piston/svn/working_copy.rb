@@ -103,6 +103,13 @@ module Piston
         svn(:update, "--non-interactive", path)
       end
 
+      def status(subpath=nil)
+        status(:status, path + subpath.to_s).split("\n").inject([]) do |memo, line|
+          next memo unless line =~ /^\w.+\s(.*)$/
+          memo << [$1, $2]
+        end
+      end
+
       # Returns all defined externals (recursively) of this WC.
       # Returns a Hash:
       #   {"vendor/rails" => {:revision => :head, :url => "http://dev.rubyonrails.org/svn/rails/trunk"},

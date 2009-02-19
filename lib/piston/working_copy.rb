@@ -243,8 +243,8 @@ module Piston
 
         remember(recall.merge(:lock => lock), to.remember_values)
 
-        status = svn(:status, path)
-        logger.debug { {:added => added, :deleted => deleted, :renamed => renamed, :status => status.split("\n")}.to_yaml }
+        status = status(path)
+        logger.debug { {:added => added, :deleted => deleted, :renamed => renamed, :status => status}.to_yaml }
         !status.empty?
       ensure
         logger.debug {"Removing temporary directory: #{tmpdir}"}

@@ -117,6 +117,15 @@ module Piston
         Piston::Git::EXCLUDE
       end
 
+      def status(subpath=nil)
+        Dir.chdir(path) do
+          git(:status).split("\n").inject([]) do |memo, line|
+            next memo unless line =~ /\s(\w+):\s+(.*)$/
+            memo << [$1, $2]
+          end
+        end
+      end
+
       protected
       def current_revision
         Dir.chdir(path) { git(:branch).match(/^\*\s+(.+)$/)[1] }

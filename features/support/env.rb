@@ -10,7 +10,17 @@ class Tmpdir
     @tmpdir.mkpath
     @tmpdir + subpath.to_s
   end
+
+  def self.piston
+    return @piston if @piston
+    bin = (Pathname.new(File.dirname(__FILE__)) + "../../bin/piston").realpath
+    lib = (Pathname.new(File.dirname(__FILE__)) + "../../lib").realpath
+    @piston = "ruby -I #{lib} #{bin}"
+  end
 end
 
 STDERR.puts "Removing #{Tmpdir.where}" if $DEBUG
+
+# Prime the cache
+_ = Tmpdir.piston
 FileUtils.rm_rf(Tmpdir.where, :verbose => $DEBUG)

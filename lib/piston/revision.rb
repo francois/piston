@@ -27,6 +27,10 @@ module Piston
     end
 
     def to_s
+      "revision #{@revision}"
+    end
+
+    def inspect
       "Piston::Revision(#{@repository.url}@#{@revision})"
     end
 

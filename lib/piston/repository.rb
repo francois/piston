@@ -47,6 +47,10 @@ module Piston
     end
 
     def to_s
+      @url
+    end
+
+    def inspect
       "Piston::Repository(#{@url})"
     end
     

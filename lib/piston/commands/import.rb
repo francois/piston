@@ -36,6 +36,7 @@ module Piston
         end
         
         working_copy.import(revision, options[:lock])
+        logger.info {"Imported #{revision} from #{repository}"}
       end
     end
   end

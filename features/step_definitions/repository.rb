@@ -80,6 +80,18 @@ When /^I update(?:ed)? ([\w\/]+)$/ do |path|
   end
 end
 
+When /^I committed$/ do
+  if (@wcdir + ".git").directory?
+    Dir.chdir(@wcdir) do
+      git(:commit, "--message", "commit", "--all")
+      stdout.should =~ /Created commit [a-fA-F0-9]+/
+    end
+  else
+    stdout = svn(:commit, "--message", "commit", @wcdir)
+    stdout.should =~ /Committed revision \d+/
+  end
+end
+
 Then /^I should see "([^"]+)"(\s+debug)?$/ do |regexp, debug|
   re = Regexp.new(regexp, Regexp::IGNORECASE + Regexp::MULTILINE)
   STDERR.puts @stdout if debug

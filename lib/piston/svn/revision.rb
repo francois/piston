@@ -94,6 +94,15 @@ module Piston
         Piston::Svn::EXCLUDE
       end
 
+      def resolve!
+        logger.debug {"Resolving #{@revision} to it's real value"}
+        return if @revision.to_i == @revision && !@revision.blank?
+        data = YAML.load(svn(:info, repository.url))
+        @revision = data["Last Changed Rev"].to_i
+        logger.debug {"Resolved #{@revision}"}
+        @revision
+      end
+
       private
       def relative_paths(paths)
         paths.map { |item| Pathname.new(item).relative_path_from(@dir) }

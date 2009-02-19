@@ -12,9 +12,10 @@ module Piston
         values = working_copy.recall
         return "#{wcdir} is locked: not updating" if values["lock"]
 
-        repository = working_copy.repository
+        repository    = working_copy.repository
         from_revision = repository.at(values["handler"])
-        to_revision = repository.at(to)
+        to_revision   = repository.at(to)
+        to_revision.resolve!
 
         logger.debug {"Validating that #{from_revision} exists and is capable of performing the update"}
         from_revision.validate!
@@ -23,7 +24,7 @@ module Piston
 
         changed = working_copy.update(from_revision, to_revision, options[:lock])
         if changed then
-          logger.info {"#{wcdir} updated to revision #{to_revision.revision}"}
+          logger.info {"Updated #{wcdir} to #{to_revision}"}
         else
           logger.info {"Upstream #{repository} was unchanged from #{from_revision}"}
         end

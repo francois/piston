@@ -315,7 +315,7 @@ Main {
                                          :dry_run => params["dry-run"].value)
 
       begin
-        puts cmd.run(File.expand_path(params["directory"].value), target_revision)
+        cmd.run(File.expand_path(params["directory"].value), target_revision)
       rescue
         $stderr.puts $!.message
         $stderr.puts $!.backtrace.join("\n")

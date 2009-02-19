@@ -13,3 +13,13 @@ Feature: Import remote repository
     Then I should find a libcalc folder
     Then I should find a libcalc/libcalc.rb file
     Then I should find a libcalc/.piston.yml file
+
+  Scenario: Importing from a classic Subversion project layout automatically uses project's name and not trunk for the local folder name
+    Given a newly created Subversion project
+    And a remote Subversion project named libcalc using the classic layout
+    And a file named libcalc.rb with content "a\nb\nc" in remote libcalc project
+    When I import libcalc/trunk
+    Then I should see "Imported revision \d+ from .*/libcalc"
+    Then I should find a libcalc folder
+    Then I should find a libcalc/libcalc.rb file
+    Then I should find a libcalc/.piston.yml file

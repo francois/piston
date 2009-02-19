@@ -6,12 +6,18 @@ Given /^a newly created Subversion project$/ do
   svn :checkout, "file:///#{@reposdir}", @wcdir
 end
 
-Given /^a remote Subversion project named (\w+)$/ do |name|
+Given /^a remote Subversion project named (\w+)( using the classic layout)?$/ do |name, classic|
   @remotereposdir = Tmpdir.where("remote/repos/#{name}")
   @remotereposdir.mkpath
   svnadmin :create, @remotereposdir
   @remotewcdir = Tmpdir.where("remote/wc/#{name}")
   svn :checkout, "file:///#{@remotereposdir}", @remotewcdir
+  if classic then
+    svn :mkdir, @remotewcdir + "trunk", @remotewcdir + "branches", @remotewcdir + "tags"
+    svn :commit, "--message", "classic layout", @remotewcdir
+    @removewcdir    = @remotewcdir + "trunk"
+    @remotereposdir = @remotereposdir + "trunk"
+  end
 end
  
 Given /^a file named ([^\s]+) with content "([^"]+)" in remote (\w+) project$/ do |filename, content, project|
@@ -21,7 +27,7 @@ Given /^a file named ([^\s]+) with content "([^"]+)" in remote (\w+) project$/ d
   svn :commit, "--message", "adding #{filename}", @remotewcdir
 end
 
-When /^I import ([\w]+)$/ do |project|
+When /^I import ([\w\/]+)$/ do |project|
   Dir.chdir(@wcdir) do
     cmd = "#{Tmpdir.piston} import file://#{@remotereposdir} 2>&1"
     STDERR.puts cmd.inspect if $DEBUG

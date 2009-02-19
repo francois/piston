@@ -175,6 +175,7 @@ module Piston
     end
 
     def import(revision, lock)
+      lock ||= false
       repository = revision.repository
       tmpdir = temp_dir_name
       begin
@@ -206,6 +207,7 @@ module Piston
     # Update this working copy from +from+ to +to+, which means merging local changes back in
     # Return true if changed, false if not
     def update(revision, to, lock)
+      lock ||= false
       tmpdir = temp_dir_name
       begin
         logger.info {"Checking out the repository at #{revision.revision}"}

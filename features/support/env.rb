@@ -11,5 +11,5 @@ class Tmpdir
   end
 end
 
-puts "Removing #{Tmpdir.where}"
-FileUtils.rm_rf(Tmpdir.where, :verbose => true)
+puts "Removing #{Tmpdir.where}" if $DEBUG
+FileUtils.rm_rf(Tmpdir.where, :verbose => $DEBUG)

@@ -1,12 +1,22 @@
 Given /^a newly created Subversion project$/ do
   @reposdir = Tmpdir.where(:repos)
+  @reposdir.mkpath
   svnadmin :create, @reposdir 
-  svn :checkout, "file:///#{@reposdir.realpath}", Tmpdir.where(:wc)
+  @wcdir = Tmpdir.where(:wc)
+  svn :checkout, "file:///#{@reposdir}", @wcdir
 end
 
 Given /^a remote Subversion project named (\w+)$/ do |name|
   @remotereposdir = Tmpdir.where("#{name}/repos")
   @remotereposdir.mkpath
   svnadmin :create, @remotereposdir
-  svn :checkout, "file:///#{@remotereposdir.realpath}", Tmpdir.where("#{name}/wc")
+  @remotewcdir = Tmpdir.where("#{name}/wc")
+  svn :checkout, "file:///#{@remotereposdir}", @remotewcdir
+end
+ 
+Given /^a file named ([^\s]+) with content "([^"]+)" in remote (\w+) project$/ do |filename, content, project|
+  content.gsub!("\\n", "\n")
+  File.open(@remotewcdir + filename, "w+") {|io| io.puts(content)}
+  svn :add, @remotewcdir + filename
+  svn :commit, "--message", "adding #{filename}", @remotewcdir
 end

@@ -157,7 +157,7 @@ module Piston
             svn(:propdel, $1, path)
           end
         end
-        remember({:repository_url => props[Piston::Svn::ROOT], :lock => props[Piston::Svn::LOCKED], :repository_class => Piston::Svn::Repository.name}, {Piston::Svn::REMOTE_REV => props[Piston::Svn::REMOTE_REV], Piston::Svn::UUID => props[Piston::Svn::UUID]})
+        remember({:repository_url => props[Piston::Svn::ROOT], :lock => props[Piston::Svn::LOCKED] || false, :repository_class => Piston::Svn::Repository.name}, {Piston::Svn::REMOTE_REV => props[Piston::Svn::REMOTE_REV], Piston::Svn::UUID => props[Piston::Svn::UUID]})
       end
 
       protected

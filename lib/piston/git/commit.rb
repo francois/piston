@@ -105,6 +105,14 @@ module Piston
       def to_s
         "commit #{sha1}"
       end
+
+      def resolve!
+        Dir.chdir(path) do
+          logger.debug {"Resolving #{@revision} to a SHA"}
+          @revision = git(:log, "-n", 1, "--pretty=oneline").split(" ", 2).first
+          logger.debug {"Resolved to #{@revision}"}
+        end
+      end
     end
   end
 end

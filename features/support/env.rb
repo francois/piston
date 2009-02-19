@@ -7,7 +7,6 @@ require "spec"
 class Tmpdir
   def self.where(subpath=nil)
     @tmpdir ||= Pathname.new(ENV["TMPDIR"] || ENV["TMP"] || "tmp") + "piston"
-    @tmpdir.mkpath
     @tmpdir + subpath.to_s
   end
 
@@ -21,6 +20,8 @@ end
 
 STDERR.puts "Removing #{Tmpdir.where}" if $DEBUG
 
-# Prime the cache
-_ = Tmpdir.piston
-FileUtils.rm_rf(Tmpdir.where, :verbose => $DEBUG)
+Before do
+  _ = Tmpdir.piston
+  FileUtils.rm_rf(Tmpdir.where, :verbose => $DEBUG)
+  Tmpdir.where.mkpath
+end

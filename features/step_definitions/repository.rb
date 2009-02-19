@@ -34,3 +34,7 @@ Then /^I should see "([^"]+)"$/ do |regexp|
   re = Regexp.new(regexp, Regexp::IGNORECASE + Regexp::MULTILINE)
   @stdout.should =~ re
 end
+
+Then /^I should find a ([\w+\/]+) folder$/ do |name|
+  File.exist?(@wcdir + name).should be_true
+end

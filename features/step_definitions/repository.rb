@@ -20,3 +20,15 @@ Given /^a file named ([^\s]+) with content "([^"]+)" in remote (\w+) project$/ d
   svn :add, @remotewcdir + filename
   svn :commit, "--message", "adding #{filename}", @remotewcdir
 end
+
+When /^I import ([\w]+)$/ do |project|
+  Dir.chdir(@wcdir) do
+    @stdout = `piston import file:///#{@reposdir} 2>&1`
+    STDERR.puts @stdout #if $DEBUG
+  end
+end
+
+Then /^I should see "([^"]+)"$/ do |regexp|
+  re = Regexp.new(regexp, Regexp::IGNORECASE + Regexp::MULTILINE)
+  @stdout.should =~ re
+end

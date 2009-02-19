@@ -2,6 +2,7 @@ require 'cucumber/formatters/unicode' # Comment out this line if you don't want 
 require "pathname"
 require "fileutils"
 require File.dirname(__FILE__) + "/svn"
+require "spec"
 
 class Tmpdir
   def self.where(subpath=nil)
@@ -11,5 +12,5 @@ class Tmpdir
   end
 end
 
-puts "Removing #{Tmpdir.where}" if $DEBUG
+STDERR.puts "Removing #{Tmpdir.where}" if $DEBUG
 FileUtils.rm_rf(Tmpdir.where, :verbose => $DEBUG)

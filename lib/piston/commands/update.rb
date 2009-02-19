@@ -21,8 +21,12 @@ module Piston
 
         logger.info {"Updating from #{from_revision} to #{to_revision}"}
 
-        working_copy.update(from_revision, to_revision, options[:lock])
-        "#{wcdir} updated to revision #{to_revision.revision}"
+        changed = working_copy.update(from_revision, to_revision, options[:lock])
+        if changed then
+          logger.info {"#{wcdir} updated to revision #{to_revision.revision}"}
+        else
+          logger.info {"Upstream #{repository} was unchanged from #{from_revision}"}
+        end
       end
     end
   end

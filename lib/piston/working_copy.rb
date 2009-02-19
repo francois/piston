@@ -204,6 +204,7 @@ module Piston
     end
 
     # Update this working copy from +from+ to +to+, which means merging local changes back in
+    # Return true if changed, false if not
     def update(revision, to, lock)
       tmpdir = temp_dir_name
       begin
@@ -231,11 +232,14 @@ module Piston
         add(added)
         logger.debug {"Deleting files from version control"}
         delete(deleted)
-        logger.debug {"Merging local changes"}
+
         # merge local changes updating to revision before downgrade was made
+        logger.debug {"Merging local changes"}
         merge_local_changes(revision_to_return)
 
         remember(recall.merge(:lock => lock), to.remember_values)
+
+        ![added, deleted, renamed].all?(&:empty?)
       ensure
         logger.debug {"Removing temporary directory: #{tmpdir}"}
         tmpdir.rmtree rescue nil

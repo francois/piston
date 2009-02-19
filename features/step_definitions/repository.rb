@@ -61,10 +61,19 @@ Given /^an existing ([\w\/]+) folder$/ do |name|
   svn :commit, "--message", "creating #{name}", @wcdir
 end
 
-When /^I import ([\w\/]+)(?: into ([\w\/]+))?$/ do |project, into|
+When /^I import(?:ed)? ([\w\/]+)(?: into ([\w\/]+))?$/ do |project, into|
   Dir.chdir(@wcdir) do
     cmd = "#{Tmpdir.piston} import --verbose 5 file://#{@remotereposdir} 2>&1"
     cmd << " #{into}" if into
+    STDERR.puts cmd.inspect if $DEBUG
+    @stdout = `#{cmd}`
+    STDERR.puts @stdout if $DEBUG
+  end
+end
+
+When /^I update(?:ed)? ([\w\/]+)$/ do |path|
+  Dir.chdir(@wcdir) do
+    cmd = "#{Tmpdir.piston} update --verbose 5 #{@wcdir + path}  2>&1"
     STDERR.puts cmd.inspect if $DEBUG
     @stdout = `#{cmd}`
     STDERR.puts @stdout if $DEBUG

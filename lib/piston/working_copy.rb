@@ -223,13 +223,17 @@ module Piston
         added, deleted, renamed = revision.update_to(to.revision)
 
         logger.info {"Updating working copy"}
-        logger.debug {"Renaming files"}
+
         # rename before copy because copy_from will copy these files
+        logger.debug {"Renaming files"}
         rename(renamed)
+
         logger.debug {"Copying files from temporary directory"}
         copy_from(revision)
+
         logger.debug {"Adding new files to version control"}
         add(added)
+
         logger.debug {"Deleting files from version control"}
         delete(deleted)
 
@@ -239,7 +243,9 @@ module Piston
 
         remember(recall.merge(:lock => lock), to.remember_values)
 
-        ![added, deleted, renamed].all?(&:empty?)
+        status = svn(:status, path)
+        logger.debug { {:added => added, :deleted => deleted, :renamed => renamed, :status => status.split("\n")}.to_yaml }
+        !status.empty?
       ensure
         logger.debug {"Removing temporary directory: #{tmpdir}"}
         tmpdir.rmtree rescue nil

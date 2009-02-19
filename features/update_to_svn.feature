@@ -23,7 +23,7 @@ Feature: Updating from a remote Subversion repository
     Then I should see "Updated .*/libcalc to revision \d+"
     And I should find a libcalc/libcomplex.rb file
 
-  Scenario: Updating a remote repository when a file wasremoved
+  Scenario: Updating a remote repository when a file was removed
     Given a newly created Subversion project
     And a remote Subversion project named libcalc
     And a file named libcalc.rb with content "a" in remote libcalc project
@@ -32,4 +32,16 @@ Feature: Updating from a remote Subversion repository
     And a file named libcalc.rb was deleted in remote libcalc project
     When I update libcalc
     Then I should see "Updated .*/libcalc to revision \d+"
-    And I should not find a libcalc/libcomplex.rb file
+    And I should not find a libcalc/libcalc.rb file
+
+  Scenario: Updating a remote repository when a file was updated
+    Given a newly created Subversion project
+    And a remote Subversion project named libcalc
+    And a file named libcalc.rb with content "a" in remote libcalc project
+    And I imported libcalc
+    And I committed
+    And a file named libcalc.rb was updated with "a\nb\nc" in remote libcalc project
+    When I update libcalc
+    Then I should see "Updated .*/libcalc to revision \d+" debug
+    And I should find a libcalc/libcalc.rb file
+    And I should find "a\nb\nc" in libcalc/libcalc.rb

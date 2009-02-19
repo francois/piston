@@ -5,7 +5,8 @@ Given /^a newly created Git project$/ do
     git :init
     touch :README
     git :add, "."
-    git :commit, "--message", "first commit"
+    stdout = git :commit, "--message", "first commit"
+    stdout.should =~ /Created commit [a-fA-F0-9]+/
   end
 end
 
@@ -24,7 +25,8 @@ Given /^a remote Git project named (\w+)$/ do |name|
     git :init
     touch :README
     git :add, "."
-    git :commit, "--message", "initial commit"
+    stdout = git :commit, "--message", "initial commit"
+    stdout.should =~ /Created commit [a-fA-F0-9]+/
   end
 end
 
@@ -36,7 +38,8 @@ Given /^a remote Subversion project named (\w+)( using the classic layout)?$/ do
   svn :checkout, "file:///#{@remotereposdir}", @remotewcdir
   if classic then
     svn :mkdir, @remotewcdir + "trunk", @remotewcdir + "branches", @remotewcdir + "tags"
-    svn :commit, "--message", "classic layout", @remotewcdir
+    stdout = svn :commit, "--message", "classic layout", @remotewcdir
+    stdout.should =~ /Committed revision \d+/
     @remotewcdir    = @remotewcdir + "trunk"
     @remotereposdir = @remotereposdir + "trunk"
   end
@@ -46,10 +49,12 @@ Given /^a file named ([^\s]+) was deleted in remote (\w+) project$/ do |filename
   Dir.chdir(@remotewcdir) do
     if (@remotewcdir + ".git").directory? then
       git :rm, filename
-      git :commit, "--message", "removing #{filename}"
+      stdout = git :commit, "--message", "removing #{filename}"
+      stdout.should =~ /Created commit [a-fA-F0-9]+/
     else
       svn :rm, filename
-      svn :commit, "--message", "removing #{filename}"
+      stdout = svn :commit, "--message", "removing #{filename}"
+      stdout.should =~ /Committed revision \d+/
     end
   end
 end
@@ -60,17 +65,35 @@ Given /^a file named ([^\s]+) with content "([^"]+)" in remote (\w+) project$/ d
   Dir.chdir(@remotewcdir) do
     if (@remotewcdir + ".git").directory? then
       git :add, "."
-      git :commit, "--message", "adding #{filename}"
+      stdout = git :commit, "--message", "adding #{filename}"
+      stdout.should =~ /Created commit [a-fA-F0-9]}/
     else
       svn :add, filename
-      svn :commit, "--message", "adding #{filename}"
+      stdout = svn :commit, "--message", "adding #{filename}"
+      stdout.should =~ /Committed revision \d+/
+    end
+  end
+end
+
+Given /^a file named ([^\s]+) was updated with "([^"]+)" in remote (\w+) project$/ do |filename, content, project|
+  content.gsub!("\\n", "\n")
+  File.open(@remotewcdir + filename, "w+") {|io| io.puts(content)}
+  Dir.chdir(@remotewcdir) do
+    if (@remotewcdir + ".git").directory? then
+      git :add, "."
+      stdout = git :commit, "--message", "updating #{filename}"
+      stdout.should =~ /Created commit [a-fA-F0-9]}/
+    else
+      stdout = svn :commit, "--message", "updating #{filename}"
+      stdout.should =~ /Committed revision \d+/
     end
   end
 end
 
 Given /^an existing ([\w\/]+) folder$/ do |name|
   svn :mkdir, @wcdir + name
-  svn :commit, "--message", "creating #{name}", @wcdir
+  stdout = svn :commit, "--message", "creating #{name}", @wcdir
+  stdout.should =~ /Committed revision \d+/
 end
 
 When /^I import(?:ed)? ([\w\/]+)(?: into ([\w\/]+))?$/ do |project, into|
@@ -95,7 +118,7 @@ end
 When /^I committed$/ do
   if (@wcdir + ".git").directory?
     Dir.chdir(@wcdir) do
-      git(:commit, "--message", "commit", "--all")
+      stdout = git :commit, "--message", "commit", "--all"
       stdout.should =~ /Created commit [a-fA-F0-9]+/
     end
   else
@@ -128,4 +151,7 @@ Then /^I should (not )?find a ([.\w+\/]+) file$/ do |not_find, name|
     File.exist?(@wcdir + name).should be_true
     File.file?(@wcdir + name).should be_true
   end
+end
+
+Then /^I should find "a\\nb\\nc" in libcalc\/libcalc\.rb$/ do
 end

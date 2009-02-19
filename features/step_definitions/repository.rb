@@ -42,6 +42,18 @@ Given /^a remote Subversion project named (\w+)( using the classic layout)?$/ do
   end
 end
  
+Given /^a file named ([^\s]+) was deleted in remote (\w+) project$/ do |filename, project|
+  Dir.chdir(@remotewcdir) do
+    if (@remotewcdir + ".git").directory? then
+      git :rm, filename
+      git :commit, "--message", "removing #{filename}"
+    else
+      svn :rm, filename
+      svn :commit, "--message", "removing #{filename}"
+    end
+  end
+end
+
 Given /^a file named ([^\s]+) with content "([^"]+)" in remote (\w+) project$/ do |filename, content, project|
   content.gsub!("\\n", "\n")
   File.open(@remotewcdir + filename, "w+") {|io| io.puts(content)}
@@ -108,7 +120,12 @@ Then /^I should( not)? find a ([\w+\/]+) folder$/ do |not_find, name|
   end
 end
 
-Then /^I should find a ([.\w+\/]+) file$/ do |name|
-  File.exist?(@wcdir + name).should be_true
-  File.file?(@wcdir + name).should be_true
+Then /^I should (not )?find a ([.\w+\/]+) file$/ do |not_find, name|
+  if not_find then
+    File.exist?(@wcdir + name).should be_false
+    File.file?(@wcdir + name).should be_false
+  else
+    File.exist?(@wcdir + name).should be_true
+    File.file?(@wcdir + name).should be_true
+  end
 end

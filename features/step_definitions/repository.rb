@@ -23,7 +23,7 @@ end
 
 When /^I import ([\w]+)$/ do |project|
   Dir.chdir(@wcdir) do
-    cmd = "#{Tmpdir.piston} import file:///#{@reposdir} 2>&1"
+    cmd = "#{Tmpdir.piston} import file://#{@remotereposdir} 2>&1"
     STDERR.puts cmd.inspect if $DEBUG
     @stdout = `#{cmd}`
     STDERR.puts @stdout if $DEBUG

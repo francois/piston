@@ -1,3 +1,14 @@
+Given /^a newly created Git project$/ do
+  @wcdir = Tmpdir.where(:wc)
+  @wcdir.mkpath
+  Dir.chdir(@wcdir) do
+    git :init
+    touch :README
+    git :add, "."
+    git :commit, "--message", "first commit"
+  end
+end
+
 Given /^a newly created Subversion project$/ do
   @reposdir = Tmpdir.where(:repos)
   @reposdir.mkpath

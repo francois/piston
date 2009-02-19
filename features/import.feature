@@ -11,5 +11,5 @@ Feature: Import remote repository
     When I import libcalc
     Then I should see "Imported revision \d+ from .*/libcalc"
     Then I should find a libcalc folder
-    Then I should find a libcalc/README file
+    Then I should find a libcalc/libcalc.rb file
     Then I should find a libcalc/.piston.yml file

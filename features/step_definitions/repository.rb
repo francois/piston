@@ -37,4 +37,10 @@ end
 
 Then /^I should find a ([\w+\/]+) folder$/ do |name|
   File.exist?(@wcdir + name).should be_true
+  File.directory?(@wcdir + name).should be_true
+end
+
+Then /^I should find a ([.\w+\/]+) file$/ do |name|
+  File.exist?(@wcdir + name).should be_true
+  File.file?(@wcdir + name).should be_true
 end

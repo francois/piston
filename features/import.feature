@@ -14,6 +14,17 @@ Feature: Import remote repository
     Then I should find a libcalc/libcalc.rb file
     Then I should find a libcalc/.piston.yml file
 
+  Scenario: Importing from a Git repository to a named folder
+    Given a newly created Subversion project
+    And a remote Git project named libcalc
+    And a file named libcalc.rb with content "a\nb\nc" in remote libcalc project
+    And an existing vendor folder
+    When I import libcalc into vendor/libcalc
+    Then I should see "Imported commit [\da-f]+ from .*/libcalc.git" debug
+    Then I should find a vendor/libcalc folder
+    Then I should find a vendor/libcalc/libcalc.rb file
+    Then I should find a vendor/libcalc/.piston.yml file
+
   Scenario: Importing from a Subversion repository
     Given a newly created Subversion project
     And a remote Subversion project named libcalc

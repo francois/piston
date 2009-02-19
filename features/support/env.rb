@@ -2,7 +2,6 @@ require 'cucumber/formatters/unicode' # Comment out this line if you don't want 
 require "pathname"
 require "fileutils"
 require File.dirname(__FILE__) + "/svn"
-require File.dirname(__FILE__) + "/git"
 require "spec"
 
 class Tmpdir

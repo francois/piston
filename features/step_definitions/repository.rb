@@ -45,6 +45,11 @@ Given /^a file named ([^\s]+) with content "([^"]+)" in remote (\w+) project$/ d
   end
 end
 
+Given /^an existing ([\w\/]+) folder$/ do |name|
+  svn :mkdir, @wcdir + name
+  svn :commit, "--message", "creating #{name}", @wcdir
+end
+
 When /^I import ([\w\/]+)(?: into ([\w\/]+))?$/ do |project, into|
   Dir.chdir(@wcdir) do
     cmd = "#{Tmpdir.piston} import --verbose 5 file://#{@remotereposdir} 2>&1"

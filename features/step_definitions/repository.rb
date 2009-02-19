@@ -15,7 +15,7 @@ Given /^a remote Subversion project named (\w+)( using the classic layout)?$/ do
   if classic then
     svn :mkdir, @remotewcdir + "trunk", @remotewcdir + "branches", @remotewcdir + "tags"
     svn :commit, "--message", "classic layout", @remotewcdir
-    @removewcdir    = @remotewcdir + "trunk"
+    @remotewcdir    = @remotewcdir + "trunk"
     @remotereposdir = @remotereposdir + "trunk"
   end
 end
@@ -36,8 +36,9 @@ When /^I import ([\w\/]+)$/ do |project|
   end
 end
 
-Then /^I should see "([^"]+)"$/ do |regexp|
+Then /^I should see "([^"]+)"(\s+debug)?$/ do |regexp, debug|
   re = Regexp.new(regexp, Regexp::IGNORECASE + Regexp::MULTILINE)
+  STDERR.puts @stdout if debug
   @stdout.should =~ re
 end
 

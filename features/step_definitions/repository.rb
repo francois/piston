@@ -7,10 +7,10 @@ Given /^a newly created Subversion project$/ do
 end
 
 Given /^a remote Subversion project named (\w+)$/ do |name|
-  @remotereposdir = Tmpdir.where("#{name}/repos")
+  @remotereposdir = Tmpdir.where("remote/repos/#{name}")
   @remotereposdir.mkpath
   svnadmin :create, @remotereposdir
-  @remotewcdir = Tmpdir.where("#{name}/wc")
+  @remotewcdir = Tmpdir.where("remote/wc/#{name}")
   svn :checkout, "file:///#{@remotereposdir}", @remotewcdir
 end
  

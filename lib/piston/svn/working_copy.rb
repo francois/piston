@@ -104,7 +104,7 @@ module Piston
       end
 
       def status(subpath=nil)
-        status(:status, path + subpath.to_s).split("\n").inject([]) do |memo, line|
+        svn(:status, path + subpath.to_s).split("\n").inject([]) do |memo, line|
           next memo unless line =~ /^\w.+\s(.*)$/
           memo << [$1, $2]
         end

@@ -88,6 +88,9 @@ img {
 	clear: both;
 	width: 100%;
 }
+#body.onecol .wrapper {
+  background-color: #d8b9ab;
+}
 #body-top {
 	background: url(images/body_top.gif) no-repeat;
 }

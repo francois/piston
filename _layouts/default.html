@@ -27,10 +27,12 @@
 			<a href="http://piston.rubyforge.org/">RubyForge</a>
 			<a class="lastchild" href="http://www.freewebsitetemplates.com">Google Group</a>
 		</div>
-		<div id="body">
+    <div id="body"{% if page.onecol %} class="onecol"{% endif %}>
 			<div id="body-top">
 				<div id="body-bot">
-          {{ content }}
+          <div class="wrapper">
+            {{ content }}
+          </div>
 					<div class="clear"></div>
 				</div>
 			</div>

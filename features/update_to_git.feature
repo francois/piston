@@ -64,7 +64,7 @@ Feature: Updating from a remote Subversion repository
     And I imported libcalc
     And I committed
     When I update libcalc
-    Then I should see "Upstream .*/libcalc was unchanged from revision \d+"
+    Then I should see "Upstream .*/libcalc.git was unchanged from commit [a-fA-F0-9]+"
     
   Scenario: Updating from a Subversion repository when a file was added
     Given a newly created Git project

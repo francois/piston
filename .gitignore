@@ -6,3 +6,4 @@ pkg
 *.iws
 .config
 InstalledFiles
+*.gem

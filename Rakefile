@@ -4,7 +4,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name              = "piston"
-    s.summary           = "Easy your vendor branch management worries"
+    s.summary           = "Ease your vendor branch management worries"
     s.email             = "francois@teksol.info"
     s.homepage          = "http://francois.github.com/piston"
     s.description       = "Piston makes it easy to merge vendor branches into your own repository, without worrying about which revisions were grabbed or not.  Piston will also keep your local changes in addition to the remote changes."

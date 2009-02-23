@@ -27,13 +27,16 @@ img {
 	margin: auto;
 	text-align: left;
 }
-#header p {
-	font-size:18px;
+#header cite {
+  display: inline;
+}
+#header p, #header cite {
+	font-size:16px;
 	font-style:italic;
 	color:#FFFFFF;
 	font-family:Georgia, "Times New Roman", Times, serif;
 }
-#header p.more {
+#header p.more, #header cite.more {
 	padding-right: 22px;
 }
 #header {
@@ -43,7 +46,7 @@ img {
 #header div {
 	padding: 183px 213px 0px 82px;
 }
-#header p {
+#header p, #header cite {
 	margin: 0px;
 	padding: 0px;
 }

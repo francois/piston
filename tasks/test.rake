@@ -24,7 +24,7 @@ namespace :test do
     # 10 minutes ago
     cutoff_at = Time.now - 10 * 60
 
-    t.test_files = FileList[""test/unit/**/test_*.rb"].select do |path|
+    t.test_files = FileList["test/unit/**/test_*.rb"].select do |path|
       File.mtime(path) > cutoff_at
     end
   end

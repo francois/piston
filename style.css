@@ -143,6 +143,9 @@ img {
 	margin: 14px;
 	text-align: center;
 }
+#footer p {
+  margin: 0;
+}
 h2 {
 	margin: 0px;
 	padding: 0px 0px 10px 0px;

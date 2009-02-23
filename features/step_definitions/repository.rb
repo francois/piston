@@ -105,9 +105,19 @@ Given /^a file named ([^\s]+) was updated with "([^"]+)" in remote (\w+) project
 end
 
 Given /^an existing ([\w\/]+) folder$/ do |name|
-  svn :mkdir, @wcdir + name
-  stdout = svn :commit, "--message", "creating #{name}", @wcdir
-  stdout.should =~ /Committed revision \d+/
+  if (@wcdir + ".git").directory? then
+    (@wcdir + "vendor").mkpath
+    touch(@wcdir + "vendor/.gitignore")
+    Dir.chdir(@wcdir) do
+      git :add, "."
+      stdout = git :commit, "--message", "registered #{name}/"
+      stdout.should =~ /Created (?:initial )?commit [a-fA-F0-9]+/
+    end
+  else
+    svn :mkdir, @wcdir + name
+    stdout = svn :commit, "--message", "creating #{name}", @wcdir
+    stdout.should =~ /Committed revision \d+/
+  end
 end
 
 When /^I import(?:ed)? ([\w\/]+)(?: into ([\w\/]+))?$/ do |project, into|

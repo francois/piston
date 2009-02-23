@@ -20,7 +20,7 @@ Feature: Import remote repository into a Subversion repository
     And a file named libcalc.rb with content "a\nb\nc" in remote libcalc project
     And an existing vendor folder
     When I import libcalc into vendor/libcalc
-    Then I should see "Imported commit [\da-f]+ from .*/libcalc.git" debug
+    Then I should see "Imported commit [\da-f]+ from .*/libcalc.git"
     And I should find a vendor/libcalc folder
     And I should find a vendor/libcalc/libcalc.rb file
     And I should find a vendor/libcalc/.piston.yml file

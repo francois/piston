@@ -107,11 +107,7 @@ module Piston
       end
 
       def resolve!
-        Dir.chdir(@dir) do
-          logger.debug {"Resolving #{@revision} to a SHA"}
-          @revision = git(:log, "-n", 1, "--pretty=oneline").split(" ", 2).first
-          logger.debug {"Resolved to #{@revision}"}
-        end
+        # NOP, because @sha1 is what we want
       end
     end
   end

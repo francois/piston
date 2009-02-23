@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://francois.github.com/piston}
   s.rdoc_options = ["--inline-source", "--charset=UTF-8"]
   s.require_paths = ["lib"]
+  s.rubyforge_project = %q{piston}
   s.rubygems_version = %q{1.3.1}
   s.summary = %q{Easy your vendor branch management worries}
 

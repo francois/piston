@@ -123,3 +123,15 @@ Feature: Updating from a remote Subversion repository
     When I update libcalc
     Then I should see "Updated .*/libcalc to revision \d+"
     And I should find "a\na\nb\nc\nd\ne\ne" in libcalc/libcalc.rb
+
+  Scenario: Updating from a Git repository when both local and remote changes have occured
+    Given a newly created Subversion project
+    And a remote Git project named libcalc
+    And a file named libcalc.rb with content "a\nb\nc\nd\ne" in remote libcalc project
+    And I imported libcaclc
+    And I committed
+    And a file named libcalc.rb was updated with "a\na\nb\nc\nd\ne" in remote libcalc project
+    And I changed libcalc/libcalc.rb to "a\nb\nc\nd\ne\ne"
+    When I update libcalc
+    Then I should see "Updated .*/libcalc to commit [a-fA-F0-9]+"
+    And I should find "a\na\nb\nc\nd\ne\ne" in libcalc/libcalc.rb

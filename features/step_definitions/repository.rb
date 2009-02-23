@@ -196,6 +196,14 @@ Then /^I should find "([^"]+)" in ([\w\/.]+)$/ do |content, path|
   File.read(@wcdir + path).should =~ Regexp.new(content, Regexp::MULTILINE + Regexp::IGNORECASE)
 end
 
+Then /^I should see a successful import message from Piston$/ do
+  if (@remotewcdir + ".git").directory? then
+    @stdout.should =~ /Imported commit [\da-f]+ from .*\/\w+.git/
+  else
+    @stdout.should =~ /Imported revision \d+ from .*\/\w+/
+  end
+end
+
 Then /^I should see a successful update message from Piston$/ do
   if (@remotewcdir + ".git").directory? then
     @stdout.should =~ /Updated .*\/libcalc to commit [a-fA-F0-9]+/

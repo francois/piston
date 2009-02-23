@@ -191,3 +191,12 @@ p.more {
 .clear {
 	clear: both;
 }
+.highlight {
+  margin: 0 0 18px 0;
+  padding: 4px;
+  background-color: white;
+  border: 1px solid #260403;
+}
+.highlight .console          { }
+.highlight .console .prompt  { color: #1D110B; }
+.highlight .console .command { color: #76644F; }

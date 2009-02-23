@@ -104,6 +104,21 @@ Given /^a file named ([^\s]+) was updated with "([^"]+)" in remote (\w+) project
   end
 end
 
+Given /^I changed ([\w\/.]+) to "([^"]+)"$/ do |filename, content|
+  content.gsub!("\\n", "\n")
+  File.open(@wcdir + filename, "w+") {|io| io.puts(content)}
+  Dir.chdir(@wcdir) do
+    if (@wcdir + ".git").directory? then
+      git :add, "."
+      stdout = git :commit, "--message", "adding #{filename}"
+      stdout.should =~ /Created (?:initial )?commit [a-fA-F0-9]/
+    else
+      stdout = svn :commit, "--message", "adding #{filename}"
+      stdout.should =~ /Committed revision \d+/
+    end
+  end
+end
+
 Given /^an existing ([\w\/]+) folder$/ do |name|
   if (@wcdir + ".git").directory? then
     (@wcdir + "vendor").mkpath
@@ -177,5 +192,6 @@ Then /^I should (not )?find a ([.\w+\/]+) file$/ do |not_find, name|
   end
 end
 
-Then /^I should find "a\\nb\\nc" in libcalc\/libcalc\.rb$/ do
+Then /^I should find "([^"]+)" in ([\w\/.]+)$/ do |content, path|
+  File.read(@wcdir + path).should =~ Regexp.new(content, Regexp::MULTILINE + Regexp::IGNORECASE)
 end

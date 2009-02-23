@@ -195,3 +195,11 @@ end
 Then /^I should find "([^"]+)" in ([\w\/.]+)$/ do |content, path|
   File.read(@wcdir + path).should =~ Regexp.new(content, Regexp::MULTILINE + Regexp::IGNORECASE)
 end
+
+Then /^I should see a successful update message from Piston$/ do
+  if (@remotewcdir + ".git").directory? then
+    @stdout.should =~ /Updated .*\/libcalc to commit [a-fA-F0-9]+/
+  else
+    @stdout.should =~ /Updated .*\/libcalc to revision \d+/
+  end
+end

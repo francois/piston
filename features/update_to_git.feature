@@ -111,3 +111,27 @@ Feature: Updating from a remote Subversion repository
     Then I should see "Updated .*/libcalc to commit [a-fA-F0-9]+"
     And I should not find a libcalc/libcalc.rb file
     And I should find a libcalc/libcomplex.rb file
+
+  Scenario: Updating from a Subversion repository when both local and remote changes have occured
+    Given a newly created Git project
+    And a remote Subversion project named libcalc
+    And a file named libcalc.rb with content "a\nb\nc\nd\ne" in remote libcalc project
+    And I imported libcaclc
+    And I committed
+    And a file named libcalc.rb was updated with "a\na\nb\nc\nd\ne" in remote libcalc project
+    And I changed libcalc/libcalc.rb to "a\nb\nc\nd\ne\ne"
+    When I update libcalc
+    Then I should see "Updated .*/libcalc to revision \d+"
+    And I should find "a\na\nb\nc\nd\ne\ne" in libcalc/libcalc.rb
+
+  Scenario: Updating from a Git repository when both local and remote changes have occured
+    Given a newly created Git project
+    And a remote Git project named libcalc
+    And a file named libcalc.rb with content "a\nb\nc\nd\ne" in remote libcalc project
+    And I imported libcaclc
+    And I committed
+    And a file named libcalc.rb was updated with "a\na\nb\nc\nd\ne" in remote libcalc project
+    And I changed libcalc/libcalc.rb to "a\nb\nc\nd\ne\ne"
+    When I update libcalc
+    Then I should see "Updated .*/libcalc to commit [a-fA-F0-9]+"
+    And I should find "a\na\nb\nc\nd\ne\ne" in libcalc/libcalc.rb

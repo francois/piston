@@ -27,28 +27,28 @@ img {
 	margin: auto;
 	text-align: left;
 }
-#header cite {
-  display: inline;
-}
-#header p, #header cite {
+#header p {
 	font-size:16px;
 	font-style:italic;
 	color:#FFFFFF;
 	font-family:Georgia, "Times New Roman", Times, serif;
+  margin: 0; padding: 0;
+  text-align: justify;
 }
-#header p.more, #header cite.more {
-	padding-right: 22px;
+#header p.more {
+  text-align: right;
+  margin-top: 16px;
+}
+#header p.more a {
+  background-image: url(images/arrow_right.gif);
+  padding-left: 20px;
 }
 #header {
 	height: 320px;
 	background: url(images/header.jpg) no-repeat;
 }
 #header div {
-	padding: 183px 213px 0px 82px;
-}
-#header p, #header cite {
-	margin: 0px;
-	padding: 0px;
+	padding: 183px 293px 0px 82px;
 }
 #header a {
 	color:#FFFFFF;

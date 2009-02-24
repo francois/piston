@@ -196,5 +196,5 @@ myHead = document.getElementsByTagName("head")[0];
 myCSS = document.createElement("link");
 myCSS.setAttribute("rel","stylesheet");
 myCSS.setAttribute("type","text/css");
-myCSS.setAttribute("href",this.path + "style.css");
+myCSS.setAttribute("href",this.path + "github-commit-badge.css");
 myHead.appendChild(myCSS);

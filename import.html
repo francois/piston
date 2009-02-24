@@ -1,0 +1,46 @@
+---
+title: Import Subcommand Documentation
+layout: default
+onecol: true
+---
+<h1>{{ page.title }}</h1>
+
+<h2><b>When</b> to use it</h2>
+<p>Use the import subcommand to grab an external dependency and manage it locally.  This subcommand is your main entryway into the world of vendor branch management.</p>
+<p>Conceptually, the import subcommand does an <tt>svn export</tt> or <tt>git clone</tt> of the external repository, copies each file into a named folder in your working copy, and throws away the clone / exported directory.</p>
+
+<h2><b>Importing</b> a named branch</h2>
+<p>When importing from Subversion, you can import any directory, including branches or subdirectories of the project.  This is a feature of Subversion, where everything (including branches and tags) are just more directories.</p>
+<p>When importing from Git, you can only import the full repository, but you may import any branch, as long as you know it's name.  Use the <tt>--commit</tt> option to tell Piston what to import.</p>
+
+<h2><b>Example</b> usage</h2>
+<div class="highlight"><pre class="console"><code><span class="prompt">$</span> <span class="command">piston</span> import git://github.com/rails/acts_as_list.git vendor/plugins/acts_as_list
+<span class="prompt">$</span> <span class="command">piston</span> import --commit 2-2-stable git://github.com/rails/rails.git vendor/rails
+<span class="prompt">$</span> <span class="command">piston</span> import http://svn.edgewall.com/repos/trac/trunk/contrib/workflow/
+</code></pre></div>
+
+<h2><b>Command</b> summary</h2>
+<pre>SYNOPSIS
+  piston import repository [directory] [options]+
+
+PARAMETERS
+  repository (1 -&gt; repository) 
+      The repository you wish to Pistonize 
+  directory (1 ~&gt; directory=) 
+      Where to put the Pistonized repository 
+  --verbose=[verbose], -v (0 ~&gt; integer(verbose=0)) 
+      Verbosity level (0 to 5, 0 being the default) 
+  --quiet, -q 
+  --force 
+  --dry-run 
+  --revision=revision, -r (0 ~&gt; revision) 
+      The revision you wish to operate on 
+  --commit=commit (0 ~&gt; commit) 
+      The commit you wish to operate on 
+  --lock 
+      Automatically lock down the revision/commit to protect against blanket 
+      updates 
+  --repository-type=repository-type (0 ~&gt; repository-type=) 
+      Force a specific repository type, for when it's not possible to guess 
+  --help, -h 
+</pre>

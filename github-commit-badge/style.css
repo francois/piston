@@ -1,0 +1,116 @@
+div#github-commit-badge-container {
+	font-family: Verdana, arial, sans-serif;
+	font-size: 80%;
+	width: 600px;
+}
+
+div.github-commit-badge-outline {
+	border: 1px solid gray;
+	border-color: gray;
+	overflow: auto;
+	margin: 8px;
+	padding: 5px;
+	padding-top: 0px;
+	background-color: #ddffff;
+}
+
+div.github-commit-badge-username {
+	border: 0px;
+	margin: 0px;
+	margin-top: 2px;
+	padding-left: 18px;
+	color: yellow;
+	font-weight: bold;
+	background-image:url(img/public.png);
+	background-repeat: no-repeat;
+	background-position: 0px 1px;
+}
+
+div.github-commit-badge-diffline {
+	color: black;
+	font-weight: bold;
+}
+
+div.github-commit-badge-commitmessage {
+	font-style: italic;
+	padding-left: 90px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background-image:url(img/commit.png);
+	background-repeat: no-repeat;
+	background-position: 70px 0px;
+}
+
+div.github-commit-badge-diffstat {
+	font-weight: normal;
+	font-size: 0.9em;
+}
+
+a.github-commit-badge-badge, a.github-commit-badge-badge:visited, a.github-commit-badge-badge:link, a.github-commit-badge-badge:active {
+	color: #3399FF;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+a.github-commit-badge-badge:hover {
+	text-decoration: underline;
+}
+
+a.github-commit-badge-username, a.github-commit-badge-username:visited, a.github-commit-badge-username:link a.github-commit-badge-username:active {
+	color: #3399FF;
+	text-decoration: underline;
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+a.github-commit-badge-username:hover {
+	text-decoration: none;
+}
+
+span.github-commit-badge-text, span.github-commit-badge-text-date {
+	color: black;
+	background-color: #fff6a9;
+}
+
+span.github-commit-badge-diffadded {
+	color: green;
+	background-color: transparent;
+}
+
+span.github-commit-badge-diffremoved {
+	color: red;
+	background-color: transparent;
+}
+
+span.github-commit-badge-diffchanged {
+	color: purple;
+	background-color: transparent;
+}
+
+img.github-commit-badge-gravatar {
+	border: 1px solid #fff6a9;
+	margin: 5px;
+	float: left;
+	margin: 2px;
+}
+
+div.github-commit-badge-filelist {
+	margin-top: 10px;
+}
+
+div.github-commit-badge-filelist ul {
+	list-style-type: square;
+	list-style-position: inside;
+	margin: 0px;
+}
+	
+a.github-commit-badge-showMoreLink, a.github-commit-badge-showMoreLink:visited, a.github-commit-badge-showMoreLink:link a.github-commit-badge-showMoreLink:active {
+	color: #3399FF;
+	text-decoration: underline;
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+a.github-commit-badge-showMoreLink:hover {
+	text-decoration: none;
+}

@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: 0659ea5e8ec578d1733498ca40d8b6d8ea9c0775
+  branch: master
+repository_url: git://github.com/heipei/github-commit-badge.git
+lock: false
+repository_class: Piston::Git::Repository

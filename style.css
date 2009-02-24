@@ -220,3 +220,6 @@ p.more {
 dt a {
   text-decoration: underline;
 }
+div#github-commit-badge-container {
+  width: 300px !important;
+}

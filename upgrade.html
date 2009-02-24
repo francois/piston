@@ -1,0 +1,28 @@
+---
+title: Upgrade Subcommand Documentation
+layout: default
+onecol: true
+---
+<h1>{{ page.title }}</h1>
+
+<h2><b>When</b> to use it</h2>
+<p>Use the upgrade command to upgrade one or more directories from the Piston v1.x Subversion properties to the new YAML file format.  This will not update any of your Pistonized folders.</p>
+<p>In the Piston v1.x-era, Piston was a Subversion-centric tool.  Piston stored it's meta-data in Subversion properties.  Now that Piston is able to use Subversion or Git working copies, the metadata had to be stored in a backend-agnostic manner.  The easiest and fastest way was to use files.  Each Pistonized folder has an extra file named <tt>.piston.yml</tt> at the root.  This file contains metadata about the repository, working copy and when last update from the upstream repository was made.</p>
+<p>If you have already converted to using something else than Subversion, you are on your own.  The YAML file is pretty self-explanatory, and you can create it yourself.</p>
+
+<h2><b>Command</b> summary</h2>
+<pre>SYNOPSIS
+  piston upgrade [directories*] [options]+
+
+PARAMETERS
+  directories (-1 ~&gt; directories=.) 
+      Which directory/directories to convert from Piston 1.x to Piston 2.x. 
+      Not specifying this argument recursively converts the whole directory 
+      tree starting from the current dir. 
+  --verbose=[verbose], -v (0 ~&gt; integer(verbose=0)) 
+      Verbosity level (0 to 5, 0 being the default) 
+  --quiet, -q 
+  --force 
+  --dry-run 
+  --help, -h 
+</pre>

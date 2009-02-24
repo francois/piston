@@ -1,0 +1,24 @@
+---
+title: Convert Subcommand Documentation
+layout: default
+onecol: true
+---
+<h1>{{ page.title }}</h1>
+<h2><b>When</b> to use it</h2>
+<p>Use the convert subcommand if you have a Subversion working copy in which you have svn:externals references.  This command will convert each of the svn:externals references running <a href="import.html">import</a> on each of them.</p>
+
+<pre>SYNOPSIS
+  piston convert [directories*] [options]+
+
+PARAMETERS
+  directories (-1 ~&gt; directories) 
+      Which directory/directories to convert from svn:externals to Piston. 
+      Not specifying this argument recursively converts the whole directory 
+      tree starting from the current dir. 
+  --verbose=[verbose], -v (0 ~&gt; integer(verbose=0)) 
+      Verbosity level (0 to 5, 0 being the default) 
+  --quiet, -q 
+  --force 
+  --dry-run 
+  --help, -h 
+</pre>

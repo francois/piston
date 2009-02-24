@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Fran\303\247ois Beausoleil"]
-  s.date = %q{2009-02-23}
+  s.date = %q{2009-02-24}
   s.default_executable = %q{piston}
   s.description = %q{Piston makes it easy to merge vendor branches into your own repository, without worrying about which revisions were grabbed or not.  Piston will also keep your local changes in addition to the remote changes.}
   s.email = %q{francois@teksol.info}
@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{piston}
   s.rubygems_version = %q{1.3.1}
-  s.summary = %q{Easy your vendor branch management worries}
+  s.summary = %q{Ease your vendor branch management worries}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION

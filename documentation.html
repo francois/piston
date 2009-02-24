@@ -3,6 +3,37 @@ title: Documentation
 layout: default
 onecol: true
 ---
+<h1>Documentation</h2>
+
 <h2><b>Wikipedia</b> definition of Piston</h2>
-<p><cite href="http://en.wikipedia.org/wiki/Piston">In general, a piston is a sliding plug that fits closely inside the bore of a cylinder. Its purpose is either to change the volume enclosed by the cylinder, or to exert a force on a fluid inside the cylinder.</cite></p>
-<p class="more"><a href="http://en.wikipedia.org/wiki/Piston"><img src="images/more_red.jpg" width="71" height="14" alt="More" /></a></p>
+<blockquote href="http://en.wikipedia.org/wiki/Piston">
+  <p>In general, a piston is a sliding plug that fits closely inside the bore of a cylinder. Its purpose is either to change the volume enclosed by the cylinder, or to exert a force on a fluid inside the cylinder.</p>
+  <p class="more"><a href="http://en.wikipedia.org/wiki/Piston"><img src="images/more_red.jpg" width="71" height="14" alt="More" /></a></p>
+</blockquote>
+
+<h2><b>Piston's</b> commands</h2>
+<dl>
+  <dt><a href="documentation/upgrade.html">upgrade</a></dt>
+  <dd><p>Upgrades from Piston 1.x to Piston 2.x format.  Use this prior to switching to Git.</p></dd>
+
+  <dt><a href="documentation/convert.html">convert</a></dt>
+  <dd><p>Converts a repository using svn:externals to using Piston in one command.</p></dd>
+
+  <dt><a href="documentation/import.html">import</a></dt>
+  <dd><p>Imports a remote repository into your own.</p></dd>
+
+  <dt><a href="documentation/update.html">update</a></dt>
+  <dd><p>Receives upstream changes into your repository.</p></dd>
+
+  <dt><a href="documentation/lock.html">lock</a> and <a href="documentation/unlock.html">unlock</a><dt>
+  <dd><p>Prevents automatic upstream changes from coming in uninvited.</p></dd>
+
+  <dt><a href="documentation/status.html">status</a></dt>
+  <dd><p>Returns status information about a Pistonized folder.</p></dd>
+
+  <dt><a href="documentation/info.html">info</a></dt>
+  <dd><p>Returns a YAML representation of the Pistonized folder.</p></dd>
+
+  <dt><a href="documentation/diff.html">diff</a></dt>
+  <dd><p>Returns a patch of the changes between upstream and your copy.</p></dd>
+</dl>

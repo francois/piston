@@ -64,7 +64,10 @@ module Piston
 
       def add(added)
         Dir.chdir(path) do
-          added.each { |item| git(:add, item) }
+          added.each do |item|
+            item.mkdir unless item.exist?
+            git(:add, item)
+          end
         end
       end
 

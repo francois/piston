@@ -6,7 +6,7 @@ require "piston/commands"
 
 Main {
   program "piston"
-  author "François Beausoleil <francois@teksol.info>"
+  author "Francois Beausoleil <francois@teksol.info>"
   version Piston::VERSION::STRING
 
   mixin :standard_options do

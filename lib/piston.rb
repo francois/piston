@@ -6,6 +6,7 @@ require "piston/working_copy"
 
 require "piston/git"
 require "piston/svn"
+require "piston/commands"
 
 require "pathname"
 

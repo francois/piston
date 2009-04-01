@@ -38,6 +38,29 @@ module Piston
         working_copy.import(revision, options[:lock])
         logger.info {"Imported #{revision} from #{repository}"}
       end
+
+      def start(*args)
+        repository_url = args.shift
+        wcdir          = args.shift
+
+        raise ArgumentError, "Required REPOSITORY argument missing" if repository_url.blank?
+
+        begin
+          self.run(repository_url, options[:revision] || options[:commit] || :head, wcdir)
+        rescue Piston::Repository::UnhandledUrl => e
+          supported_types = Piston::Repository.handlers.collect do |handler|
+            handler.repository_type
+          end
+          puts "Unsure how to handle:"
+          puts "\t#{repository_url.inspect}."
+          puts "You should try using --repository-type. Supported types are:"
+          supported_types.each do |type|
+            puts "\t#{type}"
+          end
+
+          exit 1
+        end
+      end
     end
   end
 end

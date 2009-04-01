@@ -3,6 +3,8 @@ require "rubygems"
 require "mocha"
 require "log4r"
 require "fileutils"
+require "piston"
+require "active_support"
 
 begin
   require "turn"
@@ -10,7 +12,6 @@ rescue LoadError
   # NOP: ignore, this is not a real dependency
 end
 
-require File.expand_path("#{File.dirname(__FILE__)}/../config/requirements")
 require File.expand_path("#{File.dirname(__FILE__)}/integration_helpers")
 require "find"
 

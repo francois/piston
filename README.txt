@@ -3,6 +3,8 @@ This is similar to <tt>svn:externals</tt>, except you have a local copy of
 the files, which you can modify at will.  As long as the changes are
 mergeable, you should have no problems.
 
+Piston is Ruby 1.9.1 compatible.
+
 This tool has a similar purpose than svnmerge.py which you can find in the
 contrib/client-side folder of the main Subversion repository at
 http://svn.collab.net/repos/svn/trunk/contrib/client-side/svnmerge.py.

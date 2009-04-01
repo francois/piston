@@ -1,3 +1,8 @@
+== 2.0.1 2009-04-01
+
+* Finished testing on Ruby 1.9.1.
+* Released new website.
+
 == 1.9.5 2008-11-12
 
 * Merged everything that was relevant from the community.

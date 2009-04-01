@@ -64,7 +64,7 @@ module Piston
       def each
         raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @dir
 
-        svn(:ls, "--recursive", @dir).each do |relpath|
+        svn(:ls, "--recursive", @dir).split("\n").each do |relpath|
           next if relpath =~ %r{/$}
           yield relpath.chomp
         end

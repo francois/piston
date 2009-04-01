@@ -8,7 +8,7 @@ begin
     s.email             = "francois@teksol.info"
     s.homepage          = "http://francois.github.com/piston"
     s.description       = "Piston makes it easy to merge vendor branches into your own repository, without worrying about which revisions were grabbed or not.  Piston will also keep your local changes in addition to the remote changes."
-    s.authors           = "François Beausoleil"
+    s.authors           = "Francois Beausoleil"
     s.has_rdoc          = false
     s.rubyforge_project = "piston"
 
@@ -21,3 +21,5 @@ begin
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
+
+task :default => :test

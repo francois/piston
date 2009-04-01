@@ -70,7 +70,7 @@ module Piston
 
       def finalize
         targets = []
-        Dir[path + "*"].each do |item|
+        Dir[(path + "*").to_s].each do |item|
           svn(:add, item)
         end
       end

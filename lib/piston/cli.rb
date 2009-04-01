@@ -1,391 +1,121 @@
-require "main"
 require "log4r"
 require "activesupport"
 require "piston/version"
-require "piston/commands"
+require "optparse"
 
-Main {
-  program "piston"
-  author "François Beausoleil <francois@teksol.info>"
-  version Piston::VERSION::STRING
+module Piston
+  class Cli
+    def self.start(args=ARGV)
+      options = {:lock => false, :force => false, :dry_run => false, :quiet => false, :verbose => 0}
+      opts = OptionParser.new do |opts|
+        opts.banner  = "Usage: piston COMMAND [options]"
+        opts.version = Piston::VERSION::STRING
 
-  mixin :standard_options do
-    option("verbose", "v") { 
-      argument_optional
-      cast :integer
-      default 0
-      validate {|value| (0..5).include?(value)}
-      description "Verbosity level (0 to 5, 0 being the default)"
-    }
-    option("quiet", "q") { default false }
-    option("force") { default false }
-    option("dry-run") { default false }
-  end
+        # Many!!!
+        opts.on("-r", "--revision REVISION", "Revision to operate on") do |r|
+          options[:revision] = r.to_i
+        end
 
-  mixin :revision_or_commit do
-    option "revision", "r" do
-      argument_required
-      description "The revision you wish to operate on"
+        opts.on("--commit TREEISH", "Commit to operate on") do |c|
+          options[:commit] = c
+        end
+
+        # Import
+        opts.on("--repository-type TYPE", [:git, :svn], "Force selection of a repository handler (git or svn)") do |type|
+          options[:repository_type] = type
+        end
+
+        # Import, Update and Switch
+        opts.on("--lock", "Lock down the revision against mass-updates") do
+          options[:lock] = true
+        end
+
+        opts.on("--show-updates", "Query the remote repository for out-of-dateness information") do
+          options[:show_updates] = true
+        end
+
+        # All
+        opts.on("--force", "Force the operation to go ahead") do
+          options[:force] = true
+        end
+
+        opts.on("--dry-run", "Run but do not change anything") do
+          options[:dry_run] = true
+        end
+
+        opts.on("-q", "--quiet", "Operate silently") do
+          options[:quiet] = true
+        end
+
+        opts.on("-v", "--verbose [LEVEL]", ("0".."5").to_a, "Increase verbosity (default 0)") do |level|
+          options[:verbose] = level.to_i || 1
+        end
+      end
+      opts.parse!(args)
+
+      if args.empty?
+        puts opts.help
+        exit 0
+      end
+
+      if options.has_key?(:revision) && options.has_key?(:commit) then
+        raise ArgumentError, "Only one of --revision or --commit can be given.  Received both."
+      end
+
+      configure_logging(options)
+      command = Piston::Commands.const_get(args.shift.classify).new(options)
+      command.start(*args)
     end
 
-    option "commit" do
-      argument_required
-      description "The commit you wish to operate on"
-    end
+    def self.configure_logging(options)
+      Log4r::Logger.root.level = Log4r::DEBUG
 
-    def target_revision
-      case
-      when params["revision"].given?
-        params["revision"].value
-      when params["commit"].given?
-        params["commit"].value
+      case options[:verbose]
+      when 0
+        main_level = Log4r::INFO
+        handler_level = Log4r::WARN
+        client_level = Log4r::WARN
+        client_out_level = Log4r::WARN
+        stdout_level = Log4r::INFO
+      when 1
+        main_level = Log4r::DEBUG
+        handler_level = Log4r::INFO
+        client_level = Log4r::WARN
+        client_out_level = Log4r::WARN
+        stdout_level = Log4r::DEBUG
+      when 2
+        main_level = Log4r::DEBUG
+        handler_level = Log4r::DEBUG
+        client_level = Log4r::INFO
+        client_out_level = Log4r::WARN
+        stdout_level = Log4r::DEBUG
+      when 3
+        main_level = Log4r::DEBUG
+        handler_level = Log4r::DEBUG
+        client_level = Log4r::DEBUG
+        client_out_level = Log4r::INFO
+        stdout_level = Log4r::DEBUG
+      when 4, 5
+        main_level = Log4r::DEBUG
+        handler_level = Log4r::DEBUG
+        client_level = Log4r::DEBUG
+        client_out_level = Log4r::DEBUG
+        stdout_level = Log4r::DEBUG
       else
-        :head
-      end
-    end
-  end
-
-  mixin :lock_options do
-    option("lock") do
-      default false
-      description "Automatically lock down the revision/commit to protect against blanket updates"
-    end
-  end
-
-  mode "import" do
-    mixin :standard_options
-    mixin :revision_or_commit
-    mixin :lock_options
-
-    argument "repository" do
-      required
-      description "The repository you wish to Pistonize"
-    end 
-
-    argument "directory" do
-      optional
-      default nil
-      description "Where to put the Pistonized repository"
-    end
-
-    option("repository-type") do
-      argument :required
-      default nil
-      description "Force a specific repository type, for when it's not possible to guess"
-    end
-
-    logger_level Logger::DEBUG
-    def run
-      configure_logging!
-
-      if params["revision"].given? && params["commit"].given? then
-        raise ArgumentError, "Only one of --revision or --commit can be given.  Received both."
+        raise ArgumentError, "Did not expect verbosity to be outside 0..5: #{options[:verbose]}"
       end
 
-      cmd = Piston::Commands::Import.new(:verbose => params["verbose"].value,
-                                         :quiet => params["quiet"].value,
-                                         :force => params["force"].value,
-                                         :dry_run => params["dry-run"].value,
-                                         :repository_type => params["repository-type"].value)
+      Log4r::Logger.new("main", main_level)
+      Log4r::Logger.new("handler", handler_level)
+      Log4r::Logger.new("handler::client", client_level)
+      Log4r::Logger.new("handler::client::out", client_out_level)
 
-      begin
-        cmd.run(params[:repository].value, self.target_revision, params[:directory].value)
-      rescue Piston::Repository::UnhandledUrl => e
-        supported_types = Piston::Repository.handlers.collect do |handler|
-          handler.repository_type
-        end
-        puts "Unsure how to handle:"
-        puts "\t#{params[:repository].value.inspect}."
-        puts "You should try using --repository-type. Supported types are:"
-        supported_types.each do |type|
-          puts "\t#{type}"
-        end
-        exit_failure!
-      end
+      Log4r::StdoutOutputter.new("stdout", :level => stdout_level)
 
-      # Lock the working copy, if the user asked for it
-      cmd = Piston::Commands::LockUnlock.new(:verbose => params["verbose"].value,
-                                             :quiet => params["quiet"].value,
-                                             :force => params["force"].value,
-                                             :dry_run => params["dry-run"].value)
-      cmd.run(params["directory"].value, params["lock"].value) if params["lock"].value
+      Log4r::Logger["main"].add "stdout"
+      Log4r::Logger["handler"].add "stdout"
     end
   end
-  
-  mode "convert" do
-    mixin :standard_options
-    
-    argument "directories" do
-      argument_required
-      optional
-      arity -1
-      description "Which directory/directories to convert from svn:externals to Piston.  Not specifying this argument recursively converts the whole directory tree starting from the current dir."
-    end
+end
 
-    logger_level Logger::DEBUG
-    def run
-      configure_logging!
-
-      cmd = Piston::Commands::Convert.new(:verbose => params["verbose"].value,
-                                          :quiet => params["quiet"].value,
-                                          :force => params["force"].value)
-      dirs = cmd.run(params["directories"].values.map {|dir| Pathname.new(dir)})
-      puts "#{dirs.length} directories converted"
-    end
-  end
-
-  mode "upgrade" do
-    mixin :standard_options
-
-    argument "directories" do
-      optional
-      default '.'
-      arity -1
-      description "Which directory/directories to convert from Piston 1.x to Piston 2.x. Not specifying this argument recursively converts the whole directory tree starting from the current dir."
-    end
-
-    logger_level Logger::DEBUG
-    def run
-      configure_logging!
-
-      cmd = Piston::Commands::Upgrade.new(:verbose => params["verbose"].value,
-                                          :quiet => params["quiet"].value,
-                                          :force => params["force"].value)
-      dirs = cmd.run(params["directories"].values.map { |dir| Pathname.new(dir).expand_path })
-      puts "#{dirs.length} directories upgraded"
-    end
-  end
-  
-  mode "lock" do
-    mixin :standard_options
-    
-    argument "directory" do
-      argument_required
-      optional
-      description "Which directory to lock"
-    end
-
-    logger_level Logger::DEBUG
-    def run
-      configure_logging!
-
-      cmd = Piston::Commands::LockUnlock.new(:wcdir => params["directory"].value,
-                                             :verbose => params["verbose"].value,
-                                             :quiet => params["quiet"].value,
-                                             :force => params["force"].value)
-      begin
-        cmd.run(true)
-        puts "#{params["directory"].value} locked"
-      rescue Piston::WorkingCopy::NotWorkingCopy
-        puts "The #{params["directory"].value} is not Pistonized"
-      end
-    end
-  end
-  
-  mode "unlock" do
-    mixin :standard_options
-    
-    argument "directory" do
-      argument_required
-      optional
-      description "Which directory to lock"
-    end
-
-    logger_level Logger::DEBUG
-    def run
-      configure_logging!
-
-      cmd = Piston::Commands::LockUnlock.new(:wcdir => params["directory"].value,
-                                             :verbose => params["verbose"].value,
-                                             :quiet => params["quiet"].value,
-                                             :force => params["force"].value)
-      begin
-        cmd.run(false)
-        puts "#{params["directory"].value} unlocked"
-      rescue Piston::WorkingCopy::NotWorkingCopy
-        puts "The #{params["directory"].value} is not Pistonized"
-      end
-    end
-  end
-  
-  mode "status" do
-    mixin :standard_options
-
-    option "show-updates", "s" do
-      default false
-      description "Query the remote repository for out of dateness information"
-    end
-
-    argument "directories" do
-      optional
-      default '.'
-      arity -1
-      description "Which directory/directories to get status. Not specifying this argument recursively gets status from the whole directory tree starting from the current dir."
-    end
-
-    logger_level Logger::DEBUG
-    def run
-      configure_logging!
-
-      cmd = Piston::Commands::Status.new(:show_updates => params["show-updates"].value,
-                                         :verbose => params["verbose"].value,
-                                         :quiet => params["quiet"].value,
-                                         :force => params["force"].value)
-      params["directories"].values.each do |path|
-        begin
-          cmd.run(Pathname.new(path).expand_path)
-        rescue Piston::WorkingCopy::NotWorkingCopy
-          puts "#{path} is not a working copy"
-        end
-      end
-    end
-  end
-  
-  mode "diff" do
-    mixin :standard_options
-
-    argument "directory" do
-      argument_required
-      description "Which directory to get differences between local and remote repositories."
-    end
-
-    logger_level Logger::DEBUG
-    def run
-      configure_logging!
-
-      cmd = Piston::Commands::Diff.new(:wcdir => File.expand_path(params["directory"].value),
-                                         :verbose => params["verbose"].value,
-                                         :quiet => params["quiet"].value,
-                                         :force => params["force"].value)
-      begin
-        cmd.run
-      rescue Piston::WorkingCopy::NotWorkingCopy
-        puts "#{params["directory"].value} is not Pistonized"
-      end
-    end
-  end
-  
-  mode "info" do
-    mixin :standard_options
-    
-    argument "directory" do
-      argument_required
-      optional
-      description "Which directory to get info"
-    end
-
-    logger_level Logger::DEBUG
-    def run
-      configure_logging!
-
-      cmd = Piston::Commands::Info.new(:wcdir => params["directory"].value,
-                                             :verbose => params["verbose"].value,
-                                             :quiet => params["quiet"].value,
-                                             :force => params["force"].value)
-      begin
-        puts cmd.run(params["directory"].value)
-      rescue Piston::WorkingCopy::NotWorkingCopy
-        puts "#{params["directory"].value} is not Pistonized"
-      end
-    end
-  end
-
-  mode "update" do
-    mixin :standard_options
-    mixin :revision_or_commit
-    mixin :lock_options
-
-    argument("directory") do
-      optional
-      default '.'
-    end
-
-    logger_level Logger::DEBUG
-    def run
-      configure_logging!
-
-      if params["revision"].given? && params["commit"].given? then
-        raise ArgumentError, "Only one of --revision or --commit can be given.  Received both."
-      end
-
-      cmd = Piston::Commands::Update.new(:lock => params["lock"].value,
-                                         :verbose => params["verbose"].value,
-                                         :quiet => params["quiet"].value,
-                                         :force => params["force"].value,
-                                         :dry_run => params["dry-run"].value)
-
-      begin
-        cmd.run(File.expand_path(params["directory"].value), target_revision)
-      rescue
-        $stderr.puts $!.message
-        $stderr.puts $!.backtrace.join("\n")
-        exit_failure!
-      end
-    end
-  end
-
-  option("version", "v")
-
-  def run
-    if params["version"].given? || ARGV.first == "version" then
-      puts Piston.version_message
-      exit_success!
-    elsif ARGV.empty?
-      puts Piston.version_message
-      puts "\nNo mode given.  Call with help to find out the available options."
-      exit_failure!
-    else
-      puts "Unrecognized mode: #{ARGV.first.inspect}.  Use the help mode to find the available options."
-      exit_warn!
-    end
-  end
-
-  def configure_logging!
-    Log4r::Logger.root.level = Log4r::DEBUG
-
-    case params["verbose"].value
-    when 0
-      main_level = Log4r::INFO
-      handler_level = Log4r::WARN
-      client_level = Log4r::WARN
-      client_out_level = Log4r::WARN
-      stdout_level = Log4r::INFO
-    when 1
-      main_level = Log4r::DEBUG
-      handler_level = Log4r::INFO
-      client_level = Log4r::WARN
-      client_out_level = Log4r::WARN
-      stdout_level = Log4r::DEBUG
-    when 2
-      main_level = Log4r::DEBUG
-      handler_level = Log4r::DEBUG
-      client_level = Log4r::INFO
-      client_out_level = Log4r::WARN
-      stdout_level = Log4r::DEBUG
-    when 3
-      main_level = Log4r::DEBUG
-      handler_level = Log4r::DEBUG
-      client_level = Log4r::DEBUG
-      client_out_level = Log4r::INFO
-      stdout_level = Log4r::DEBUG
-    when 4, 5
-      main_level = Log4r::DEBUG
-      handler_level = Log4r::DEBUG
-      client_level = Log4r::DEBUG
-      client_out_level = Log4r::DEBUG
-      stdout_level = Log4r::DEBUG
-    else
-      raise ArgumentError, "Did not expect verbosity to be outside 0..5: #{params["verbose"].value}"
-    end
-
-    Log4r::Logger.new("main", main_level)
-    Log4r::Logger.new("handler", handler_level)
-    Log4r::Logger.new("handler::client", client_level)
-    Log4r::Logger.new("handler::client::out", client_out_level)
-
-    Log4r::StdoutOutputter.new("stdout", :level => stdout_level)
-
-    Log4r::Logger["main"].add "stdout"
-    Log4r::Logger["handler"].add "stdout"
-  end
-}
+Piston::Cli.start

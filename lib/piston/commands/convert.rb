@@ -21,6 +21,12 @@ module Piston
           wc.remove_external_references(*targets)
         end
       end
-    end
-  end
+
+			def start(*args)
+				targets = args.flatten.map {|d| Pathname.new(d).expand_path}
+				run(targets)
+				puts "#{targets.length} directories converted"
+			end
+		end
+	end
 end

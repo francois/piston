@@ -15,6 +15,12 @@ module Piston
 
         repositories
       end
+
+			def start(*args)
+				targets = args.flatten.map {|d| Pathname.new(d).expand_path}
+				run(targets)
+				puts "#{targets.length} directories upgraded"
+			end
     end
   end
 end

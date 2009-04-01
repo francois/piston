@@ -49,7 +49,14 @@ class Piston::TestCase < Test::Unit::TestCase
   end
 
   def run(*args)
-    return if method_name.to_sym == :default_test && self.class == Piston::TestCase
+    test_name = if self.respond_to?(:name) then
+                  name
+                elsif self.respond_to?(:method_name) then
+                  method_name
+                else
+                  raise "Don't know how to get the test's name: neither #name or #method_name is available"
+                end
+    return if test_name.to_sym == :default_test && self.class == Piston::TestCase
     super
   end
 

@@ -35,6 +35,16 @@ module Piston
       def show_updates
         options[:show_updates]
       end
+
+			def start(*args)
+				args.flatten.map {|d| Pathname.new(d).expand_path}.each do |wcdir|
+					begin
+						run(wcdir)
+					rescue Piston::WorkingCopy::NotWorkingCopy
+						puts "#{wcdir} is not a working copy"
+					end
+				end
+			end
     end
   end
 end

@@ -1,3 +1,4 @@
+require "pathname"
 PISTON_ROOT = Pathname.new(File.dirname(__FILE__)).parent.realpath
 
 def logger

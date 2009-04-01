@@ -77,7 +77,9 @@ module Piston
 
       def add(added)
         added.each do |item|
-          svn(:add, path + item)
+          target = path + item
+          target.mkdir unless target.exist?
+          svn(:add, target)
         end
       end
 

@@ -1,0 +1,37 @@
+---
+title: Update Subcommand Documentation
+layout: default
+onecol: true
+---
+<h1>{{ page.title }}</h1>
+
+<h2><b>When</b> to use it</h2>
+<p>Use the update subcommand when the upstream repository changed and you want to grab the latest changes.</p>
+<p>The update subcommand is non-destructive: local changes you make will be kept after the update.</p>
+
+<h2><b>Example</b> usage</h2>
+<div class="highlight"><pre class="console"><code><span class="prompt">$</span> <span class="command">piston</span> update vendor/plugins/acts_as_list
+<span class="prompt">$</span> <span class="command">piston</span> update
+</code></pre></div>
+
+<h2><b>Command</b> summary</h2>
+<pre>SYNOPSIS
+  piston update [DIRECTORY [DIRECTORY ...]]
+
+PARAMETERS
+  DIRECTORY
+      Which directory to update.  Not specifying this will update all unlocked pistonized directories.
+  --verbose=[verbose], -v (0 ~&gt; integer(verbose=0)) 
+      Verbosity level (0 to 5, 0 being the default) 
+  --quiet, -q 
+  --force 
+  --dry-run 
+  --revision=revision, -r (0 ~&gt; revision) 
+      The revision you wish to operate on 
+  --commit=commit (0 ~&gt; commit) 
+      The commit you wish to operate on 
+  --lock 
+      Automatically lock down the revision/commit to protect against blanket 
+      updates 
+  --help, -h 
+</pre>

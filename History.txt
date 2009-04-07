@@ -1,3 +1,7 @@
+== 2.0.2 2009-04-07
+
+* Fixed a bug in the command line parser that was interpreting status as statu.
+
 == 2.0.1 2009-04-01
 
 * Finished testing on Ruby 1.9.1.

@@ -63,7 +63,7 @@ module Piston
       end
 
       configure_logging(options)
-      command = Piston::Commands.const_get(args.shift.classify).new(options)
+      command = Piston::Commands.const_get(args.shift.camelize).new(options)
       command.start(*args)
     end
 

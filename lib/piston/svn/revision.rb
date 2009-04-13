@@ -66,6 +66,7 @@ module Piston
 
         svn(:ls, "--recursive", @dir).split("\n").each do |relpath|
           next if relpath =~ %r{/$}
+          next if relpath == '.piston.yml'
           yield relpath.chomp
         end
       end

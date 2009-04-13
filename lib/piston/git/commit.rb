@@ -85,6 +85,7 @@ module Piston
           Find.prune if path.to_s =~ %r{/[.]git}
           next if @dir == path
           next if File.directory?(path)
+          next if @dir + '.piston.yml' == path
           yield path.relative_path_from(@dir)
         end
       end

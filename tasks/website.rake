@@ -10,7 +10,7 @@ namespace :website do
         Dir.chdir("piston") do
           sh "git checkout origin/gh-pages"
           sh "jekyll"
-          sh "rsync -avz --delete --exclude='*.psd'_site/ rubyforge.org:/var/www/gforge-projects/piston"
+          sh "rsync -avz --delete --exclude='*.psd' _site/ rubyforge.org:/var/www/gforge-projects/piston"
         end
       end
     ensure

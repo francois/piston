@@ -102,7 +102,7 @@ module Piston
 
       def merge_local_changes(revision)
         logger.debug {"Update to #{revision} in order to merge local changes"}
-        svn(:update, "--non-interactive", path)
+        svn(:update, path)
       end
 
       def status(subpath=nil)

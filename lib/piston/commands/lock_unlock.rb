@@ -16,11 +16,6 @@ module Piston
         text = lock ? "Locked" : "Unlocked"
         logger.info "#{text} #{working_copy} against automatic updates"
       end
-
-			def start(*args)
-				options[:wcdir] = args.first
-				run(true)
-			end
     end
   end
 end

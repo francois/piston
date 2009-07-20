@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{piston}
-  s.version = "2.0.3"
+  s.version = "2.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Francois Beausoleil"]
-  s.date = %q{2009-07-17}
+  s.date = %q{2009-07-20}
   s.default_executable = %q{piston}
   s.description = %q{Piston makes it easy to merge vendor branches into your own repository, without worrying about which revisions were grabbed or not.  Piston will also keep your local changes in addition to the remote changes.}
   s.email = %q{francois@teksol.info}
@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
     ".gitignore",
      "History.txt",
      "License.txt",
-     "Manifest.txt",
      "README.txt",
      "Rakefile",
      "TODO",
@@ -68,7 +67,6 @@ Gem::Specification.new do |s|
      "setup.rb",
      "tasks/environment.rake",
      "tasks/features.rake",
-     "tasks/manifest.rake",
      "tasks/test.rake",
      "tasks/website.rake",
      "test/integration_helpers.rb",

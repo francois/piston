@@ -51,6 +51,6 @@ Feature: Import remote repository into a Git repository
     And a remote Subversion project named libcalc using the classic layout
     And a file named libcalc.rb with content "a\nb\nc" in remote libcalc project
     When I import libcalc/trunk into vendor/libcalc
-    And I should see a successful import message from Piston
+    Then I should see a successful import message from Piston
     And I should find a vendor/libcalc folder
     And I should find a vendor/libcalc/libcalc.rb file

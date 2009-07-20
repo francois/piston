@@ -172,7 +172,7 @@ Then /^I should see "([^"]+)"(\s+debug)?$/ do |regexp, debug|
   @stdout.should =~ re
 end
 
-Then /^I should( not)? find a ([\w+\/]+) folder$/ do |not_find, name|
+Then /^I should( not)? find a ([-\w+\/]+) folder$/ do |not_find, name|
   if not_find then
     File.exist?(@wcdir + name).should_not be_true
     File.directory?(@wcdir + name).should_not be_true
@@ -182,7 +182,7 @@ Then /^I should( not)? find a ([\w+\/]+) folder$/ do |not_find, name|
   end
 end
 
-Then /^I should (not )?find a ([.\w+\/]+) file$/ do |not_find, name|
+Then /^I should (not )?find a ([-.\w+\/]+) file$/ do |not_find, name|
   if not_find then
     File.exist?(@wcdir + name).should be_false
     File.file?(@wcdir + name).should be_false
@@ -192,7 +192,7 @@ Then /^I should (not )?find a ([.\w+\/]+) file$/ do |not_find, name|
   end
 end
 
-Then /^I should find "([^"]+)" in ([\w\/.]+)$/ do |content, path|
+Then /^I should find "([^"]+)" in ([-\w\/.]+)$/ do |content, path|
   File.read(@wcdir + path).should =~ Regexp.new(content, Regexp::MULTILINE + Regexp::IGNORECASE)
 end
 

@@ -211,3 +211,25 @@ Then /^I should see a successful update message from Piston$/ do
     @stdout.should =~ /Updated .*\/libcalc to revision \d+/
   end
 end
+
+Given /^a branch on the ([^ ]+) project named "([^\"]*)"$/ do |project, branch|
+  Dir.chdir(@remotewcdir) do
+    if (@remotewcdir + ".git").directory? then
+      git :checkout, "-b", branch
+			@stdout = git :branch
+      @stdout.should =~ /^\*\s+#{branch}/
+    else
+			pending
+    end
+  end
+end
+
+When /^I import the "([^\"]+)" branch of ([^ ]+)(?: into ([\w\/]+))?$/ do |branch, project, into|
+  Dir.chdir(@wcdir) do
+    cmd = "#{Tmpdir.piston} import --verbose 5 --commit #{branch} file://#{@remotereposdir} 2>&1"
+    cmd << " #{into}" if into
+    STDERR.puts cmd.inspect if $DEBUG
+    @stdout = `#{cmd}`
+    STDERR.puts @stdout if $DEBUG
+  end
+end

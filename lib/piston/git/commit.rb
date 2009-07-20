@@ -14,6 +14,7 @@ module Piston
       def initialize(repository, revision, recalled_values={})
         super
         @revision = 'master' if @revision.upcase == 'HEAD'
+        @revision = "origin/#{@revision}" unless @revision.include?("/")
       end
 
       def client

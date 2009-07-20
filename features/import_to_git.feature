@@ -54,3 +54,17 @@ Feature: Import remote repository into a Git repository
     Then I should see a successful import message from Piston
     And I should find a vendor/libcalc folder
     And I should find a vendor/libcalc/libcalc.rb file
+
+  Scenario: Import from a branch
+    Given a newly created Git project
+    And a remote Git project named rails
+    And a file named rails.rb with content "a\n" in remote rails project
+    And a branch on the rails project named "2-3-stable"
+    And a file named 2-3-README with content "Rails 2.3\n" in remote rails project
+    When I import the "2-3-stable" branch of rails
+    Then I should see "2-3-stable"
+    And I should see a successful import message from Piston
+    And I should find a rails folder
+    And I should find a rails/rails.rb file
+    And I should find a rails/2-3-README file
+    And I should find a rails/.piston.yml file

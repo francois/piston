@@ -14,7 +14,6 @@ module Piston
       def initialize(repository, revision, recalled_values={})
         super
         @revision = 'master' if @revision.upcase == 'HEAD'
-        @revision = "origin/#{@revision}" unless @revision.include?("/")
       end
 
       def client
@@ -50,6 +49,8 @@ module Piston
         super
         git(:clone, repository.url, @dir)
         Dir.chdir(@dir) do
+          target = commit
+          target = "origin/#{target}" unless target.include?("/") || target =~ /^[a-f\d]+$/i
           git(:checkout, "-b", branch_name, commit)
           response = git(:log, "-n", "1")
           @sha1 = $1 if response =~ /commit\s+([a-f\d]{40})/i

@@ -55,18 +55,18 @@ module Piston
       end
 
       def after_remember(path)
-        Dir.chdir(self.path) { git(:add, path.relative_path_from(self.path)) }
+        Dir.chdir(self.path) { git(:add, "-f", path.relative_path_from(self.path)) }
       end
 
       def finalize
-        Dir.chdir(path) { git(:add, ".") }
+        Dir.chdir(path) { git(:add, "-f", ".") }
       end
 
       def add(added)
         Dir.chdir(path) do
           added.each do |item|
             item.mkdir unless item.exist?
-            git(:add, item)
+            git(:add, "-f", item)
           end
         end
       end

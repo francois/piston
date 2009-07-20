@@ -66,7 +66,6 @@ Gem::Specification.new do |s|
      "script/txt2html",
      "setup.rb",
      "tasks/environment.rake",
-     "tasks/features.rake",
      "tasks/test.rake",
      "tasks/website.rake",
      "test/integration_helpers.rb",

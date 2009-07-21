@@ -51,7 +51,7 @@ module Piston
         Dir.chdir(@dir) do
           target = commit
           target = "origin/#{target}" unless target.include?("/") || target =~ /^[a-f\d]+$/i
-          git(:checkout, "-b", branch_name, commit)
+          git(:checkout, "-b", branch_name, target)
           response = git(:log, "-n", "1")
           @sha1 = $1 if response =~ /commit\s+([a-f\d]{40})/i
         end

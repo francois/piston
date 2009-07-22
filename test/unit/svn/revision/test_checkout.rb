@@ -16,8 +16,8 @@ class Piston::Svn::TestSvnRevisionCheckout < Piston::TestCase
   end
 
   def test_specific_revision_checkout_to_path
-    rev = new_revision(1231)
-    rev.expects(:svn).with(:checkout, "--revision", 1231, @repos.url, @wcdir).returns("Checked out revision 1231.")
+    rev = new_revision('1231')
+    rev.expects(:svn).with(:checkout, "--revision", '1231', @repos.url, @wcdir).returns("Checked out revision 1231.")
     rev.checkout_to(@wcdir)
   end
 

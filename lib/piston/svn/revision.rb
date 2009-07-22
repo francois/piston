@@ -26,7 +26,7 @@ module Piston
         if answer =~ /Checked out revision (\d+)[.]/ then
           if revision == "HEAD" then
             @revision = $1.to_i
-          elsif revision != $1.to_i then
+          elsif revision.to_i != $1.to_i then
             raise InvalidRevision, "Did not get the revision I wanted to checkout.  Subversion checked out #{$1}, I wanted #{revision}"
           end
         else

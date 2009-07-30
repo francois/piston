@@ -12,7 +12,7 @@ module Piston
       def select_repository(repository_url)
         if repository_type then
           logger.info {"Forced repository type to #{repository_type}"}
-          repository_class_name = "Piston::#{repository_type.downcase.capitalize}::Repository"
+          repository_class_name = "Piston::#{repository_type.to_s.downcase.capitalize}::Repository"
           repository_class = repository_class_name.constantize
           repository_class.new(repository_url)
         else

@@ -1,3 +1,14 @@
+== 2.0.6 2009-08-01
+
+* Fixed a couple of bugs:
+  - Chris Gibson: When forcing the repository type, Piston would break because
+                  it called #downcase on a Symbol. 1bcc16bf8 
+  - Terry Heath:  Subversion's --non-interactive would prevent OS X's keychain
+                  from kicking in. 93d9a957
+  - Florian Aßmann: In certain cases, the revision would be a String, and
+                    other times it would be an Integer.  Normalize before
+                    comparing. 40c0bc4e
+
 == 2.0.4 2009-07-20
 
 * Enable git support to work with more versions of Git by specifying th

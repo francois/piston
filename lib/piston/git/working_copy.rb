@@ -55,11 +55,11 @@ module Piston
       end
 
       def after_remember(path)
-        Dir.chdir(self.path) { git(:add, "-f", path.relative_path_from(self.path)) }
+        Dir.chdir(self.path) { git(:add, "--force", path.relative_path_from(self.path)) }
       end
 
       def finalize
-        Dir.chdir(path) { git(:add, "-f", ".") }
+        Dir.chdir(path) { git(:add, "--force", ".") }
       end
 
       def add(added)

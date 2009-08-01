@@ -9,7 +9,7 @@ class Piston::Git::TestGitWorkingCopyFinalization < Piston::TestCase
 
   def test_finalize_adds_path_to_git
     Dir.expects(:chdir).with(@wcdir).yields
-    @wc.expects(:git).with(:add, ".")
+    @wc.expects(:git).with(:add, "--force", ".")
     @wc.finalize
   end
 end

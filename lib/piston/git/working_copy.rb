@@ -74,7 +74,7 @@ module Piston
 
       def delete(deleted)
         Dir.chdir(path) do
-          deleted.each { |item| git(:rm, item) }
+          deleted.each { |item| git(:rm, "-r", item) }
         end
       end
 

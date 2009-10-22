@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'rake'
+
 Dir["tasks/**/*.rake"].each { |rake| load rake }
 
 begin
@@ -18,8 +21,9 @@ begin
     s.add_runtime_dependency "log4r", ">= 1.0.5"
     s.add_runtime_dependency "activesupport", ">= 2.0.0"
   end
+  Jeweler::GemcutterTasks.new
 rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
 end
 
 task :default => :test

@@ -80,7 +80,11 @@ module Piston
 
       def rename(renamed)
         Dir.chdir(path) do
-          renamed.each { |from, to| git(:mv, from, to) }
+          renamed.each do |from, to|
+            target = path + File.dirname(to)
+            target.mkpath unless target.exist?
+            git(:mv, from, to)
+          end
         end
       end
 

@@ -1,5 +1,5 @@
 require "log4r"
-require "activesupport"
+require "active_support"
 require "piston/version"
 require "optparse"
 

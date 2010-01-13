@@ -6,30 +6,19 @@ module Piston
       def run(wcdir)
         # Get the working copy handler to search pistonized folders inside it
         handler = guess_wc(wcdir).class
-        
-        # First, find the list of pistonized folders
-        repos = Hash.new
-        Pathname.glob(wcdir + '**/.piston.yml') do |path|
-          repos[path.dirname] = Hash.new
-        end
+        props   = Hash.new
 
-        # Then, get their properties
-        repos.each_pair do |path, props|
-          logger.debug {"Get info of #{path}"}
-          working_copy = handler.new(path)
-          working_copy.validate!
-          props.update(working_copy.info)
-          props[:locally_modified] = 'M' if working_copy.locally_modified
-          props[:remotely_modified] = 'M' if show_updates and working_copy.remotely_modified
-        end
+        # Then, get that repository's properties
+        logger.debug {"Get info of #{path}"}
+        working_copy = handler.new(wcdir)
+        working_copy.validate!
+        props.update(working_copy.info)
+        props[:locally_modified]  = 'M' if working_copy.locally_modified
+        props[:remotely_modified] = 'M' if show_updates && working_copy.remotely_modified
 
         # Display the results
-        repos.each_pair do |path, props|
-          printf "%1s%1s %6s %s (%s)\n", props[:locally_modified],
-              props[:remotely_modified], props["lock"] ? 'locked' : '', path, props["repository_url"]
-        end
-
-        puts "No pistonized folders found in #{wcdir}" if repos.empty?
+        printf "%1s%1s %6s %s (%s)\n", props[:locally_modified],
+          props[:remotely_modified], props["lock"] ? 'locked' : '', wcdir.to_s, props["repository_url"]
       end
 
       def show_updates
@@ -37,7 +26,9 @@ module Piston
       end
 
 			def start(*args)
-				args.flatten.map {|d| Pathname.new(d).expand_path}.each do |wcdir|
+        paths = args.flatten.map {|d| Pathname.new(d).expand_path}
+        paths = find_local_piston_folders if paths.empty?
+        paths.each do |wcdir|
 					begin
 						run(wcdir)
 					rescue Piston::WorkingCopy::NotWorkingCopy
@@ -45,6 +36,12 @@ module Piston
 					end
 				end
 			end
+
+      private
+
+      def find_local_piston_folders
+        Pathname.glob(Pathname.new(Dir.pwd) + '**/.piston.yml').map {|path| path + ".."}.map(&:expand_path)
+      end
     end
   end
 end

@@ -1,3 +1,9 @@
+# Git's UI changes between revisions...  Have to support more formats, or
+# maybe find a better way to determine what's going on
+#
+# TODO: Maybe use Grit to determine repository validity?
+GIT_COMMIT_RE = /Created (?:initial )?commit [a-fA-F0-9]+|\[[-\w]+ (?:\(root-commit\) )?[a-fA-F0-9]{7,40}\]/
+
 Given /^a newly created Git project$/ do
   @wcdir = Tmpdir.where(:wc)
   @wcdir.mkpath
@@ -6,7 +12,7 @@ Given /^a newly created Git project$/ do
     touch :README
     git :add, "."
     @stdout = git :commit, "--message", "first commit"
-    @stdout.should =~ /Created (?:initial )?commit [a-fA-F0-9]+/
+    @stdout.should =~ GIT_COMMIT_RE
   end
 end
 
@@ -26,7 +32,7 @@ Given /^a remote Git project named (\w+)$/ do |name|
     touch :README
     git :add, "."
     @stdout = git :commit, "--message", "initial commit"
-    @stdout.should =~ /Created (?:initial )?commit [a-fA-F0-9]+/
+    @stdout.should =~ GIT_COMMIT_RE
   end
 end
 
@@ -50,7 +56,7 @@ Given /^a file named ([^\s]+) was deleted in remote (\w+) project$/ do |filename
     if (@remotewcdir + ".git").directory? then
       git :rm, filename
       @stdout = git :commit, "--message", "removing #{filename}"
-      @stdout.should =~ /Created (?:initial )?commit [a-fA-F0-9]+/
+      @stdout.should =~ GIT_COMMIT_RE
     else
       svn :rm, filename
       @stdout = svn :commit, "--message", "removing #{filename}"
@@ -66,7 +72,7 @@ Given /^a file named ([^\s]+) with content "([^"]+)" in remote (\w+) project$/ d
     if (@remotewcdir + ".git").directory? then
       git :add, "."
       @stdout = git :commit, "--message", "adding #{filename}"
-      @stdout.should =~ /Created (?:initial )?commit [a-fA-F0-9]/
+      @stdout.should =~ GIT_COMMIT_RE
     else
       svn :add, filename
       @stdout = svn :commit, "--message", "adding #{filename}"
@@ -80,7 +86,7 @@ Given /^a file named ([^\s]+) was renamed to ([^\s]+) in remote (\w+) project$/ 
     if (@remotewcdir + ".git").directory? then
       git :mv, from, to
       @stdout = git :commit, "--message", "moved #{from} to #{to}"
-      @stdout.should =~ /Created (?:initial )?commit [a-fA-F0-9]/
+      @stdout.should =~ GIT_COMMIT_RE
     else
       svn :mv, from, to
       @stdout = svn :commit, "--message", "moved #{from} to #{to}"
@@ -96,7 +102,7 @@ Given /^a file named ([^\s]+) was updated with "([^"]+)" in remote (\w+) project
     if (@remotewcdir + ".git").directory? then
       git :add, "."
       @stdout = git :commit, "--message", "updating #{filename}"
-      @stdout.should =~ /Created (?:initial )?commit [a-fA-F0-9]/
+      @stdout.should =~ GIT_COMMIT_RE
     else
       @stdout = svn :commit, "--message", "updating #{filename}"
       @stdout.should =~ /Committed revision \d+/
@@ -111,7 +117,7 @@ Given /^I changed ([\w\/.]+) to "([^"]+)"$/ do |filename, content|
     if (@wcdir + ".git").directory? then
       git :add, "."
       @stdout = git :commit, "--message", "adding #{filename}"
-      @stdout.should =~ /Created (?:initial )?commit [a-fA-F0-9]/
+      @stdout.should =~ GIT_COMMIT_RE
     else
       @stdout = svn :commit, "--message", "adding #{filename}"
       @stdout.should =~ /Committed revision \d+/
@@ -126,7 +132,7 @@ Given /^an existing ([\w\/]+) folder$/ do |name|
     Dir.chdir(@wcdir) do
       git :add, "."
       @stdout = git :commit, "--message", "registered #{name}/"
-      @stdout.should =~ /Created (?:initial )?commit [a-fA-F0-9]+/
+      @stdout.should =~ GIT_COMMIT_RE
     end
   else
     svn :mkdir, @wcdir + name
@@ -158,7 +164,7 @@ When /^I committed$/ do
   if (@wcdir + ".git").directory?
     Dir.chdir(@wcdir) do
       @stdout = git :commit, "--message", "commit", "--all"
-      @stdout.should =~ /Created (?:initial )?commit [a-fA-F0-9]+/
+      @stdout.should =~ GIT_COMMIT_RE
     end
   else
     @stdout = svn(:commit, "--message", "commit", @wcdir)

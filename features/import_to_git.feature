@@ -46,7 +46,22 @@ Feature: Import remote repository into a Git repository
     And I should find a libcalc/libcalc.rb file
     And I should find a libcalc/.piston.yml file
 
-  Scenario: Importing into a specific folder when the parent folders doesn't exist succeeds
+    Given I committed
+    When I check the status
+    Then I should see an empty status report for "libcalc"
+
+    When I check the status with "--show-updates"
+    Then I should see an empty status report for "libcalc"
+
+    Given a file named libfix.rb with content "a\nb\nc" in remote libcalc project
+    When I check the status
+    Then I should see an empty status report for "libcalc"
+
+    When I check the status with "--show-updates"
+    Then I should see a change for "libcalc"
+    And I should see a remote change for "libcalc"
+
+  Scenario: Importing into a specific folder when the parent folder doesn't exist succeeds
     Given a newly created Git project
     And a remote Subversion project named libcalc using the classic layout
     And a file named libcalc.rb with content "a\nb\nc" in remote libcalc project

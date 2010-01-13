@@ -239,3 +239,28 @@ When /^I import the "([^\"]+)" branch of ([^ ]+)(?: into ([\w\/]+))?$/ do |branc
     STDERR.puts @stdout if $DEBUG
   end
 end
+
+When /^I check the status(?: with "([^"]+)")?$/ do |args|
+  Dir.chdir(@wcdir) do
+    cmd = "#{Tmpdir.piston} status --verbose 5"
+    cmd << " #{args}" if args
+    STDERR.puts cmd.inspect if $DEBUG
+    @stdout = `#{cmd}`
+    STDERR.puts @stdout if $DEBUG
+  end
+end
+
+Then /^I should see an empty status report for "([^"]+)"$/ do |project|
+  @stdout.should =~ /^\s+(?:\/private)?#{Regexp.escape(@wcdir + project)} \(file:\/\/#{Regexp.escape(@remotereposdir)}\)/
+end
+
+Then /^I should see a (?:(local|remote) )?change for "([^\"]*)"$/ do |local_remote, project|
+  case local_remote
+  when nil, ""
+    @stdout.should =~ /^[ M]{2}\s+(?:\/private)?#{Regexp.escape(@wcdir + project)} \(file:\/\/#{Regexp.escape(@remotereposdir)}\)/
+  when "local"
+    @stdout.should =~ /^M \s+(?:\/private)?#{Regexp.escape(@wcdir + project)} \(file:\/\/#{Regexp.escape(@remotereposdir)}\)/
+  when "remote"
+    @stdout.should =~ /^ M\s+(?:\/private)?#{Regexp.escape(@wcdir + project)} \(file:\/\/#{Regexp.escape(@remotereposdir)}\)/
+  end
+end

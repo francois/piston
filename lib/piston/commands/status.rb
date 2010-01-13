@@ -9,7 +9,7 @@ module Piston
         props   = Hash.new
 
         # Then, get that repository's properties
-        logger.debug {"Get info of #{path}"}
+        logger.debug {"Get info of #{wcdir}"}
         working_copy = handler.new(wcdir)
         working_copy.validate!
         props.update(working_copy.info)

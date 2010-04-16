@@ -63,8 +63,10 @@ module Piston
         Dir.chdir(@dir) do
           logger.debug {"Saving old changes before updating"}
           git(:commit, '-a', '-m', 'old changes')
-          logger.debug {"Merging old changes with #{commit}"}
-          git(:merge, '--squash', commit)
+          target = commit
+          target = "origin/#{target}" unless target.include?("/") || target =~ /^[a-f\d]+$/i
+          logger.debug {"Merging old changes with #{target}"}
+          git(:merge, '--squash', target)
           output = git(:status)
           added = output.scan(/new file:\s+(.*)$/).flatten
           deleted = output.scan(/deleted:\s+(.*)$/).flatten
@@ -75,7 +77,10 @@ module Piston
 
       def remember_values
         # find last commit for +commit+ if it wasn't checked out
-        @sha1 = git('ls-remote', repository.url, commit).match(/\w+/)[0] unless @sha1
+        unless @sha1
+          out = git('ls-remote', repository.url, commit).match(/\w+/)
+          @sha1 = out[0] unless out.nil?
+        end
         # if ls-remote returns nothing, +commit+ must be a commit, not a branch
         @sha1 = commit unless @sha1
         { Piston::Git::COMMIT => @sha1, Piston::Git::BRANCH => commit }

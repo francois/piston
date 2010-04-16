@@ -91,7 +91,7 @@ module Piston
 
       def rename(renamed)
         renamed.each do |from, to|
-          svn(:mv, path + from, path + to)
+          svn(:mv, '--parents', path + from, path + to)
         end
       end
 

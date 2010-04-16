@@ -60,7 +60,7 @@ module Piston
       raise ArgumentError, "Revision #{revision} of #{repository.url} was never checked out -- can't iterate over files" unless @dir
 
       Pathname.new(abspath).dirname.mkpath
-      FileUtils.cp(@dir + relpath, abspath)
+      FileUtils.copy_entry(@dir + relpath, abspath) unless abspath.symlink?
     end
 
     # Copies +abspath+ (an absolute path) to +relpath+ (relative to ourselves).
@@ -69,7 +69,7 @@ module Piston
 
       target = @dir + relpath
       Pathname.new(target).dirname.mkpath
-      FileUtils.cp(abspath, target)
+      FileUtils.copy_entry(abspath, target) unless abspath.symlink?
     end
 
     def remotely_modified

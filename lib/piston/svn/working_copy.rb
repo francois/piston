@@ -79,7 +79,7 @@ module Piston
         added.each do |item|
           target = path + item
           target.mkdir unless target.exist?
-          svn(:add, target)
+          svn(:add, '--parents', target)
         end
       end
 

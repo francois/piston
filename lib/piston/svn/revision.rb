@@ -106,7 +106,11 @@ module Piston
 
       private
       def relative_paths(paths)
-        paths.map { |item| Pathname.new(item).relative_path_from(@dir) }
+        # Paths taken from svn will come with backslashes. We must make sure the argument to
+        # Pathname#relative_path_from uses the same kind of slash, otherwise we get an
+        # "ArgumentError: different prefix..." error
+        rel_dir = RUBY_PLATFORM =~ /mswin/ ? Pathname.new(@dir.to_s.gsub(/\//, '\\')) : @dir
+        paths.map { |item| Pathname.new(item).relative_path_from(rel_dir) }
       end
     end
   end

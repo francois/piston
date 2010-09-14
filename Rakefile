@@ -19,7 +19,7 @@ begin
 
     s.add_runtime_dependency "main", ">= 2.8.3"
     s.add_runtime_dependency "log4r", ">= 1.0.5"
-    s.add_runtime_dependency "activesupport", ">= 2.0.0"
+    s.add_runtime_dependency "activesupport", ">= 2.0.0", "< 3.0.0"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

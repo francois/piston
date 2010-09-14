@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{piston}
-  s.version = "2.0.9"
+  s.version = "2.0.10"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Francois Beausoleil"]
-  s.date = %q{2010-08-04}
+  s.date = %q{2010-09-14}
   s.default_executable = %q{piston}
   s.description = %q{Piston makes it easy to merge vendor branches into your own repository, without worrying about which revisions were grabbed or not.  Piston will also keep your local changes in addition to the remote changes.}
   s.email = %q{francois@teksol.info}
@@ -169,18 +169,18 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<cucumber>, [">= 0.1.16"])
       s.add_runtime_dependency(%q<main>, [">= 2.8.3"])
       s.add_runtime_dependency(%q<log4r>, [">= 1.0.5"])
-      s.add_runtime_dependency(%q<activesupport>, [">= 2.0.0"])
+      s.add_runtime_dependency(%q<activesupport>, [">= 2.0.0", "< 3.0.0"])
     else
       s.add_dependency(%q<cucumber>, [">= 0.1.16"])
       s.add_dependency(%q<main>, [">= 2.8.3"])
       s.add_dependency(%q<log4r>, [">= 1.0.5"])
-      s.add_dependency(%q<activesupport>, [">= 2.0.0"])
+      s.add_dependency(%q<activesupport>, [">= 2.0.0", "< 3.0.0"])
     end
   else
     s.add_dependency(%q<cucumber>, [">= 0.1.16"])
     s.add_dependency(%q<main>, [">= 2.8.3"])
     s.add_dependency(%q<log4r>, [">= 1.0.5"])
-    s.add_dependency(%q<activesupport>, [">= 2.0.0"])
+    s.add_dependency(%q<activesupport>, [">= 2.0.0", "< 3.0.0"])
   end
 end
 

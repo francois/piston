@@ -98,7 +98,7 @@ module Piston
         Dir.chdir(path) do
           begin
             logger.debug {"Saving changes in temporary branch"}
-            git(:commit, '-a', '-m', 'merging')
+            git(:commit, '-a', '-m', '"merging"')
             logger.debug {"Return to previous branch"}
             git(:checkout, revision)
             logger.debug {"Merge changes from temporary branch"}

@@ -62,7 +62,7 @@ module Piston
         
         Dir.chdir(@dir) do
           logger.debug {"Saving old changes before updating"}
-          git(:commit, '-a', '-m', 'old changes')
+          git(:commit, '-a', '-m', '"old changes"')
           target = commit
           target = "origin/#{target}" unless target.include?("/") || target =~ /^[a-f\d]+$/i
           logger.debug {"Merging old changes with #{target}"}
